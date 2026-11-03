@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Meeting Summary to OneDrive",
+      "description": "Generates a formatted meeting summary, preserves structure, and saves it to OneDrive in the meeting’s original language - without any AI processing.",
+      "source": "template",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Meeting Summary to OneDrive",
+          "description": "Generates a formatted meeting summary, preserves structure, and saves it to OneDrive in the meeting’s original language - without any AI processing."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "pmkccs",
+            "node_type": "trigger",
+            "node_name": "Zoom Meetings event",
+            "node_alias": "Zoom Meetings event",
+            "node_desc": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+            "input_map": {
+              "filter_type": "all_meetings"
+            },
+            "config": {
+              "event_name": "meeting.summary_created",
+              "event_config": {
+                "time_offset": 0
+              }
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "meeting": {
+                  "description": "the meeting object includes meeting info like meeting topic, meeting host etc",
+                  "type": "meeting",
+                  "required": true
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.system.operators.condition",
+            "reference_id": "yfqzyp",
+            "node_type": "condition",
+            "node_name": "Condition",
+            "node_alias": "",
+            "node_desc": "Specify a condition on it's output to decide which path the flow will to follow",
+            "input_map": {
+              "determined_by_ai": false,
+              "expression": {
+                "switchConditionMap": {
+                  "Route 1": [
+                    {
+                      "key": "{{pmkccs.meeting.summary.summaryContent}}",
+                      "value": "",
+                      "condition": "isNotEmpty"
+                    }
+                  ]
+                }
+              }
+            },
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.connector_mcp.zm_onedrive.zm_onedrive_create_file",
+            "reference_id": "sknnzr",
+            "node_type": "mcp_tool",
+            "node_name": "Create OneDrive File",
+            "node_alias": "",
+            "node_desc": "Create a new file in the user's OneDrive by uploading text content.",
+            "input_map": {
+              "fileName": "{{pmkccs.meeting.meeting_topic}}.md",
+              "content": "{{pmkccs.meeting.summary.summaryContent}}"
+            },
+            "config": {
+              "approval_strategy": "always_allow"
+            },
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "pmkccs",
+            "target_node": "yfqzyp"
+          },
+          {
+            "source_node": "yfqzyp",
+            "target_node": "sknnzr",
+            "condition": {
+              "yfqzyp.branch": "Route 1"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "zoom": {
+      "type": "http",
+      "url": "https://mcp.zoom.us/mcp/zoom/streamable"
+    }
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Salesforce Opportunity Auto-Update",
+      "description": "Updates Salesforce opportunities after meetings by extracting deal details, matching accounts, updating fields, logging the call, and sending a Zoom Chat confirmation.",
+      "source": "template",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Salesforce Opportunity Auto-Update",
+          "description": "Updates Salesforce opportunities after meetings by extracting deal details, matching accounts, updating fields, logging the call, and sending a Zoom Chat confirmation."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "bgmenb",
+            "node_type": "trigger",
+            "node_name": "Meeting event",
+            "node_alias": "",
+            "node_desc": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+            "input_map": {
+              "filter_type": "all_meetings",
+              "include_webinar": false,
+              "event_config": {
+                "time_offset": 0
+              }
+            },
+            "config": {
+              "event_name": "meeting.summary_created",
+              "event_config": {
+                "time_offset": 0
+              }
+            },
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.aic.agent.deep_reasoning",
+            "reference_id": "ntcrhu",
+            "node_type": "deep_reasoning",
+            "node_name": "Deep Reasoning",
+            "node_alias": "Analyze and update Salesforce Opportunity",
+            "node_desc": "",
+            "input_map": {
+              "task_prompt": "Get meeting data {{bgmenb.meeting}} to update salesforce opportunity .\n\nif {{bgmenb.meeting}} is empty or not sales meeting, just skip immediately.\n\nOutput contract:\n- Return only the configured output fields.\n- name: updated Opportunity name, or empty string when skipped.\n- url: Opportunity URL/link when available, or empty string when skipped.\n- should_notify: true only when the Salesforce update tool completed successfully.\n- result_json: a non-empty serialized JSON object with this shape:\n{\n  \"status\": \"updated|skipped|failed\",\n  \"skip_reason\": \"only when skipped or failed\",\n  \"opportunity_name\": \"\",\n  \"account_name\": \"\",\n  \"account_industry\": \"Salesforce Account Industry field, empty string if unknown\",\n  \"opportunity_id\": \"\",\n  \"opportunity_url\": \"\",\n  \"meeting_date\": \"meeting date formatted like 'Mar 19, 2026', empty string if unknown\",\n  \"call_logged\": true,\n  \"updated_fields\": [\n    {\"field\": \"Stage|Amount|Close Date|Probability|Next Step|Other\", \"old_value\": \"Unknown\", \"new_value\": \"\", \"evidence\": \"brief phrase from meeting\"}\n  ]\n}\n\nRules:\n- Ground every update in the meeting data.\n- Only include an entry in updated_fields when it has a real, concrete new_value that actually changed. Never include a field with an empty, unknown, or unchanged new_value just to report it was considered.\n- Keep result_json compact; cap updated_fields at 6.\n- If should_notify=false, result_json must still explain why in skip_reason.\n- Never include markdown fences in any output field.",
+              "knowledge": {
+                "web_urls": ""
+              },
+              "skills": [
+                {
+                  "name": "salesforce_record_ops",
+                  "display_name": "Salesforce Record Ops",
+                  "description": "Creates, updates, reads, and deletes Salesforce records across standard and custom sObjects when the user asks for ordinary record CRUD with explicit object and field intent. Use for Lead, Account, Contact, Opportunity, Task, Campaign, Note, CampaignMember, and custom object record operations when the request is single-record or safely bounded. Do not use for metadata/schema setup, field creation, permissions, validation rules, reports, bulk jobs, raw org diagnostics, or high-level business workflows such as Lead conversion.",
+                  "skill_type": "static",
+                  "skill_path": "salesforce_record_ops",
+                  "tags": [
+                    "salesforce",
+                    "crm",
+                    "records",
+                    "sobject",
+                    "workflow_planner"
+                  ],
+                  "required_tools": [
+                    "zm.connector_mcp.zm_salesforce.salesforce_get_user_info",
+                    "zm.connector_mcp.zm_salesforce.salesforce_get_all_custom_objects",
+                    "zm.connector_mcp.zm_salesforce.salesforce_get_all_fields_for_object",
+                    "zm.connector_mcp.zm_salesforce.salesforce_sobject_describe",
+                    "zm.connector_mcp.zm_salesforce.salesforce_run_soql_query",
+                    "zm.connector_mcp.zm_salesforce.salesforce_get_s_object_record",
+                    "zm.connector_mcp.zm_salesforce.salesforce_create_s_object_record",
+                    "zm.connector_mcp.zm_salesforce.salesforce_update_a_record",
+                    "zm.connector_mcp.zm_salesforce.salesforce_delete_record"
+                  ]
+                }
+              ],
+              "tools": [
+                {
+                  "authorized": true,
+                  "app_key": "zm_salesforce",
+                  "source": "connector",
+                  "app_name": "Salesforce for Zoom",
+                  "logo": null,
+                  "description": "Salesforce connector helps businesses manage and improve customer relationships, and enable sales pipeline automation.",
+                  "total_count": 8,
+                  "tool_details": [
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_get_user_info",
+                      "node_name": "Salesforce Get User Info",
+                      "node_description": "Retrieves information about the current user or a specific user in Salesforce.",
+                      "checked": false
+                    },
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_search_accounts",
+                      "node_name": "Salesforce Search Accounts",
+                      "node_description": "Search for Salesforce accounts using multiple criteria like name, industry, type, location, or contact information.",
+                      "checked": false
+                    },
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_search_opportunities",
+                      "node_name": "Salesforce Search Opportunities",
+                      "node_description": "Search for Salesforce opportunities using multiple criteria like name, account, stage, amount, close date, or status.",
+                      "checked": false
+                    },
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_search_contacts",
+                      "node_name": "Salesforce Search Contacts",
+                      "node_description": "Search for Salesforce contacts using multiple criteria like name, email, phone, account, or title.",
+                      "checked": false
+                    },
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_create_opportunity",
+                      "node_name": "Salesforce Create Opportunity",
+                      "node_description": "Creates a new opportunity in Salesforce with the specified information.",
+                      "checked": false
+                    },
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_log_call",
+                      "node_name": "Salesforce Log Call",
+                      "node_description": "Logs a completed phone call as a task in Salesforce with call-specific details like duration, type, and disposition.",
+                      "checked": false
+                    },
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_create_note",
+                      "node_name": "Salesforce Create Note",
+                      "node_description": "Creates a new note attached to a Salesforce record with the specified title and content.",
+                      "checked": false
+                    },
+                    {
+                      "node_id": "zm.connector_mcp.zm_salesforce.salesforce_update_opportunity_by_id",
+                      "node_name": "Salesforce Update Opportunity By Id",
+                      "node_description": "Updates specified fields of an existing Salesforce Opportunity by its ID,the Opportunity must exist.",
+                      "checked": false
+                    }
+                  ]
+                }
+              ],
+              "outputs": [
+                {
+                  "id": "qmukii",
+                  "name": "name",
+                  "type": "string",
+                  "description": "opportunity name",
+                  "is_array": false
+                },
+                {
+                  "id": "jyhghf",
+                  "name": "url",
+                  "type": "string",
+                  "description": "opportunity url",
+                  "is_array": false
+                },
+                {
+                  "name": "should_notify",
+                  "type": "boolean",
+                  "description": "True only when the Salesforce update succeeded and a DM should be sent",
+                  "is_array": false
+                },
+                {
+                  "name": "result_json",
+                  "type": "string",
+                  "description": "Serialized compact JSON with update details for deterministic DM formatting",
+                  "is_array": false
+                }
+              ],
+              "max_steps": 10,
+              "system_prompt": ""
+            },
+            "config": {
+              "execution_mode": "workflow"
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "opportunity name"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "opportunity url"
+                },
+                "should_notify": {
+                  "type": "boolean",
+                  "description": "True only when the Salesforce update succeeded and a DM should be sent"
+                },
+                "result_json": {
+                  "type": "string",
+                  "description": "Serialized compact JSON with update details for deterministic DM formatting"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.system.operators.condition",
+            "reference_id": "mfyynr",
+            "node_type": "condition",
+            "node_name": "Condition",
+            "node_alias": "Continue if update succeeded",
+            "node_desc": "Specify a condition on it's output to decide which path the flow will to follow",
+            "input_map": {
+              "determined_by_ai": false,
+              "expression": {
+                "switchConditionMap": {
+                  "updated": [
+                    {
+                      "key": "{{ntcrhu.should_notify}}",
+                      "value": "",
+                      "condition": "isTrue"
+                    }
+                  ]
+                }
+              }
+            },
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.system.operators.code",
+            "reference_id": "cnwqtj",
+            "node_type": "logic",
+            "node_name": "Custom script",
+            "node_alias": "Format Salesforce DM",
+            "node_desc": "Insert and run custom Python in your workflow. Code runs in a secure sandbox; the value it returns is mapped to the Outputs below.",
+            "input_map": {
+              "code": "import ast\nimport json\nimport re\nfrom pathlib import Path\n\n\ndef parse_json_maybe(value):\n    if value is None:\n        return {}\n    if isinstance(value, dict):\n        return value\n    if isinstance(value, str):\n        text = value.strip()\n        if not text:\n            return {}\n        ticks = chr(96) * 3\n        if text.startswith(ticks):\n            text = re.sub(\"^\" + ticks + r\"(?:json)?\\s*\", \"\", text, flags=re.I).strip()\n            if text.endswith(ticks):\n                text = text[:-3].strip()\n        for parser in (json.loads, ast.literal_eval):\n            try:\n                parsed = parser(text)\n                return parsed if isinstance(parsed, dict) else {}\n            except Exception:\n                pass\n    return {}\n\n\ndef clean(value, fallback=\"\"):\n    if value in (None, \"\", [], {}):\n        return fallback\n    if isinstance(value, (dict, list)):\n        value = json.dumps(value, ensure_ascii=False)\n    return re.sub(r\"\\s+\", \" \", str(value)).strip() or fallback\n\n\ndef as_list(value):\n    return value if isinstance(value, list) else []\n\n\nFIELD_LABEL_MAP = {\"close date\": \"Close\"}\nLONG_VALUE_THRESHOLD = 36\nEMPTY_MARKERS = {\"\", \"-\", \"unknown\", \"n/a\", \"none\", \"null\", \"tbd\", \"no change\", \"not changed\"}\n\n\ndef is_meaningful(value):\n    return clean(value, \"\").strip().lower() not in EMPTY_MARKERS\n\n\ndef format_field_value(field_label, new_value):\n    if field_label.strip().lower() == \"amount\":\n        raw = new_value.replace(\",\", \"\").replace(\"$\", \"\").strip()\n        try:\n            amount = float(raw)\n            return \"${:,.2f}\".format(amount)\n        except ValueError:\n            return new_value\n    return new_value\n\n\ndef build_opportunity_details(data, fallback_name=\"\"):\n    name = clean(data.get(\"opportunity_name\") or fallback_name, \"Unknown Opportunity\")\n    account_raw = clean(data.get(\"account_name\"), \"\")\n    industry = clean(data.get(\"account_industry\"), \"\")\n    account_display = \" · \".join(p for p in [account_raw, industry] if p) or \"Unknown Account\"\n    opp_id = clean(data.get(\"opportunity_id\"), \"Unknown\")\n    return \"\\n\".join([\n        f\"**Name: ** {name}\",\n        f\"**Account: ** {account_display}\",\n        f\"**ID: ** {opp_id}\",\n    ])\n\n\ndef build_updated_fields(data):\n    raw_fields = [item for item in as_list(data.get(\"updated_fields\"))[:6] if isinstance(item, dict)]\n    compact_pairs = []\n    long_pairs = []\n    for item in raw_fields:\n        field = clean(item.get(\"field\"), \"Field\")\n        label = FIELD_LABEL_MAP.get(field.strip().lower(), field)\n        value = format_field_value(label, clean(item.get(\"new_value\"), \"\"))\n        if not is_meaningful(value):\n            continue\n        if len(value) > LONG_VALUE_THRESHOLD:\n            long_pairs.append((label, value))\n        else:\n            compact_pairs.append((label, value))\n\n    lines = [f\"{label} {value}\" for label, value in compact_pairs]\n    lines.extend(f\"{label}: {value}\" for label, value in long_pairs)\n    if not lines:\n        lines = [\"Completed - review Salesforce for changed fields\"]\n    return \"\\n\".join(lines)\n\n\ndef build_source_line(data):\n    account_raw = clean(data.get(\"account_name\"), \"\")\n    meeting_date = clean(data.get(\"meeting_date\"), \"\")\n    meeting_display = \" · \".join(p for p in [account_raw, meeting_date] if p) or \"-\"\n    return f\"Meeting {meeting_display}\"\n\n\ndef resolve_url(data, fallback_url=\"\"):\n    return clean(data.get(\"opportunity_url\") or fallback_url, \"\")\n\n\ndef run_node(input_data, context=None):\n    input_data = input_data or {}\n    try:\n        data = parse_json_maybe(input_data.get(\"result_json\"))\n        fallback_name = input_data.get(\"name\", \"\")\n        fallback_url = input_data.get(\"url\", \"\")\n        return {\n            \"success\": True,\n            \"output\": {\n                \"opportunity_details\": build_opportunity_details(data, fallback_name),\n                \"updated_fields\": build_updated_fields(data),\n                \"source_line\": build_source_line(data),\n                \"salesforce_url\": resolve_url(data, fallback_url),\n            },\n        }\n    except Exception as exc:\n        return {\n            \"success\": True,\n            \"output\": {\n                \"opportunity_details\": \"Update completed - review Salesforce for details.\",\n                \"updated_fields\": \"\",\n                \"source_line\": \"\",\n                \"salesforce_url\": input_data.get(\"url\", \"\"),\n            },\n            \"error\": str(exc),\n        }\n\n\nif __name__ == \"__main__\":\n    try:\n        request = json.loads(Path(__file__).with_name(\"request.json\").read_text(encoding=\"utf-8\"))\n        result = run_node(request.get(\"input_data\", {}), request.get(\"context\", {}))\n    except Exception as exc:\n        result = {\n            \"success\": True,\n            \"output\": {\n                \"opportunity_details\": \"Update completed - review Salesforce for details.\",\n                \"updated_fields\": \"\",\n                \"source_line\": \"\",\n                \"salesforce_url\": \"\",\n            },\n            \"error\": str(exc),\n        }\n    print(json.dumps(result, ensure_ascii=False))\n",
+              "inputSchema": [
+                {
+                  "name": "result_json",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "name": "url",
+                  "type": "string",
+                  "required": true
+                }
+              ],
+              "outputSchema": [
+                {
+                  "name": "opportunity_details",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "name": "updated_fields",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "name": "source_line",
+                  "type": "string",
+                  "required": true
+                },
+                {
+                  "name": "salesforce_url",
+                  "type": "string",
+                  "required": false
+                }
+              ],
+              "parameter": {
+                "result_json": "{{ntcrhu.result_json}}",
+                "name": "{{ntcrhu.name}}",
+                "url": "{{ntcrhu.url}}"
+              }
+            },
+            "config": {},
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "opportunity_details": {
+                  "type": "string",
+                  "description": "opportunity_details"
+                },
+                "updated_fields": {
+                  "type": "string",
+                  "description": "updated_fields"
+                },
+                "source_line": {
+                  "type": "string",
+                  "description": "source_line"
+                },
+                "salesforce_url": {
+                  "type": "string",
+                  "description": "salesforce_url"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.tc.message.send_message_to_person_node",
+            "reference_id": "qbrekc",
+            "node_type": "tool",
+            "node_name": "Zoom Chat",
+            "node_alias": "Send update confirmation DM",
+            "node_desc": "Send a direct message to a contact",
+            "input_map": {
+              "message_content": "# 🎉 Salesforce Opportunity Updated Successfully\n## 📋 Opportunity Details\n{{cnwqtj.opportunity_details}}\n## 📊 Updated Fields\n{{cnwqtj.updated_fields}}\n## 🗓️ Source\n{{cnwqtj.source_line}}\n**🔗 View in Salesforce:**\n[{{cnwqtj.salesforce_url}}]()",
+              "isMarkdown": true,
+              "user": "{{ROOT.sysWorkflowCreator.user_id}}"
+            },
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            },
+            "node_set_id": "zm.tc.tc.team_chat_nodes"
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "bgmenb",
+            "target_node": "ntcrhu"
+          },
+          {
+            "source_node": "ntcrhu",
+            "target_node": "mfyynr"
+          },
+          {
+            "source_node": "mfyynr",
+            "target_node": "cnwqtj",
+            "condition": {
+              "mfyynr.branch": "updated"
+            }
+          },
+          {
+            "source_node": "cnwqtj",
+            "target_node": "qbrekc"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1097 @@
+{
+  "format_version": 1,
+  "capsules": [
+    {
+      "capsule_id": "confluence_page_ops",
+      "skill_name": "confluence_page_ops",
+      "when_to_use": "Creates, updates, reads, searches, and inspects Confluence pages and wiki content using the remote Confluence connector. Handles page creation in an explicit or authoritatively resolved numeric spaceId, child-page creation when a parent page is resolved, safe version-aware updates to an exactly resolved page, CQL content search, page read-back by ID, page/child-page listing, attachment listing, and Confluence user search for attribution or mention resolution. Resolves user-supplied identifiers when a reliable remote tool can do so, and asks for missing critical information when resolution is absent, ambiguous, or unsupported. Never mention email/messaging unless the user explicitly asks to send, email, share, or notify. Use for Confluence documentation/wiki/page operations that are not Jira tickets, Zoom Canvas Doc, Google Docs, or Confluence administration.",
+      "required_tools": [
+        "zm.connector_mcp.zm_confluence.confluence_search_user",
+        "zm.connector_mcp.zm_confluence.confluence_get_attachments",
+        "zm.connector_mcp.zm_confluence.confluence_get_page_by_id",
+        "zm.connector_mcp.zm_confluence.confluence_get_pages",
+        "zm.connector_mcp.zm_confluence.confluence_search_kb_cql",
+        "zm.connector_mcp.zm_confluence.confluence_get_child_pages",
+        "zm.connector_mcp.zm_confluence.confluence_create_page",
+        "zm.connector_mcp.zm_confluence.confluence_update_page"
+      ],
+      "app_scope": [
+        "zm_confluence"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: confluence_page_ops"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/confluence_page_ops.md",
+      "body_bytes": 38630,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:9e58fe66013b82ca"
+      }
+    },
+    {
+      "capsule_id": "email-html-generator",
+      "skill_name": "email-html-generator",
+      "when_to_use": "Generate clean, email-client-safe HTML from plain text, Markdown, or existing HTML. Use whenever the user wants to compose or prepare an HTML email body, convert notes/announcements/release-notes/newsletters/meeting-summaries to email, turn Markdown into sendable email, or clean up raw HTML so it renders in Gmail, Outlook, Hotmail/Outlook.com, Apple Mail, and Yahoo Mail. Enforces brand styling (primary #0E72ED, no gradients), email-safe markup (inline CSS, table layout, no JS/external assets, \u2264720px rounded white card on #F7F9FA), and adapts language/fonts to the detected input language.",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: email-html-generator"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/email-html-generator.md",
+      "body_bytes": 4938,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:38f8379bdc06e68a"
+      }
+    },
+    {
+      "capsule_id": "gmail_message_classifier",
+      "skill_name": "gmail_message_classifier",
+      "when_to_use": "Read one trigger-selected Gmail message, classify it against the workflow's explicit sender, product, notification, or content criteria, and extract only grounded fields for a separately gated downstream action. Use when an incoming Gmail automation must send, post, create, or update something only for matching messages. This capsule is read-only and never performs the downstream side effect itself.",
+      "required_tools": [
+        "zm.connector_mcp.zm_gmail.gmail_read_email"
+      ],
+      "app_scope": [
+        "zm_gmail"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Classification summary"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "The observed Gmail message satisfies every requested classification rule"
+        },
+        {
+          "name": "message_details",
+          "type": "string",
+          "description": "Grounded fields and source metadata for a matched message"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "message_details"
+        ]
+      },
+      "body_path": "resources/dp_capsules/gmail_message_classifier.md",
+      "body_bytes": 3752,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:6cc5499f80f7cc0c"
+      }
+    },
+    {
+      "capsule_id": "gmail_recent_message_poll",
+      "skill_name": "gmail_recent_message_poll",
+      "when_to_use": "Read-only one-hour polling fallback for a Gmail event request that has no supported trigger. Fetches recent inbox messages, applies the user's event criteria, and emits a typed match result for a separately gated downstream step. Use only immediately after the Custom schedule trigger; never send, draft, label, archive, delete, or otherwise modify mail.",
+      "required_tools": [
+        "zm.connector_mcp.zm_gmail.gmail_fetch_emails"
+      ],
+      "app_scope": [
+        "zm_gmail"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Polling result summary"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "At least one Gmail message in the bounded polling window matches the request"
+        },
+        {
+          "name": "matched_items",
+          "type": "string",
+          "description": "Grounded fields from Gmail messages that matched in the polling window"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "matched_items"
+        ]
+      },
+      "body_path": "resources/dp_capsules/gmail_recent_message_poll.md",
+      "body_bytes": 3147,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:a0269d979cb329c2"
+      },
+      "polling_contract": {
+        "source_app": "zm_gmail",
+        "window_minutes": 60
+      }
+    },
+    {
+      "capsule_id": "google_docs_ops",
+      "skill_name": "google_docs_ops",
+      "when_to_use": "Creates, searches, reads, summarizes, extracts from, compares, updates, appends to, copies, exports, and shares Google Docs documents using Google Docs connector tools. Use for Google Doc creation from explicit text or markdown, blank document creation, document content reads, summaries/extractions, read-only comparison of two Docs, whole-document markdown replacement, targeted text insert/replace/append including insertion under a heading or anchor, appending already-provided meeting transcript payloads from current input or a same-agent handoff into resolved meeting-notes Docs, literal document copy, export to formats such as PDF/DOCX/TXT/HTML, and document sharing. Can be composed after upstream skills when source payloads are already provided. Do not use for template/source document transformation; defer those requests to doc_template_rewrite. Executes writes without confirmation once a target is resolved; asks only when the request is genuinely ambiguous or missing required information.",
+      "required_tools": [
+        "zm.connector_mcp.zm_googledocs.googledocs_export_document",
+        "zm.connector_mcp.zm_googledocs.googledocs_get_document_by_id",
+        "zm.connector_mcp.zm_googledocs.googledocs_get_document_content",
+        "zm.connector_mcp.zm_googledocs.googledocs_search_documents",
+        "zm.connector_mcp.zm_googledocs.googledocs_copy_document",
+        "zm.connector_mcp.zm_googledocs.googledocs_create_document",
+        "zm.connector_mcp.zm_googledocs.googledocs_create_document_markdown",
+        "zm.connector_mcp.zm_googledocs.googledocs_create_new_document",
+        "zm.connector_mcp.zm_googledocs.googledocs_insert_replace_text",
+        "zm.connector_mcp.zm_googledocs.googledocs_share_document",
+        "zm.connector_mcp.zm_googledocs.googledocs_update_document_markdown"
+      ],
+      "app_scope": [
+        "zm_googledocs"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: google_docs_ops"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/google_docs_ops.md",
+      "body_bytes": 63540,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:629dcae4599f71e4"
+      }
+    },
+    {
+      "capsule_id": "google_sheets_row_classifier",
+      "skill_name": "google_sheets_row_classifier",
+      "when_to_use": "Read one exact Google Sheets spreadsheet and tab, evaluate rows against the workflow's explicit criteria, and extract only grounded qualifying rows for a separately gated downstream action. Use when a document, message, email, or record write is allowed only if matching spreadsheet rows actually exist. This capsule is read-only and never performs the downstream side effect itself.",
+      "required_tools": [
+        "zm.connector_mcp.zm_googlesheets.googlesheets_search_spreadsheets",
+        "zm.connector_mcp.zm_googlesheets.googlesheets_get_sheet_names",
+        "zm.connector_mcp.zm_googlesheets.googlesheets_values_get"
+      ],
+      "app_scope": [
+        "zm_googlesheets"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Read and classification summary"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "At least one observed spreadsheet row satisfies every requested rule"
+        },
+        {
+          "name": "matched_rows",
+          "type": "string",
+          "description": "Grounded requested fields from the qualifying rows"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "matched_rows"
+        ]
+      },
+      "body_path": "resources/dp_capsules/google_sheets_row_classifier.md",
+      "body_bytes": 3861,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:bc5853c8caf7b4cb"
+      }
+    },
+    {
+      "capsule_id": "hiring-debrief-decision-log",
+      "skill_name": "hiring-debrief-decision-log",
+      "when_to_use": "Extract structured hiring decisions and action items from hiring debrief meeting transcripts. Use this skill whenever the user pastes or uploads a hiring debrief transcript, hiring committee meeting notes, interview debrief discussion, or candidate review meeting recording and wants to generate a decision log. Also trigger when the user mentions \"hiring debrief\", \"debrief meeting\", \"candidate decision\", \"hiring committee notes\", \"interview panel recap\", \"offer decision meeting\", or asks to summarize a debrief into actionable next steps. Even if the user simply pastes a meeting transcript that discusses candidate evaluations and hiring decisions without explicitly naming it a \"debrief\", this skill should activate. This skill is specifically for the post-interview group decision-making meeting \u2014 not for individual interviewer feedback forms.",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: hiring-debrief-decision-log"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/hiring-debrief-decision-log.md",
+      "body_bytes": 9002,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:fdab8be964b5da88"
+      }
+    },
+    {
+      "capsule_id": "interview-feedback-consolidator",
+      "skill_name": "interview-feedback-consolidator",
+      "when_to_use": "Consolidate interview feedback from meeting transcripts into a structured hiring debrief report. Extracts each interviewer's assessment, candidate strengths, concerns with supporting evidence, and recommended next steps. Use this skill whenever the user pastes or uploads an interview transcript, debrief recording, hiring panel discussion, or asks to summarize interview feedback, write a hiring debrief, consolidate interviewer notes, or generate a candidate assessment report. Also trigger when the user mentions \"interview summary\", \"hiring debrief\", \"candidate feedback\", \"panel debrief\", \"interviewer notes\", or phrases like \"summarize the interview\", \"what did the panel think\", \"consolidate feedback from the interviews\", even if they don't explicitly say \"interview feedback consolidator\".",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: interview-feedback-consolidator"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/interview-feedback-consolidator.md",
+      "body_bytes": 7578,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:dd0389a3bb009fbf"
+      }
+    },
+    {
+      "capsule_id": "jira_issue_ops",
+      "skill_name": "jira_issue_ops",
+      "when_to_use": "Creates, updates, escalates, transitions, and reads/lists Jira issues and tickets \u2014 including bugs, tasks, stories, and subtasks. Handles assignee resolution, priority changes, status transitions, comments, watchers, issue links, worklog, attachments, bulk creation from meeting transcripts or chat threads, and reading/listing issues by saved filter URL, specific keys, or JQL criteria (project / assignee / status / time range / etc.). Asks the user for missing critical information when it cannot be confidently inferred. Use for any Jira issue or ticket operation that is NOT sprint/board management, epic management, or project administration.",
+      "required_tools": [
+        "zm.connector_mcp.zm_jira.jira_get_fields",
+        "zm.connector_mcp.zm_jira.jira_get_create_meta_issue_types",
+        "zm.connector_mcp.zm_jira.jira_get_issue_types_for_project",
+        "zm.connector_mcp.zm_jira.jira_find_users",
+        "zm.connector_mcp.zm_jira.jira_search_for_issues_using_jql_post",
+        "zm.connector_mcp.zm_jira.jira_get_issue",
+        "zm.connector_mcp.zm_jira.jira_get_transitions",
+        "zm.connector_mcp.zm_jira.jira_get_all_projects",
+        "zm.connector_mcp.zm_jira.jira_get_current_user",
+        "zm.connector_mcp.zm_jira.jira_get_changelogs",
+        "zm.connector_mcp.zm_jira.jira_list_comments",
+        "zm.connector_mcp.zm_jira.jira_get_watchers",
+        "zm.connector_mcp.zm_jira.jira_get_issue_link",
+        "zm.connector_mcp.zm_jira.jira_get_all_labels",
+        "zm.connector_mcp.zm_jira.jira_get_project_statuses",
+        "zm.connector_mcp.zm_jira.jira_get_attachment",
+        "zm.connector_mcp.zm_jira.jira_create_issue",
+        "zm.connector_mcp.zm_jira.jira_bulk_create_issues",
+        "zm.connector_mcp.zm_jira.jira_edit_issue",
+        "zm.connector_mcp.zm_jira.jira_assign_issue",
+        "zm.connector_mcp.zm_jira.jira_transition_issue",
+        "zm.connector_mcp.zm_jira.jira_add_comment",
+        "zm.connector_mcp.zm_jira.jira_add_watcher",
+        "zm.connector_mcp.zm_jira.jira_remove_watcher",
+        "zm.connector_mcp.zm_jira.jira_create_issue_link",
+        "zm.connector_mcp.zm_jira.jira_delete_issue_link",
+        "zm.connector_mcp.zm_jira.jira_add_worklog",
+        "zm.connector_mcp.zm_jira.jira_delete_attachment",
+        "zm.connector_mcp.zm_jira.jira_delete_issue"
+      ],
+      "app_scope": [
+        "zm_jira"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: jira_issue_ops"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/jira_issue_ops.md",
+      "body_bytes": 95380,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:b4c1d816a4e3137b"
+      }
+    },
+    {
+      "capsule_id": "jira_recent_issue_poll",
+      "skill_name": "jira_recent_issue_poll",
+      "when_to_use": "Read-only one-hour polling fallback for a Jira issue event request that has no supported trigger. Searches a bounded Jira scope for issues created or assigned during the latest hourly window and emits a typed match result for a separately gated downstream step. Use only immediately after the Custom schedule trigger; never create, edit, assign, transition, comment on, or delete an issue.",
+      "required_tools": [
+        "zm.connector_mcp.zm_jira.jira_get_current_user",
+        "zm.connector_mcp.zm_jira.jira_find_users",
+        "zm.connector_mcp.zm_jira.jira_search_for_issues_using_jql_post",
+        "zm.connector_mcp.zm_jira.jira_get_issue"
+      ],
+      "app_scope": [
+        "zm_jira"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Polling result summary"
+        },
+        {
+          "name": "read_succeeded",
+          "type": "boolean",
+          "description": "Jira identity, bounded search, pagination, and required history verification all completed"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "At least one Jira issue in the bounded polling window matches the request"
+        },
+        {
+          "name": "matched_items",
+          "type": "string",
+          "description": "Grounded fields from Jira issues that matched in the polling window"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "matched_items"
+        ]
+      },
+      "body_path": "resources/dp_capsules/jira_recent_issue_poll.md",
+      "body_bytes": 6092,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:38c19078c4d5fde2"
+      },
+      "task_prompt_guards": [
+        "Resolve the connector-authenticated Jira user before searching and use its explicit Jira account id; never infer Jira identity from the workflow requester's Zoom profile.",
+        "For assignment events, use `updated` only to retrieve bounded candidates and require either an in-window changelog transition to the resolved account id or an issue created in-window with that current assignee and a complete changelog containing no assignee transition.",
+        "Inspect Jira business-error payloads even when the outer tool call succeeds, and paginate until `isLast=true` before classifying the read.",
+        "Set `read_succeeded=false` and `matched=false` for any identity, search, pagination, or history gap; report `Outcome: PARTIAL` or `Outcome: FAILED`, never a successful no-match.",
+        "Set `matched=true` only when `read_succeeded=true` and verified Jira records satisfy every requested criterion."
+      ],
+      "polling_contract": {
+        "source_app": "zm_jira",
+        "window_minutes": 60
+      }
+    },
+    {
+      "capsule_id": "marketing_content_brief_generator",
+      "skill_name": "marketing_content_brief_generator",
+      "when_to_use": "Generate professional marketing content briefs from meeting transcripts, summaries, or planning notes. Use this skill whenever a user shares notes or transcripts from a marketing meeting \u2014 campaign planning, content strategy, brand kickoff, demand generation, social media planning, email marketing, product marketing, or editorial planning \u2014 and wants a structured content brief. Trigger when users say things like: turn this into a brief, generate a content brief, make a campaign brief from these notes, what content should we create, or summarize this meeting into a brief. Covers all marketing content types: social posts, blog articles, email campaigns, paid ads, video scripts, landing pages, whitepapers, and more.",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: marketing_content_brief_generator"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/marketing_content_brief_generator.md",
+      "body_bytes": 9657,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:b0cefcf600aa91f3"
+      }
+    },
+    {
+      "capsule_id": "meeting_allocation_report",
+      "skill_name": "meeting_allocation_report",
+      "when_to_use": "Analyze meeting data to classify meetings by type (External, Team, 1:1, Cross-team), calculate time allocation, and summarize achievements and blockers. Generate the report as DP output, and email it only when the workflow task explicitly requests email delivery to a grounded recipient. Use for meeting-allocation analysis and periodic meeting reports.",
+      "required_tools": [
+        "zm.meeting.meeting.get_meeting_summary",
+        "zm.connector_mcp.zm_gmail.gmail_send_email"
+      ],
+      "app_scope": [
+        "zm.meeting.meeting.meeting_nodes",
+        "zm_gmail"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Execution summary"
+        },
+        {
+          "name": "has_data",
+          "type": "boolean",
+          "description": "Usable meeting data exists"
+        },
+        {
+          "name": "delivery_succeeded",
+          "type": "boolean",
+          "description": "The requested primary email action succeeded"
+        },
+        {
+          "name": "fallback_required",
+          "type": "boolean",
+          "description": "A report exists but primary delivery failed"
+        },
+        {
+          "name": "report_html",
+          "type": "string",
+          "description": "Generated report HTML"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/meeting_allocation_report.md",
+      "body_bytes": 12666,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:44943a605623e425"
+      }
+    },
+    {
+      "capsule_id": "meeting_content_classifier",
+      "skill_name": "meeting_content_classifier",
+      "when_to_use": "Classify and check whether one Zoom trigger-supplied meeting is non-empty, has usable summary or transcript content, and satisfies the user's explicit sales, customer, external, interview, support, or other content and participant eligibility rules before downstream actions. Emit a typed match result so writes and deliveries run only on the qualifying path. This capsule is read-only and never performs the downstream side effect itself.",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Classification summary"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "The meeting satisfies every explicit eligibility rule"
+        },
+        {
+          "name": "meeting_context",
+          "type": "string",
+          "description": "Grounded classification evidence for the matched meeting"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "meeting_context"
+        ]
+      },
+      "body_path": "resources/dp_capsules/meeting_content_classifier.md",
+      "body_bytes": 3766,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:7249195f6e2caf28"
+      },
+      "entry_gate_contract": {
+        "source_node_ids": [
+          "zm.meeting.meeting.meeting_event"
+        ],
+        "source_output": "meeting"
+      }
+    },
+    {
+      "capsule_id": "meeting_followup_email",
+      "skill_name": "meeting_followup_email",
+      "when_to_use": "Send or draft a conventional post-meeting recap email with grounded recipients and factual decisions, action items, and next steps. Use only when the requested product is the recap email itself; do not use for a decision log, design review, interview/hiring report, coaching brief, engagement plan, onboarding pack, allocation report, campaign analysis, or risk monitor.",
+      "required_tools": [
+        "zm.meeting.meeting.get_meeting_summary",
+        "zm.connector_mcp.zm_gmail.gmail_send_email",
+        "zm.connector_mcp.zm_gmail.gmail_create_draft"
+      ],
+      "app_scope": [
+        "zm.meeting.meeting.meeting_nodes",
+        "zm_gmail"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Execution summary"
+        },
+        {
+          "name": "delivery_succeeded",
+          "type": "boolean",
+          "description": "The requested send or draft action succeeded"
+        },
+        {
+          "name": "delivery_metadata",
+          "type": "string",
+          "description": "Confirmed delivery or draft details"
+        }
+      ],
+      "incompatible_intent_phrases": [
+        "architecture review",
+        "campaign recap",
+        "campaign status",
+        "candidate assessment",
+        "coaching brief",
+        "coaching insights",
+        "deal coaching",
+        "deal risk",
+        "decision log",
+        "design review",
+        "engagement plan",
+        "hiring debrief",
+        "interview feedback",
+        "interviewer feedback",
+        "joint engagement",
+        "manager coaching",
+        "meeting allocation",
+        "new hire onboarding",
+        "onboarding plan",
+        "onboarding kickoff",
+        "rfc review",
+        "technical design"
+      ],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/meeting_followup_email.md",
+      "body_bytes": 4686,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:010144c417640723"
+      }
+    },
+    {
+      "capsule_id": "meeting_to_sf_note",
+      "skill_name": "meeting_to_sf_note",
+      "when_to_use": "Save meeting content as a Salesforce Note attached to an Opportunity or Account. Use this skill whenever the user wants to log, save, record, or write meeting notes into Salesforce \u2014 even if they just paste a transcript and say \"save this\" or \"log this to SF\". Trigger on phrases like \"save meeting to Salesforce\", \"log meeting notes\", \"add a note to the opportunity\", \"write this to SF\", \"record meeting in CRM\", \"attach meeting summary to account\", or any time raw meeting content needs to be persisted in Salesforce. Do NOT modify Opportunity fields \u2014 this skill writes Notes only.",
+      "required_tools": [
+        "zm.connector_mcp.zm_salesforce.salesforce_get_user_info",
+        "zm.connector_mcp.zm_salesforce.salesforce_search_accounts",
+        "zm.connector_mcp.zm_salesforce.salesforce_search_opportunities",
+        "zm.connector_mcp.zm_salesforce.salesforce_get_opportunity",
+        "zm.connector_mcp.zm_salesforce.salesforce_create_note"
+      ],
+      "app_scope": [
+        "zm_salesforce"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Execution summary"
+        },
+        {
+          "name": "note_created",
+          "type": "boolean",
+          "description": "Salesforce confirmed creation of the Note"
+        },
+        {
+          "name": "note_info",
+          "type": "string",
+          "description": "Confirmed Note details"
+        }
+      ],
+      "incompatible_intent_phrases": [
+        "best available record"
+      ],
+      "downstream_contract": {
+        "success_output": "note_created",
+        "payload_outputs": [
+          "note_info"
+        ]
+      },
+      "body_path": "resources/dp_capsules/meeting_to_sf_note.md",
+      "body_bytes": 5969,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:26e4f843ced9aafc"
+      }
+    },
+    {
+      "capsule_id": "onboarding-kickoff-pack",
+      "skill_name": "onboarding-kickoff-pack",
+      "when_to_use": "Generate a structured New Hire Onboarding Kickoff Pack from a meeting transcript or onboarding sync notes. The pack includes first-week tasks, key contacts, training resources, and 30/60/90-day milestones \u2014 all extracted intelligently from the conversation. Use this skill whenever the user mentions \"onboarding plan\", \"onboarding pack\", \"new hire plan\", \"kickoff pack\", \"new employee onboarding\", \"onboarding sync\", \"first week plan\", \"30-60-90 plan\", or pastes a transcript and asks to generate onboarding materials. Even if the user simply shares a meeting transcript involving a new hire discussion and asks \"what should the onboarding look like\", this skill should trigger. This is one of the highest-value HR automation tasks \u2014 it turns a 60-minute meeting into an actionable, professionally formatted onboarding document in seconds.",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: onboarding-kickoff-pack"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/onboarding-kickoff-pack.md",
+      "body_bytes": 6381,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:b42ceb7a925f77c2"
+      }
+    },
+    {
+      "capsule_id": "outlook_hourly_poll",
+      "skill_name": "outlook_hourly_poll",
+      "when_to_use": "Read-only one-hour polling fallback for an Outlook event request that has no supported trigger, such as a new email arriving in Outlook. Lists recent inbox messages, applies the user's event criteria, and emits a typed match result for a separately gated downstream step. Use only after the Custom schedule trigger; never send, reply, forward, draft, move, flag, categorize, mark read, or delete mail.",
+      "required_tools": [
+        "zm.connector_mcp.zm_outlook.outlook_list_messages",
+        "zm.connector_mcp.zm_outlook.outlook_get_message"
+      ],
+      "app_scope": [
+        "zm_outlook"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Polling result summary"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "At least one Outlook message in the bounded polling window matches the request"
+        },
+        {
+          "name": "matched_items",
+          "type": "string",
+          "description": "Grounded fields from Outlook messages that matched in the polling window"
+        }
+      ],
+      "incompatible_intent_phrases": [
+        "draft an email",
+        "forward",
+        "reply to",
+        "send an email",
+        "send email",
+        "send the email"
+      ],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "matched_items"
+        ]
+      },
+      "body_path": "resources/dp_capsules/outlook_hourly_poll.md",
+      "body_bytes": 3970,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:88b0231419d54168"
+      },
+      "task_prompt_guards": [
+        "Read only the authenticated user's inbox messages whose `receivedDateTime` falls in `[run time - 60 minutes, run time)`; never send, reply, forward, draft, move, flag, mark read, or delete mail.",
+        "Set `matched=false` and an empty `matched_items` for an authorization, listing, or timestamp failure; never report a failed read as a match.",
+        "Take the run time from the epoch milliseconds on the Current time line, which are UTC, and write the window in UTC with a trailing Z. The displayed clock time is local, and a zone abbreviation such as CST names more than one zone, so never convert through it."
+      ],
+      "polling_contract": {
+        "source_app": "zm_outlook",
+        "window_minutes": 60
+      }
+    },
+    {
+      "capsule_id": "salesforce_opportunity_ops",
+      "skill_name": "salesforce_opportunity_ops",
+      "when_to_use": "Creates, updates, advances, reads, and deletes Salesforce Opportunities only after unique ID and sales-process validation. Must ask instead of writing for Closed Lost without required loss reason, human-name-only updates, or Renewal/Expansion/Upsell paired with incompatible stages such as Prospecting. Use for Opportunity/deal operations that are NOT account/contact CRUD, lead lifecycle, activity logging, campaign management, or generic workspace admin/query work.",
+      "required_tools": [
+        "zm.connector_mcp.zm_salesforce.salesforce_get_user_info",
+        "zm.connector_mcp.zm_salesforce.salesforce_get_all_fields_for_object",
+        "zm.connector_mcp.zm_salesforce.salesforce_search_accounts",
+        "zm.connector_mcp.zm_salesforce.salesforce_search_opportunities",
+        "zm.connector_mcp.zm_salesforce.salesforce_search_contacts",
+        "zm.connector_mcp.zm_salesforce.salesforce_get_opportunity",
+        "zm.connector_mcp.zm_salesforce.salesforce_get_contact",
+        "zm.connector_mcp.zm_salesforce.salesforce_get_s_object_record",
+        "zm.connector_mcp.zm_salesforce.salesforce_create_s_object_record",
+        "zm.connector_mcp.zm_salesforce.salesforce_create_opportunity",
+        "zm.connector_mcp.zm_salesforce.salesforce_update_opportunity_by_id",
+        "zm.connector_mcp.zm_salesforce.salesforce_update_a_record",
+        "zm.connector_mcp.zm_salesforce.salesforce_update_opportunity_contact_role",
+        "zm.connector_mcp.zm_salesforce.salesforce_link_file_to_record",
+        "zm.connector_mcp.zm_salesforce.salesforce_upload_file_attachment",
+        "zm.connector_mcp.zm_salesforce.salesforce_delete_opportunity"
+      ],
+      "app_scope": [
+        "zm_salesforce"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Execution summary"
+        },
+        {
+          "name": "operation_succeeded",
+          "type": "boolean",
+          "description": "Salesforce confirmed the requested Opportunity operation"
+        },
+        {
+          "name": "updated",
+          "type": "boolean",
+          "description": "Salesforce confirmed the requested Opportunity update"
+        },
+        {
+          "name": "opportunity_info",
+          "type": "string",
+          "description": "Confirmed Opportunity details"
+        }
+      ],
+      "incompatible_intent_phrases": [
+        "call activity",
+        "create a note",
+        "direct message",
+        "log call",
+        "log the call",
+        "logging a call",
+        "logging the call",
+        "logging this call",
+        "salesforce note",
+        "zoom chat"
+      ],
+      "downstream_contract": {
+        "success_output": "operation_succeeded",
+        "alternate_success_outputs": [
+          "updated"
+        ],
+        "payload_outputs": [
+          "opportunity_info"
+        ]
+      },
+      "body_path": "resources/dp_capsules/salesforce_opportunity_ops.md",
+      "body_bytes": 46313,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:083fe4b71d80c761"
+      }
+    },
+    {
+      "capsule_id": "salesforce_sales_deal_risk_monitor",
+      "skill_name": "salesforce_sales_deal_risk_monitor",
+      "when_to_use": "Identifies grounded deal-risk signals from customer calls or internal deal-review meeting content, safely updates one uniquely matched Salesforce Opportunity, and creates a Google Doc risk report. External delivery by email or chat is a separate operation and is not performed by this capsule. Use for deal health checks, post-meeting risk scans, competitor/budget/champion/timeline/legal/procurement signals, and escalation analysis.",
+      "required_tools": [
+        "zm.connector_mcp.zm_salesforce.salesforce_get_user_info",
+        "zm.connector_mcp.zm_salesforce.salesforce_get_all_fields_for_object",
+        "zm.connector_mcp.zm_salesforce.salesforce_search_opportunities",
+        "zm.connector_mcp.zm_salesforce.salesforce_get_s_object_record",
+        "zm.connector_mcp.zm_salesforce.salesforce_update_a_record",
+        "zm.connector_mcp.zm_googledocs.googledocs_create_document"
+      ],
+      "app_scope": [
+        "zm_salesforce",
+        "zm_googledocs"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Execution summary"
+        },
+        {
+          "name": "risk_analyzed",
+          "type": "boolean",
+          "description": "Usable deal-risk meeting content was analyzed"
+        },
+        {
+          "name": "salesforce_updated",
+          "type": "boolean",
+          "description": "Salesforce confirmed the requested risk-field update"
+        },
+        {
+          "name": "report_created",
+          "type": "boolean",
+          "description": "Google Docs confirmed creation of the risk report"
+        },
+        {
+          "name": "report_url",
+          "type": "string",
+          "description": "Confirmed Google Doc report URL"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {
+        "success_output": "report_created",
+        "payload_outputs": [
+          "report_url"
+        ]
+      },
+      "body_path": "resources/dp_capsules/salesforce_sales_deal_risk_monitor.md",
+      "body_bytes": 14304,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:c4c070150b70c518"
+      }
+    },
+    {
+      "capsule_id": "send-email",
+      "skill_name": "send-email",
+      "when_to_use": "Draft or send email on the user's behalf via an available Gmail or Outlook-style mail tool. Use when a workflow must create exactly one draft or deliver exactly one email, preserve To/CC/BCC semantics, choose the provider's real HTML flag for sends, and compose an email-safe body. The requested draft/send action is authoritative and mutually exclusive.",
+      "required_tools": [],
+      "app_scope": [
+        "zm_gmail",
+        "zm_outlook"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Execution summary"
+        },
+        {
+          "name": "delivery_succeeded",
+          "type": "boolean",
+          "description": "The requested send or draft action succeeded"
+        },
+        {
+          "name": "delivery_metadata",
+          "type": "string",
+          "description": "Confirmed delivery or draft details"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/send-email.md",
+      "body_bytes": 9524,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:bb004004cd703552"
+      },
+      "task_prompt_guards": [
+        "Treat the PlanIR requested delivery action as authoritative. For `draft`, call only the provider's draft-creation capability and never a send capability; for `send`, call only the provider's send capability. Never perform both actions."
+      ]
+    },
+    {
+      "capsule_id": "slack_hourly_poll",
+      "skill_name": "slack_hourly_poll",
+      "when_to_use": "Read-only one-hour polling fallback for new Slack channel messages when there is no supported Slack message trigger. Detect matching messages and expose typed fields for a separately gated delivery; never post, reply, edit, schedule, or delete.",
+      "required_tools": [
+        "zm.connector_mcp.zm_slack.slack_find_user_channels",
+        "zm.connector_mcp.zm_slack.slack_fetch_conversation_history"
+      ],
+      "app_scope": [
+        "zm_slack"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Polling result summary"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "At least one Slack channel message in the bounded polling window matches the request"
+        },
+        {
+          "name": "matched_items",
+          "type": "string",
+          "description": "Grounded fields from Slack messages that matched in the polling window"
+        }
+      ],
+      "incompatible_intent_phrases": [
+        "post a",
+        "post the",
+        "post to",
+        "send a message",
+        "send the message",
+        "reply to",
+        "edit the message"
+      ],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "matched_items"
+        ]
+      },
+      "body_path": "resources/dp_capsules/slack_hourly_poll.md",
+      "body_bytes": 2604,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:e0a95b433b846a64"
+      },
+      "allow_auto_tool_discovery": false,
+      "task_prompt_guards": [
+        "Resolve the named Slack channel through the connected account's user-channel read, accept only a unique exact label, and use its returned ID for history.",
+        "Read only messages whose provider timestamps are in the half-open prior hour, paging until the window is covered; a failed or incomplete read is not a match.",
+        "Take run time from the epoch milliseconds on the Current time line and compare history timestamps in UTC, never via a local timezone abbreviation.",
+        "Never post, schedule, reply, edit, react, or delete a Slack message in this poll."
+      ],
+      "polling_contract": {
+        "source_app": "zm_slack",
+        "window_minutes": 60
+      }
+    },
+    {
+      "capsule_id": "stakeholder-campaign-recap",
+      "skill_name": "stakeholder-campaign-recap",
+      "when_to_use": "Automatically generates a structured Stakeholder Campaign Recap from marketing team meeting notes,status updates, or verbal summaries. Output covers five standard sections: Published/Live, In Progress,Planned/Pending, Risks & Blockers, and Next Milestones \u2014 ready to share with stakeholders via email,Slack, or as a report attachment.Use this skill whenever the user mentions \"summarize the meeting\", \"sync campaign status\", \"write a recap\",\"campaign summary\", \"marketing status update\", \"stakeholder update\", \"activity progress report\",\"help me organize today's meeting notes\", or \"generate a status update\".Even if the user simply pastes a block of meeting notes and asks \"can you organize this?\", this skillmust be triggered.",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: stakeholder-campaign-recap"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/stakeholder-campaign-recap.md",
+      "body_bytes": 5074,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:7bdbdeea4a325209"
+      }
+    },
+    {
+      "capsule_id": "summary_meeting",
+      "skill_name": "summary_meeting",
+      "when_to_use": "Analyzes meeting transcripts and generates structured summaries using a single best-fit template (Decision, Lecture, Interview, Clinical, Sales, Legal, etc.). Fetches meeting content via tab context or RAG search, then writes the summary to a document in Zoom Canvas Doc, Google Doc, or Microsoft Doc as requested.",
+      "required_tools": [
+        "zm.aic.tool.search_meeting",
+        "zm.aic.tool.get_meeting_summary",
+        "zm.doc.doc.create_zoom_doc",
+        "zm.doc.doc.update_zoom_doc",
+        "zm.aic.tool.search_zoom_doc",
+        "zm.connector_mcp.zm_googledocs.googledocs_create_document",
+        "zm.connector_mcp.zm_googledocs.googledocs_update_document_markdown"
+      ],
+      "app_scope": [
+        "zm.meeting.meeting.meeting_nodes",
+        "zm.doc.doc.doc_nodes",
+        "zm_googledocs"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: summary_meeting"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/summary_meeting.md",
+      "body_bytes": 14918,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:60301cb1fcd59351"
+      }
+    },
+    {
+      "capsule_id": "zoom_chat",
+      "skill_name": "zoom_chat",
+      "when_to_use": "Use for every Zoom Chat operation. WRITE: send DM, post to channel, reply, create channel, add users to channel, mute/unmute channel, archive/unarchive channel. READ: search messages, fetch channel history (a meeting's in-meeting chat is a Zoom Chat channel named after the meeting topic), list my mentions, list my sent. Triggers: DM, message, post, reply, create channel, add to channel, mute, archive, find chat, mentions of me, catch up.",
+      "required_tools": [
+        "zm.aic.tool.resolve_entity",
+        "zm.aic.tool.search_chat",
+        "zm.aic.tool.fetch_messages_by_session_and_time",
+        "zm.system.resource.unified_search",
+        "zm.tc.channel.create_chat_channel_node",
+        "zm.tc.channel.add_people_to_channel_node",
+        "zm.tc.channel.team_chat_channel_mute_status_update",
+        "zm.tc.channel.team_chat_channel_archive_status_update",
+        "zm.tc.channel.team_chat_channel_members_get",
+        "zm.tc.channel.team_chat_channel_mention_groups_get",
+        "zm.tc.message.send_message_to_person_node",
+        "zm.tc.message.send_message_to_channel",
+        "zm.tc.message.reply_message",
+        "zm.tc.message.team_chat_msg_mention_me_fetch",
+        "zm.tc.message.team_chat_msg_sent_list",
+        "zm.tc.message.team_chat_msg_deep_links_get",
+        "zm.tc.message.team_chat_session_deep_links_get"
+      ],
+      "app_scope": [
+        "zm.tc.tc.team_chat_nodes"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: zoom_chat"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/zoom_chat.md",
+      "body_bytes": 49006,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:d3c80809a1f0ba6e"
+      }
+    },
+    {
+      "capsule_id": "zoom_chat_formatter",
+      "skill_name": "zoom_chat_formatter",
+      "when_to_use": "Beautifies model-generated content for Zoom Chat/Channel by converting unsupported markdown syntax into Zoom-compatible equivalents, adding emoji-based section headers, extracting action items, bolding summary sentences, converting implicit enumerations into bullet lists, and splitting dense paragraphs; accepts any plain text or markdown content; use when the user asks to format, reformat, send, or prepare content for Zoom Chat or a Zoom Channel.",
+      "required_tools": [],
+      "app_scope": [],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Result of: zoom_chat_formatter"
+        }
+      ],
+      "incompatible_intent_phrases": [],
+      "downstream_contract": {},
+      "body_path": "resources/dp_capsules/zoom_chat_formatter.md",
+      "body_bytes": 10642,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:fd1091acb862eb6d"
+      }
+    },
+    {
+      "capsule_id": "zoom_chat_hourly_poll",
+      "skill_name": "zoom_chat_hourly_poll",
+      "when_to_use": "Read-only one-hour polling fallback for a Zoom Chat event request that no supported trigger covers, such as new messages in a named channel inside a digest that also watches other sources, or messages matching a keyword across chats. Reads a bounded Zoom Chat scope, applies the user's event criteria, and emits a typed match result for a separately gated downstream step. Use only after the Custom schedule trigger; never send, reply, react, pin, edit, or delete a message.",
+      "required_tools": [
+        "zm.aic.tool.resolve_entity",
+        "zm.aic.tool.fetch_messages_by_session_and_time",
+        "zm.aic.tool.search_chat",
+        "zm.tc.message.team_chat_msg_deep_links_get"
+      ],
+      "app_scope": [
+        "zm.tc.tc.team_chat_nodes"
+      ],
+      "typed_outputs": [
+        {
+          "name": "response",
+          "type": "string",
+          "description": "Polling result summary"
+        },
+        {
+          "name": "matched",
+          "type": "boolean",
+          "description": "At least one Zoom Chat message in the bounded polling window matches the request"
+        },
+        {
+          "name": "matched_items",
+          "type": "string",
+          "description": "Grounded fields from Zoom Chat messages that matched in the polling window"
+        }
+      ],
+      "incompatible_intent_phrases": [
+        "direct message",
+        "post a",
+        "post the",
+        "post to",
+        "reply to",
+        "send a message",
+        "send the message"
+      ],
+      "downstream_contract": {
+        "success_output": "matched",
+        "payload_outputs": [
+          "matched_items"
+        ]
+      },
+      "body_path": "resources/dp_capsules/zoom_chat_hourly_poll.md",
+      "body_bytes": 4656,
+      "source": {
+        "kind": "bundled_copy",
+        "digest": "sha256:15882a73d27ca5e9"
+      },
+      "task_prompt_guards": [
+        "Resolve every named channel with `resolve_entity` before reading it and read only that exact channel; never substitute a similar channel.",
+        "Set `matched=false` and an empty `matched_items` for an unresolved channel, a failed read, or a missing scope; never send, reply, react, pin, edit, or delete a message.",
+        "Take the run time from the epoch milliseconds on the Current time line, which are UTC, and compare message times and any search window in UTC. The displayed clock time is local, and a zone abbreviation such as CST names more than one zone, so never convert through it."
+      ],
+      "polling_contract": {
+        "source_app": "zm.tc.tc.team_chat_nodes",
+        "window_minutes": 60
+      }
+    }
+  ]
+}

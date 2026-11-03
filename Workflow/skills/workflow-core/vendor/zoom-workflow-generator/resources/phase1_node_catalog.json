@@ -1,0 +1,4072 @@
+{
+  "format_version": 1,
+  "items": [
+    {
+      "action_id": "zm.aic.agent.deep_reasoning",
+      "node_id": "zm.aic.agent.deep_reasoning",
+      "node_name": "AI reasoning",
+      "node_type": "tool",
+      "nodeSetId": null,
+      "source": "1p",
+      "description": "Zoom AI - AI Reasoning analyzes complex inputs, synthesizes information, and generates structured insights or recommendations. It can evaluate multi-step problems, compare strategic options with pros and cons, or produce detailed explanations and action plans from raw context. It is intended for decision support, root cause analysis, and complex scenario modeling within automated workflows.",
+      "tags": [
+        "1p",
+        "agent",
+        "ai analysis",
+        "aic",
+        "built-in",
+        "companion",
+        "decision support",
+        "deep_reasoning",
+        "first-party",
+        "problem solving",
+        "reasoning",
+        "tool",
+        "tool node",
+        "workflow automation",
+        "zoom",
+        "zoom ai"
+      ],
+      "arg_schema": {},
+      "output_schema": {},
+      "input_summary": null,
+      "output_summary": null,
+      "domain": "tool",
+      "product_name": "Zoom AI",
+      "is_third_party": false,
+      "app": null,
+      "execution": {
+        "worker_node_id": "zm.aic.agent.deep_reasoning"
+      },
+      "config": {},
+      "ext": "{\"aicw_node_type\":\"deep_reasoning\"}",
+      "relation_ids": {},
+      "node_description": "",
+      "prompt": null,
+      "created_at": 1782418588,
+      "updated_at": 1782418588,
+      "version": "3.3"
+    },
+    {
+      "action_id": "zm.system.operators.code",
+      "node_id": "zm.system.operators.code",
+      "node_name": "Custom script",
+      "node_type": "tool",
+      "source": "1p",
+      "description": "Runs deterministic Python in a secure sandbox to transform, normalize, calculate, serialize, or format upstream workflow data.",
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "object",
+            "description": "Named input bindings"
+          },
+          "code": {
+            "type": "string",
+            "description": "Complete sandbox-compatible Python program"
+          }
+        },
+        "required": [
+          "input",
+          "code"
+        ]
+      },
+      "output_schema": {},
+      "domain": "tool",
+      "product_name": "Zoom System Utilities",
+      "is_third_party": false,
+      "execution": {
+        "worker_node_id": "zm.system.operators.code"
+      },
+      "config": {},
+      "ext": "{\"aicw_node_type\":\"logic\"}",
+      "node_description": "Insert and run custom Python in a secure sandbox; returned fields become workflow outputs.",
+      "prompt": null,
+      "version": "3.3"
+    },
+    {
+      "action_id": "zm.system.operators.html",
+      "node_id": "zm.system.operators.html",
+      "name": "zm.system.operators.html",
+      "node_name": "HTML page",
+      "node_type": "tool",
+      "domain": "tool",
+      "description": "Render a complete HTML template with flat runtime slots and publish it as an owner-scoped shareable artifact.",
+      "source": "1P",
+      "tags": [
+        "html",
+        "html render",
+        "presentation",
+        "workflow automation"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "template": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "type": {
+                  "type": "string"
+                },
+                "required": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "name",
+                "type",
+                "required"
+              ]
+            }
+          },
+          "parameter": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "template",
+          "slots",
+          "parameter"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "description": "Owner-scoped stored HTML artifact identifier"
+          },
+          "url": {
+            "type": "string",
+            "description": "Shareable rendered HTML URL"
+          },
+          "content": {
+            "type": "object",
+            "description": "Stored HTML artifact content metadata"
+          }
+        }
+      },
+      "input_summary": "Complete HTML5 template plus flat slot bindings",
+      "output_summary": "Stored artifact id, shareable URL, and artifact content metadata",
+      "is_third_party": false,
+      "product_name": "Zoom Workflows",
+      "execution": {
+        "worker_node_id": "zm.system.operators.html"
+      },
+      "config": {},
+      "ext": "{\"aicw_node_type\":\"logic\"}",
+      "node_description": ""
+    },
+    {
+      "action_id": "zm.doc.mynotes.note_generated",
+      "node_id": "zm.doc.mynotes.note_generated",
+      "name": "zm.doc.mynotes.note_generated",
+      "node_name": "Note generated",
+      "node_type": "trigger",
+      "nodeSetId": "zm.doc.mynotes.mynotes_events",
+      "domain": "trigger",
+      "description": "Trigger when a new note is generated in My Notes.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "meeting_summary_template": {
+            "type": "string",
+            "description": "Select a meeting summary template"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "meeting": {
+            "type": "meeting",
+            "description": "Meeting data for My Notes summary created trigger",
+            "name": "Meeting"
+          },
+          "meetingParticipants": {
+            "type": "array",
+            "items": {
+              "type": "user",
+              "description": "Meeting participants for My Notes summary created trigger",
+              "name": "Meeting Participants"
+            }
+          },
+          "note_link": {
+            "type": "string",
+            "description": "URL of the generated My Notes note.",
+            "name": "Note URL"
+          }
+        }
+      },
+      "input_summary": "meeting_summary_template (Optional): Select a meeting summary template",
+      "output_summary": "meeting: Meeting data for My Notes summary created trigger; meetingParticipants: Meeting participants for My Notes summary created trigger; note_link: URL of the generated My Notes note.",
+      "is_third_party": false,
+      "product_name": "My Notes",
+      "execution": {
+        "worker_node_id": "zm.doc.mynotes.note_generated"
+      },
+      "config": {},
+      "node_description": "Trigger when a new note is generated in My Notes."
+    },
+    {
+      "action_id": "zm.doc.mynotes.transcript_generated",
+      "node_id": "zm.doc.mynotes.transcript_generated",
+      "name": "zm.doc.mynotes.transcript_generated",
+      "node_name": "Transcript generated",
+      "node_type": "trigger",
+      "nodeSetId": "zm.doc.mynotes.mynotes_events",
+      "domain": "trigger",
+      "description": "Trigger when a transcript is generated for a My Notes note.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "meeting_summary_template": {
+            "type": "string",
+            "description": "Select a meeting summary template"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "meeting": {
+            "type": "meeting",
+            "description": "Meeting data for My Notes transcript generated trigger",
+            "name": "Meeting"
+          },
+          "meetingParticipants": {
+            "type": "array",
+            "items": {
+              "type": "user",
+              "description": "Meeting participants for My Notes transcript generated trigger",
+              "name": "Meeting Participants"
+            }
+          },
+          "note_link": {
+            "type": "string",
+            "description": "URL of the generated My Notes note.",
+            "name": "Note URL"
+          }
+        }
+      },
+      "input_summary": "meeting_summary_template (Optional): Select a meeting summary template",
+      "output_summary": "meeting: Meeting data for My Notes transcript generated trigger; meetingParticipants: Meeting participants for My Notes transcript generated trigger; note_link: URL of the generated My Notes note.",
+      "is_third_party": false,
+      "product_name": "My Notes",
+      "execution": {
+        "worker_node_id": "zm.doc.mynotes.transcript_generated"
+      },
+      "config": {},
+      "node_description": "Trigger when a transcript is generated for a My Notes note."
+    },
+    {
+      "action_id": "zm.meeting.meeting.meeting_event",
+      "name": "zm.meeting.meeting.meeting_event",
+      "domain": "trigger",
+      "description": "Zoom Meetings - Meeting event trigger. This trigger node starts a workflow when a Zoom meeting event occurs, such as meeting start, meeting end, or other meeting activities, and outputs the meeting object with details like topic and host. Use cases include triggering automated meeting follow-ups, tracking meeting lifecycle events for analytics, and syncing meeting activity to external systems or notifications.",
+      "tags": [
+        "1p",
+        "built-in",
+        "event",
+        "first-party",
+        "meeting",
+        "meeting data",
+        "meeting end",
+        "meeting event",
+        "meeting start",
+        "meeting_event",
+        "meetings",
+        "trigger",
+        "workflow automation",
+        "zoom",
+        "zoom meetings"
+      ],
+      "arg_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Meeting filter config",
+        "description": "Defines configuration for filtering meetings based on specific criteria such as meeting ID, participant, topic, or time range.",
+        "type": "object",
+        "oneOf": [
+          {
+            "title": "specified_meeting",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "filter_type": {
+                "const": "specified_meeting"
+              },
+              "specific_meetings": {
+                "type": "array",
+                "description": "Use when specific meetings are explicitly identified (e.g., selected meetings or directly referenced in the request).",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "meeting_id": {
+                      "type": "string",
+                      "description": "Unique meeting ID. Example: '93913482256'."
+                    },
+                    "meeting_topic": {
+                      "type": "string",
+                      "description": "Meeting topic or title. Example: 'Meeting with John Doe'."
+                    }
+                  },
+                  "required": [
+                    "meeting_id",
+                    "meeting_topic"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "filter_type",
+              "specific_meetings"
+            ],
+            "description": "Use when the request or context specifies exact meetings to filter."
+          },
+          {
+            "title": "by_rules",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "filter_type": {
+                "const": "by_rules"
+              },
+              "participant_filter": {
+                "type": "array",
+                "description": "Filter meetings that include specific participants (e.g., 'meetings with John Doe').",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "user_name": {
+                      "type": "string",
+                      "description": "Exact participant name as stated."
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "description": "Unique user ID of the participant."
+                    }
+                  },
+                  "required": [
+                    "user_name",
+                    "user_id"
+                  ]
+                }
+              },
+              "topic_filter": {
+                "type": "array",
+                "description": "Filter meetings by keywords in the meeting topic (e.g., 'project updates').",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "time_range_filter": {
+                "type": "object",
+                "additionalProperties": false,
+                "description": "Filter meetings within a certain time range.",
+                "properties": {
+                  "start_time": {
+                    "type": "string",
+                    "description": "Start time in Unix timestamp format. Include only if specifically requested."
+                  },
+                  "end_time": {
+                    "type": "string",
+                    "description": "End time in Unix timestamp format. Include only if specifically requested."
+                  }
+                }
+              }
+            },
+            "required": [
+              "filter_type"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "participant_filter"
+                ]
+              },
+              {
+                "required": [
+                  "topic_filter"
+                ]
+              },
+              {
+                "required": [
+                  "time_range_filter"
+                ]
+              }
+            ],
+            "description": "Use when filtering meetings based on participant names, topic keywords, or time ranges."
+          },
+          {
+            "title": "all_meetings",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "filter_type": {
+                "const": "all_meetings"
+              }
+            },
+            "required": [
+              "filter_type"
+            ],
+            "description": "Use when no specific filters are applied; includes all meetings."
+          },
+          {
+            "title": "all_external_meetings",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "filter_type": {
+                "const": "all_external_meetings"
+              }
+            },
+            "required": [
+              "filter_type"
+            ],
+            "description": "Use when the request explicitly applies only to meetings with external participants."
+          }
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "meeting": {
+            "type": "meeting",
+            "description": "the meeting object includes meeting info like meeting topic, meeting host etc",
+            "required": true,
+            "properties": {
+              "account_id": {
+                "description": "Account identifier",
+                "type": "string"
+              },
+              "attendee_list": {
+                "description": "Meeting attendees",
+                "items": {
+                  "type": "User"
+                },
+                "type": "array"
+              },
+              "business_group_id": {
+                "description": "Business group identifier",
+                "type": "string"
+              },
+              "business_id": {
+                "description": "Business identifier",
+                "type": "string"
+              },
+              "business_type": {
+                "description": "Type of business meeting",
+                "type": "string"
+              },
+              "created": {
+                "description": "Creation timestamp string",
+                "type": "string"
+              },
+              "doc_id": {
+                "content_type": "doc_id",
+                "description": "Associated document ID",
+                "type": "string"
+              },
+              "has_metadata_permission": {
+                "description": "Whether user can access metadata",
+                "type": "boolean"
+              },
+              "has_summary": {
+                "description": "Whether meeting has AI summary",
+                "type": "boolean"
+              },
+              "has_summary_permission": {
+                "description": "Whether user can access summary",
+                "type": "boolean"
+              },
+              "has_transcript": {
+                "description": "Whether meeting has transcript",
+                "type": "boolean"
+              },
+              "has_transcript_permission": {
+                "description": "Whether user can access transcript",
+                "type": "boolean"
+              },
+              "host_email": {
+                "description": "Host email address",
+                "type": "string"
+              },
+              "host_id": {
+                "description": "Host ID",
+                "type": "string"
+              },
+              "htmlLink": {
+                "description": "Link to meeting details",
+                "type": "string"
+              },
+              "join_time": {
+                "description": "Participant join time records",
+                "items": {
+                  "type": "JoinTimeItem"
+                },
+                "type": "array"
+              },
+              "kind": {
+                "description": "Meeting kind or type",
+                "type": "string"
+              },
+              "location": {
+                "description": "Meeting location",
+                "type": "string"
+              },
+              "main_file_id": {
+                "description": "Primary associated file ID",
+                "type": "string"
+              },
+              "master_event_id": {
+                "description": "Master event ID for recurring meetings",
+                "type": "string"
+              },
+              "meeting_category": {
+                "description": "Meeting category classification",
+                "type": "MeetingCategory"
+              },
+              "meeting_end_time": {
+                "description": "Actual meeting end timestamp",
+                "type": "integer"
+              },
+              "meeting_id": {
+                "description": "Meeting  id",
+                "type": "string"
+              },
+              "meeting_number": {
+                "description": "Meeting number",
+                "type": "integer"
+              },
+              "meeting_source": {
+                "description": "Source platform of the meeting",
+                "type": "string"
+              },
+              "meeting_start_time": {
+                "description": "Actual meeting start timestamp",
+                "type": "integer"
+              },
+              "meeting_topic": {
+                "description": "Topic",
+                "type": "string"
+              },
+              "meeting_type": {
+                "description": "Type of meeting (instant, scheduled, etc.)",
+                "type": "integer"
+              },
+              "next_steps_file_sub_type": {
+                "description": "Type of next steps file",
+                "type": "string"
+              },
+              "original_meeting_type": {
+                "description": "Original meeting type before changes",
+                "type": "integer"
+              },
+              "participant_size": {
+                "description": "Number of participants",
+                "type": "integer"
+              },
+              "query_privilege": {
+                "description": "User query permission level",
+                "type": "integer"
+              },
+              "recall_source_names": {
+                "description": "Source names for recall functionality",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "recurring_event_id": {
+                "description": "ID for recurring meeting series",
+                "type": "string"
+              },
+              "schedule_end_time": {
+                "description": "Scheduled end timestamp",
+                "type": "integer"
+              },
+              "schedule_start_time": {
+                "description": "Scheduled start time",
+                "type": "integer"
+              },
+              "score": {
+                "description": "Relevance or quality score",
+                "type": "number"
+              },
+              "status": {
+                "description": "Current meeting status",
+                "type": "string"
+              },
+              "summary.docId": {
+                "content_type": "doc_id",
+                "description": "Canonical meeting summary document ID in Zoom Canvas Doc",
+                "type": "string"
+              },
+              "summary.summaryContent": {
+                "content_type": "markdown_text",
+                "description": "Meeting AI summary content",
+                "type": "string"
+              },
+              "summary_chunk": {
+                "description": "Segmented summary content chunks",
+                "items": {
+                  "type": "Chunk"
+                },
+                "type": "array"
+              },
+              "summary_content": {
+                "content_type": "markdown_text",
+                "description": "Meeting summary text content",
+                "type": "string"
+              },
+              "summary_file_sub_type": {
+                "description": "Type of summary file",
+                "type": "string"
+              },
+              "transcript_chunk": {
+                "description": "Segmented transcript content chunks",
+                "items": {
+                  "type": "Chunk"
+                },
+                "type": "array"
+              },
+              "transcript_content": {
+                "description": "Meeting transcript text content",
+                "type": "string"
+              },
+              "transcript_file_sub_type": {
+                "description": "Type of transcript file",
+                "type": "string"
+              },
+              "unified_id": {
+                "description": "Unified identifier across systems",
+                "type": "string"
+              },
+              "updated": {
+                "description": "Last update timestamp string",
+                "type": "string"
+              }
+            }
+          },
+          "meetingParticipants": {
+            "type": "array",
+            "items": {
+              "type": "user",
+              "properties": {
+                "account_id": {
+                  "description": "Account ID",
+                  "type": "string"
+                },
+                "admin": {
+                  "description": "Admin status",
+                  "type": "boolean"
+                },
+                "dept": {
+                  "description": "Department",
+                  "type": "string"
+                },
+                "display_name": {
+                  "description": "Display name",
+                  "type": "string"
+                },
+                "email": {
+                  "description": "Email",
+                  "type": "string"
+                },
+                "lower_user_id": {
+                  "description": "Lowercase user ID",
+                  "type": "string"
+                },
+                "option01": {
+                  "description": "Option field",
+                  "type": "integer"
+                },
+                "owner": {
+                  "description": "Owner status",
+                  "type": "boolean"
+                },
+                "role": {
+                  "description": "Role ID",
+                  "type": "integer"
+                },
+                "sns_email": {
+                  "description": "SNS email",
+                  "type": "string"
+                },
+                "user_id": {
+                  "description": "User ID",
+                  "type": "string"
+                },
+                "user_type": {
+                  "description": "User type",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "account_id",
+                "user_id"
+              ]
+            },
+            "description": "Meeting Participants"
+          },
+          "recording": {
+            "type": "object",
+            "description": "Recording"
+          }
+        }
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.meeting.meeting.meeting_event"
+      },
+      "input_summary": "None",
+      "output_summary": "meeting: the meeting object includes meeting info like meeting topic, meeting host etc; meetingParticipants: Meeting Participants; recording: Recording",
+      "node_id": "zm.meeting.meeting.meeting_event",
+      "node_name": "Meeting event",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom Meetings",
+      "is_third_party": false,
+      "node_description": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+      "config": {
+        "event_type": {
+          "type": "array",
+          "description": "Types of meeting events that can activate this trigger, such as meeting start or end.",
+          "items": [
+            {
+              "event_name": "meeting.start",
+              "event_type": "auto",
+              "event_desc": "Use when the trigger is tied to the moment a meeting begins (or slightly before/after).\nIf the workflow action clearly happens before or during the meeting, select this.\nDo not use if the user intends to take action after the meeting finishes.  This includes phrases like 'when the meeting starts', 'right before the meeting', or '5 minutes after it begins'.",
+              "event_config": {
+                "time_offset": {
+                  "type": "number",
+                  "description": "Minutes before (negative) or after (positive) the event to trigger. Example: -5 means 5 minutes before, 10 means 10 minutes after."
+                }
+              }
+            },
+            {
+              "event_name": "meeting.end",
+              "event_type": "auto",
+              "event_desc": "Use when the workflow should run after the meeting finishes or shortly before/after that moment.\nTypical cases: immediate follow-up actions that do not require an AI summary.\nDo not use for a request that explicitly waits until the meeting summary becomes available; use meeting.summary_created instead.",
+              "event_config": {
+                "time_offset": {
+                  "type": "number",
+                  "description": "Minutes before (negative) or after (positive) the event to trigger. Example: -5 means 5 minutes before, 10 means 10 minutes after."
+                }
+              }
+            },
+            {
+              "event_name": "meeting.summary_created",
+              "event_type": "auto",
+              "event_desc": "Use when the workflow must start only after the meeting AI summary becomes available. This is later and more specific than meeting.end; use zero time_offset when the request says the summary is ready or becomes available.",
+              "event_config": {
+                "time_offset": {
+                  "type": "number",
+                  "description": "Minutes before (negative) or after (positive) summary availability. Use 0 for summary-ready workflows."
+                }
+              }
+            },
+            {
+              "event_name": "meeting.participant_joined_late",
+              "event_type": "auto",
+              "event_desc": "Use when the user request involves reacting to participants joining a meeting late. Look for mentions like 'notify me if someone joins more than X minutes late' or 'track late arrivals'.",
+              "event_config": {
+                "time": {
+                  "type": "number",
+                  "description": "The specific number of minutes a participant is late to join the meeting. For example, if a participant joins 10 minutes late, set this value to 10."
+                }
+              }
+            },
+            {
+              "event_name": "meeting.participant_left_early",
+              "event_type": "auto",
+              "event_desc": "Use when the user request is about detecting or responding to participants leaving before the scheduled meeting end time. Example phrases: 'if someone leaves 10 minutes early', 'alert me when a participant leaves early'.",
+              "event_config": {
+                "time": {
+                  "type": "number",
+                  "description": "Number of minutes before the scheduled end time that a participant leaves to be considered as 'left early'. For example, if set to 10, it means the participant left 10 minutes before the meeting ended."
+                }
+              }
+            }
+          ]
+        },
+        "suggest_type": {
+          "type": "array",
+          "items": [
+            {
+              "suggest_name": "specific_meetings",
+              "suggest_desc": "MUST suggest the user to select specific meetings to track only when no meetings have been specified \u2014 **Skip the suggest if the user has explicitly mention some particular meetings(with someone or some particular topics etc) or explicitly indicated \"all meetings\" (or equivalent terms like \"all\" \"every meeting\")."
+            },
+            {
+              "suggest_name": "meeting_event_type",
+              "suggest_desc": "**MUST Suggest** specifying which meeting event should trigger the workflow (meeting start, meeting end, participant joined late, participant left early) **only if the user hasn\u2019t explicitly mentioned it and it cannot be inferred from context**."
+            },
+            {
+              "suggest_name": "meeting_start",
+              "suggest_desc": "Suggest specifying the time offset for the meeting start event trigger if the user mentions it but did not provide a specific time. Only allow time input in minutes or larger units."
+            },
+            {
+              "suggest_name": "meeting_end",
+              "suggest_desc": "Suggest specifying the time offset for the meeting end event if the user mentions it but does not provide a specific time. Only accept input in minutes or larger units."
+            },
+            {
+              "suggest_name": "meeting_participant_joined_late",
+              "suggest_desc": "Suggest specifying the number of minutes for the participant joined late event if the user mentions it but does not provide a time threshold. Only accept input in minutes or larger units."
+            },
+            {
+              "suggest_name": "meeting_participant_left_early",
+              "suggest_desc": "Suggest specifying the number of minutes for the **participant left early event** if the user mentions it but does not provide a time threshold. Only accept input in minutes or larger units."
+            }
+          ]
+        }
+      },
+      "raw_node": {
+        "nodeId": "zm.meeting.meeting.meeting_event",
+        "nodeName": "Meeting event",
+        "nodeDescription": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "Meeting filter config",
+          "description": "Defines configuration for filtering meetings based on specific criteria such as meeting ID, participant, topic, or time range.",
+          "type": "object",
+          "oneOf": [
+            {
+              "title": "specified_meeting",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filter_type": {
+                  "const": "specified_meeting"
+                },
+                "specific_meetings": {
+                  "type": "array",
+                  "description": "Use when specific meetings are explicitly identified (e.g., selected meetings or directly referenced in the request).",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "meeting_id": {
+                        "type": "string",
+                        "description": "Unique meeting ID. Example: '93913482256'."
+                      },
+                      "meeting_topic": {
+                        "type": "string",
+                        "description": "Meeting topic or title. Example: 'Meeting with John Doe'."
+                      }
+                    },
+                    "required": [
+                      "meeting_id",
+                      "meeting_topic"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "filter_type",
+                "specific_meetings"
+              ],
+              "description": "Use when the request or context specifies exact meetings to filter."
+            },
+            {
+              "title": "by_rules",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filter_type": {
+                  "const": "by_rules"
+                },
+                "participant_filter": {
+                  "type": "array",
+                  "description": "Filter meetings that include specific participants (e.g., 'meetings with John Doe').",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "user_name": {
+                        "type": "string",
+                        "description": "Exact participant name as stated."
+                      },
+                      "user_id": {
+                        "type": "string",
+                        "description": "Unique user ID of the participant."
+                      }
+                    },
+                    "required": [
+                      "user_name",
+                      "user_id"
+                    ]
+                  }
+                },
+                "topic_filter": {
+                  "type": "array",
+                  "description": "Filter meetings by keywords in the meeting topic (e.g., 'project updates').",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "time_range_filter": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Filter meetings within a certain time range.",
+                  "properties": {
+                    "start_time": {
+                      "type": "string",
+                      "description": "Start time in Unix timestamp format. Include only if specifically requested."
+                    },
+                    "end_time": {
+                      "type": "string",
+                      "description": "End time in Unix timestamp format. Include only if specifically requested."
+                    }
+                  }
+                }
+              },
+              "required": [
+                "filter_type"
+              ],
+              "anyOf": [
+                {
+                  "required": [
+                    "participant_filter"
+                  ]
+                },
+                {
+                  "required": [
+                    "topic_filter"
+                  ]
+                },
+                {
+                  "required": [
+                    "time_range_filter"
+                  ]
+                }
+              ],
+              "description": "Use when filtering meetings based on participant names, topic keywords, or time ranges."
+            },
+            {
+              "title": "all_meetings",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filter_type": {
+                  "const": "all_meetings"
+                }
+              },
+              "required": [
+                "filter_type"
+              ],
+              "description": "Use when no specific filters are applied; includes all meetings."
+            }
+          ]
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "meeting": {
+              "type": "meeting",
+              "description": "the meeting object includes meeting info like meeting topic, meeting host etc",
+              "required": true
+            }
+          }
+        },
+        "config": {
+          "event_type": {
+            "type": "array",
+            "description": "Types of meeting events that can activate this trigger, such as meeting start or end.",
+            "items": [
+              {
+                "event_name": "meeting.start",
+                "event_type": "auto",
+                "event_desc": "Use when the trigger is tied to the moment a meeting begins (or slightly before/after).\nIf the workflow action clearly happens before or during the meeting, select this.\nDo not use if the user intends to take action after the meeting finishes.  This includes phrases like 'when the meeting starts', 'right before the meeting', or '5 minutes after it begins'.",
+                "event_config": {
+                  "time_offset": {
+                    "type": "number",
+                    "description": "Minutes before (negative) or after (positive) the event to trigger. Example: -5 means 5 minutes before, 10 means 10 minutes after."
+                  }
+                }
+              },
+              {
+                "event_name": "meeting.end",
+                "event_type": "auto",
+                "event_desc": "Use when the workflow should run after the meeting finishes or shortly before/after that moment.\nTypical cases: summaries, follow-up emails, document creation based on the meeting\u2019s discussion.\nIf the request is about producing results from the meeting content, this is almost always meeting.end.",
+                "event_config": {
+                  "time_offset": {
+                    "type": "number",
+                    "description": "Minutes before (negative) or after (positive) the event to trigger. Example: -5 means 5 minutes before, 10 means 10 minutes after."
+                  }
+                }
+              },
+              {
+                "event_name": "meeting.participant_joined_late",
+                "event_type": "auto",
+                "event_desc": "Use when the user request involves reacting to participants joining a meeting late. Look for mentions like 'notify me if someone joins more than X minutes late' or 'track late arrivals'.",
+                "event_config": {
+                  "time": {
+                    "type": "number",
+                    "description": "The specific number of minutes a participant is late to join the meeting. For example, if a participant joins 10 minutes late, set this value to 10."
+                  }
+                }
+              },
+              {
+                "event_name": "meeting.participant_left_early",
+                "event_type": "auto",
+                "event_desc": "Use when the user request is about detecting or responding to participants leaving before the scheduled meeting end time. Example phrases: 'if someone leaves 10 minutes early', 'alert me when a participant leaves early'.",
+                "event_config": {
+                  "time": {
+                    "type": "number",
+                    "description": "Number of minutes before the scheduled end time that a participant leaves to be considered as 'left early'. For example, if set to 10, it means the participant left 10 minutes before the meeting ended."
+                  }
+                }
+              }
+            ]
+          },
+          "suggest_type": {
+            "type": "array",
+            "items": [
+              {
+                "suggest_name": "specific_meetings",
+                "suggest_desc": "MUST suggest the user to select specific meetings to track only when no meetings have been specified \u2014 **Skip the suggest if the user has explicitly mention some particular meetings(with someone or some particular topics etc) or explicitly indicated \"all meetings\" (or equivalent terms like \"all\" \"every meeting\")."
+              },
+              {
+                "suggest_name": "meeting_event_type",
+                "suggest_desc": "**MUST Suggest** specifying which meeting event should trigger the workflow (meeting start, meeting end, participant joined late, participant left early) **only if the user hasn\u2019t explicitly mentioned it and it cannot be inferred from context**."
+              },
+              {
+                "suggest_name": "meeting_start",
+                "suggest_desc": "Suggest specifying the time offset for the meeting start event trigger if the user mentions it but did not provide a specific time. Only allow time input in minutes or larger units."
+              },
+              {
+                "suggest_name": "meeting_end",
+                "suggest_desc": "Suggest specifying the time offset for the meeting end event if the user mentions it but does not provide a specific time. Only accept input in minutes or larger units."
+              },
+              {
+                "suggest_name": "meeting_participant_joined_late",
+                "suggest_desc": "Suggest specifying the number of minutes for the participant joined late event if the user mentions it but does not provide a time threshold. Only accept input in minutes or larger units."
+              },
+              {
+                "suggest_name": "meeting_participant_left_early",
+                "suggest_desc": "Suggest specifying the number of minutes for the **participant left early event** if the user mentions it but does not provide a time threshold. Only accept input in minutes or larger units."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "action_id": "zm.meeting.meeting.aic_transcript_completed",
+      "node_id": "zm.meeting.meeting.aic_transcript_completed",
+      "name": "zm.meeting.meeting.aic_transcript_completed",
+      "node_name": "When my meeting aic transcript ready",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Trigger when a meeting aic transcript ready",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "listenAll": {
+            "type": "boolean",
+            "title": "Trigger by all meetings",
+            "default": true,
+            "enum": [
+              true,
+              false
+            ]
+          }
+        },
+        "required": [
+          "listenAll"
+        ],
+        "dependencies": {
+          "listenAll": {
+            "oneOf": [
+              {
+                "properties": {
+                  "listenAll": {
+                    "const": false
+                  },
+                  "filterParam": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Select meeting",
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "filterParam"
+                ]
+              },
+              {
+                "properties": {
+                  "listenAll": {
+                    "const": true
+                  }
+                },
+                "required": []
+              }
+            ]
+          }
+        }
+      },
+      "output_schema": {},
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.meeting.meeting.aic_transcript_completed"
+      },
+      "config": {},
+      "node_description": ""
+    },
+    {
+      "action_id": "zm.phone.phone.fax_received_event",
+      "node_id": "zm.phone.phone.fax_received_event",
+      "name": "zm.phone.phone.fax_received_event",
+      "node_name": "Fax received event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Starts a workflow when a fax is received.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "fax_log_id": {
+            "type": "string",
+            "description": "Fax log ID.",
+            "maxLength": 64
+          },
+          "receiver_extension_id": {
+            "type": "string",
+            "description": "Receiver extension ID.",
+            "maxLength": 64
+          },
+          "receiver_phone_number": {
+            "type": "string",
+            "description": "Receiver phone number.",
+            "maxLength": 32
+          },
+          "receiver_extension_number": {
+            "type": "string",
+            "description": "Receiver extension number.",
+            "maxLength": 16
+          },
+          "sender_name": {
+            "type": "string",
+            "description": "Sender name.",
+            "maxLength": 128
+          },
+          "sender_phone_number": {
+            "type": "string",
+            "description": "Sender phone number.",
+            "maxLength": 32
+          },
+          "sender_extension_number": {
+            "type": "string",
+            "description": "Sender extension number.",
+            "maxLength": 16
+          },
+          "fax_received_timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time when the fax was received, in ISO 8601 (UTC) format."
+          },
+          "file_id": {
+            "type": "string",
+            "description": "Fax file ID.",
+            "maxLength": 64
+          }
+        }
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.phone.phone.fax_received_event"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.phone.phone.phone_event_nodes"
+    },
+    {
+      "action_id": "zm.phone.phone.missed_call_event",
+      "node_id": "zm.phone.phone.missed_call_event",
+      "name": "zm.phone.phone.missed_call_event",
+      "node_name": "Missed call event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Triggers when a Zoom Phone missed call event is received.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "caller_phone_number": {
+            "type": "string",
+            "description": "Caller phone number."
+          },
+          "callee_phone_number": {
+            "type": "string",
+            "description": "Callee phone number."
+          },
+          "extension_number": {
+            "type": "string",
+            "description": "Extension number."
+          },
+          "department": {
+            "type": "string",
+            "description": "Department."
+          },
+          "call_timestamp": {
+            "type": "string",
+            "description": "When the call occurred."
+          },
+          "call_duration_before_missed": {
+            "type": "integer",
+            "description": "How long the call rang before it was missed."
+          }
+        }
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.phone.phone.missed_call_event"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.phone.phone.phone_event_nodes"
+    },
+    {
+      "action_id": "zm.phone.phone.post_call_event",
+      "node_id": "zm.phone.phone.post_call_event",
+      "name": "zm.phone.phone.post_call_event",
+      "node_name": "Post call trigger",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Starts a workflow when a post-call event is received.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "extension_id": {
+            "type": "string",
+            "description": "Extension ID.",
+            "maxLength": 64
+          },
+          "caller_phone_number": {
+            "type": "string",
+            "description": "Caller phone number.",
+            "maxLength": 32
+          },
+          "callee_phone_number": {
+            "type": "string",
+            "description": "Callee phone number.",
+            "maxLength": 32
+          },
+          "caller_name": {
+            "type": "string",
+            "description": "Caller name.",
+            "maxLength": 128
+          },
+          "callee_name": {
+            "type": "string",
+            "description": "Callee name.",
+            "maxLength": 128
+          },
+          "call_start_timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time when the call started, in ISO 8601 (UTC) format."
+          },
+          "call_end_timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time when the call ended, in ISO 8601 (UTC) format."
+          },
+          "call_duration": {
+            "type": "integer",
+            "description": "Call duration in seconds.",
+            "minimum": 0
+          },
+          "call_transcript": {
+            "type": "string",
+            "description": "Call transcript text. Empty when transcription is disabled or not yet available.",
+            "maxLength": 50000
+          }
+        }
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.phone.phone.post_call_event"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.phone.phone.phone_event_nodes"
+    },
+    {
+      "action_id": "zm.phone.phone.sms_event",
+      "node_id": "zm.phone.phone.sms_event",
+      "name": "zm.phone.phone.sms_event",
+      "node_name": "SMS event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Triggers when a Zoom Phone SMS event is received.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "sender_phone_number": {
+            "type": "string"
+          },
+          "receiver_phone_number": {
+            "type": "string"
+          },
+          "sms_message_content": {
+            "type": "string"
+          },
+          "sms_timestamp": {
+            "type": "string"
+          },
+          "extension_number": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          }
+        }
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.phone.phone.sms_event"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.phone.phone.phone_event_nodes"
+    },
+    {
+      "action_id": "zm.phone.phone.voicemail_event",
+      "node_id": "zm.phone.phone.voicemail_event",
+      "name": "zm.phone.phone.voicemail_event",
+      "node_name": "Voicemail event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Triggers when a Zoom Phone voicemail event is received.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "voicemail_timestamp": {
+            "type": "string"
+          },
+          "voicemail_duration": {
+            "type": "integer"
+          },
+          "voicemail_transcript": {
+            "type": "string"
+          },
+          "voicemail_recording_id": {
+            "type": "string"
+          },
+          "extension_number": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          }
+        }
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.phone.phone.voicemail_event"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.phone.phone.phone_event_nodes"
+    },
+    {
+      "action_id": "zm.system.manual.trigger_manually",
+      "name": "zm.system.manual.trigger_manually",
+      "domain": "trigger",
+      "description": "Zoom System Utilities - Manually start trigger node. This trigger node starts a workflow on demand when there is no automatic event or schedule to initiate it. Use cases include processing historical meetings, analyzing existing documents or emails, and running one-off maintenance or testing workflows without waiting for a future event.",
+      "tags": [
+        "1p",
+        "built-in",
+        "first-party",
+        "historical data",
+        "manual",
+        "manual trigger",
+        "manually",
+        "on demand",
+        "one off run",
+        "start",
+        "system",
+        "trigger",
+        "trigger_manually",
+        "utilities",
+        "workflow start",
+        "zoom",
+        "zoom system utilities"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {},
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.system.manual.trigger_manually"
+      },
+      "input_summary": "None",
+      "output_summary": "None",
+      "node_id": "zm.system.manual.trigger_manually",
+      "node_name": "Manually start",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom System Utilities",
+      "is_third_party": false,
+      "node_description": "Use only when the request can be fulfilled immediately and there is no clear automatic trigger condition.Typical cases: processing past meetings, documents, or emails without waiting for a specific future event or time. Do NOT use if the request specifies an event-based condition (e.g., \"when the meeting ends\", \"at 9 AM every day\"), even if the resource itself is from the past \u2014 in those cases, choose the relevant auto trigger event.",
+      "config": {
+        "event_type": {
+          "type": "array",
+          "description": "",
+          "items": [
+            {
+              "event_name": "manual.trigger",
+              "event_type": "manual",
+              "event_desc": "Use only when the request can be fulfilled immediately and there is no clear automatic trigger condition.\n  Typical cases: processing past meetings, documents, or emails without waiting for a specific future event or time.\n Do NOT use if the request specifies an event-based condition (e.g., \"when the meeting ends\", \"at 9 AM every day\"),\n  even if the resource itself is from the past \u2014 in those cases, choose the relevant auto trigger event.\n"
+            }
+          ]
+        }
+      },
+      "raw_node": {
+        "nodeId": "zm.system.manual.trigger_manually",
+        "nodeName": "Manually start",
+        "nodeDescription": "Use only when the request can be fulfilled immediately and there is no clear automatic trigger condition.Typical cases: processing past meetings, documents, or emails without waiting for a specific future event or time. Do NOT use if the request specifies an event-based condition (e.g., \"when the meeting ends\", \"at 9 AM every day\"), even if the resource itself is from the past \u2014 in those cases, choose the relevant auto trigger event.",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        },
+        "config": {
+          "event_type": {
+            "type": "array",
+            "description": "",
+            "items": [
+              {
+                "event_name": "manual.trigger",
+                "event_type": "manual",
+                "event_desc": "Use only when the request can be fulfilled immediately and there is no clear automatic trigger condition.\n  Typical cases: processing past meetings, documents, or emails without waiting for a specific future event or time.\n Do NOT use if the request specifies an event-based condition (e.g., \"when the meeting ends\", \"at 9 AM every day\"),\n  even if the resource itself is from the past \u2014 in those cases, choose the relevant auto trigger event.\n"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "action_id": "zm.system.manual.trigger_form",
+      "node_id": "zm.system.manual.trigger_form",
+      "name": "zm.system.manual.trigger_form",
+      "node_name": "Fill out a form",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Triggered when the user manually runs the workflow by submitting a form that collects field values each time the workflow executes.\\\\nUse this when the workflow requires custom inputs (e.g., names, dates, parameters) provided at the moment of execution.\\\\nThis distinguishes it from manual.trigger, which runs immediately without any user-provided input.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "description": "This is a trigger for custom form data, which constructs the form parameters using the form information described by the user. The constructed input_map result is as follows:{\"form\":[{\"description\":\"userId\",\"type\":\"user\",\"name\":\"cpzhk\",\"required\":false,\"default_value\":\"\"},{\"description\":\"channelId\",\"type\":\"channel\",\"name\":\"fkopz\",\"required\":false,\"default_value\":\"\"},{\"description\":\"bizId\",\"type\":\"string\",\"name\":\"ujzyp\",\"required\":false,\"default_value\":\"\"}]}",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "description": "The submitted form data with dynamic user-defined fields.",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.system.manual.trigger_form"
+      },
+      "config": {},
+      "node_description": ""
+    },
+    {
+      "action_id": "zm.system.rss.feed",
+      "name": "zm.system.rss.feed",
+      "domain": "trigger",
+      "description": "Zoom System Utilities - RSS feed trigger node. This trigger node starts a workflow when a new item is published to a specified RSS feed, outputting details such as title, link, content, author, and publication date. Use cases include monitoring news or blog updates, triggering notifications or summaries for new content, and syncing RSS updates into internal systems or chat channels.",
+      "tags": [
+        "1p",
+        "automation",
+        "built-in",
+        "content update",
+        "feed",
+        "first-party",
+        "news feed",
+        "rss",
+        "rss feed",
+        "rss monitoring",
+        "system",
+        "trigger",
+        "utilities",
+        "zoom",
+        "zoom system utilities"
+      ],
+      "arg_schema": {
+        "type": "array",
+        "description": "Array of 5 parameter objects with specific structure",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "actionId": {
+                "type": "string",
+                "const": "difftype",
+                "description": "Fixed action identifier: difftype"
+              },
+              "type": {
+                "type": "string",
+                "const": "text_field",
+                "description": "Fixed field type: text_field"
+              },
+              "value": {
+                "type": "integer",
+                "minimum": 0,
+                "const": 0,
+                "description": "Fixed value for difftype"
+              }
+            },
+            "required": [
+              "actionId",
+              "type",
+              "value"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "actionId": {
+                "type": "string",
+                "const": "fedUrl",
+                "description": "Fixed action identifier: fedUrl"
+              },
+              "type": {
+                "type": "string",
+                "const": "text_field",
+                "description": "Fixed field type: text_field"
+              },
+              "value": {
+                "type": "array",
+                "description": "User input value for fedUrl"
+              }
+            },
+            "required": [
+              "actionId",
+              "type",
+              "value"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "actionId": {
+                "type": "string",
+                "const": "timerValue",
+                "description": "Fixed action identifier: timerValue"
+              },
+              "type": {
+                "type": "string",
+                "const": "text_field",
+                "description": "Fixed field type: text_field"
+              },
+              "value": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "User input value for timerValue"
+              }
+            },
+            "required": [
+              "actionId",
+              "type",
+              "value"
+            ]
+          }
+        ],
+        "minItems": 5,
+        "maxItems": 5
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the RSS item"
+          },
+          "link": {
+            "type": "string",
+            "description": "The link of the RSS item"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the RSS item"
+          },
+          "pubDate": {
+            "type": "string",
+            "description": "The published date of the RSS item"
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the RSS item"
+          },
+          "author": {
+            "type": "string",
+            "description": "The original author of the RSS item"
+          },
+          "object": {
+            "type": "string",
+            "description": "the input for rss feed node"
+          }
+        },
+        "description": "the input for rss feed node"
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.system.rss.feed"
+      },
+      "input_summary": "None",
+      "output_summary": "title: The title of the RSS item; link: The link of the RSS item; description: The description of the RSS item; pubDate: The published date of the RSS item; content: The content of the RSS item; author: The original author of the RSS item; object: the input for rss feed node",
+      "node_id": "zm.system.rss.feed",
+      "node_name": "RSS feed",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom System Utilities",
+      "is_third_party": false,
+      "node_description": "When an RSS feed item is published",
+      "config": null,
+      "raw_node": {
+        "nodeId": "zm.system.rss.feed",
+        "nodeName": "RSS feed",
+        "nodeDescription": "When an RSS feed item is published",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "array",
+          "description": "Array of 5 parameter objects with specific structure",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "actionId": {
+                  "type": "string",
+                  "const": "difftype",
+                  "description": "Fixed action identifier: difftype"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "text_field",
+                  "description": "Fixed field type: text_field"
+                },
+                "value": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "const": 0,
+                  "description": "Fixed value for difftype"
+                }
+              },
+              "required": [
+                "actionId",
+                "type",
+                "value"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "actionId": {
+                  "type": "string",
+                  "const": "fedUrl",
+                  "description": "Fixed action identifier: fedUrl"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "text_field",
+                  "description": "Fixed field type: text_field"
+                },
+                "value": {
+                  "type": "array",
+                  "description": "User input value for fedUrl"
+                }
+              },
+              "required": [
+                "actionId",
+                "type",
+                "value"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "actionId": {
+                  "type": "string",
+                  "const": "timerValue",
+                  "description": "Fixed action identifier: timerValue"
+                },
+                "type": {
+                  "type": "string",
+                  "const": "text_field",
+                  "description": "Fixed field type: text_field"
+                },
+                "value": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "User input value for timerValue"
+                }
+              },
+              "required": [
+                "actionId",
+                "type",
+                "value"
+              ]
+            }
+          ],
+          "minItems": 5,
+          "maxItems": 5
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "The title of the RSS item"
+            },
+            "link": {
+              "type": "string",
+              "description": "The link of the RSS item"
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the RSS item"
+            },
+            "pubDate": {
+              "type": "string",
+              "description": "The published date of the RSS item"
+            },
+            "content": {
+              "type": "string",
+              "description": "The content of the RSS item"
+            },
+            "author": {
+              "type": "string",
+              "description": "The original author of the RSS item"
+            }
+          },
+          "description": "the input for rss feed node"
+        }
+      }
+    },
+    {
+      "action_id": "zm.system.scheduler.trigger.scheduler",
+      "name": "zm.system.scheduler.trigger.scheduler",
+      "domain": "trigger",
+      "description": "Zoom System Utilities - Custom schedule trigger node. This trigger node starts a workflow at a specific absolute time or on a recurring schedule based entirely on time, such as a one-time future run or repeating daily, weekly, or monthly execution. Use cases include running daily reports at a fixed hour, scheduling weekly maintenance or data sync jobs, and triggering reminders or automations at a precise future date and time.",
+      "tags": [
+        "1p",
+        "built-in",
+        "custom",
+        "custom schedule",
+        "first-party",
+        "recurring schedule",
+        "schedule",
+        "scheduled run",
+        "scheduler",
+        "system",
+        "time based trigger",
+        "trigger",
+        "utilities",
+        "workflow automation",
+        "zoom",
+        "zoom system utilities"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "startsOn": {
+            "type": "string",
+            "description": "First execution time in format \"YYYY-MM-DD HH:mm:ss\", always should be next execution time, do not generate a time belonging to the past.",
+            "required": false
+          },
+          "frequency": {
+            "type": "number",
+            "description": "Use numeric values: -1=Once (Single execution (repeatEvery=0)), 0=Daily (Every day (repeatEvery can be 1+ for intervals: 1=daily, 2=every 2 days, etc.)), 1=Weekly on (Single specific weekday per week (repeatEvery MUST=1, repeatOn=[day])), 2=Every weekday (Monday-Friday only (repeatEvery MUST=1)), 3=Monthly on (Same date each month OR complex monthly patterns like \"first Monday\" (use monthlyOn, repeatEvery can be 1+)), 4=Annually on (Same date each year (use monthlyOn field, repeatEvery can be 1+)), 5=Custom (Multiple days per week (e.g., \"Tuesday and Friday\") OR interval patterns (e.g., \"every 2 weeks on Monday\")).            Key decision rules: 1. Multiple days in one week (e.g., \"Tuesday and Friday\") \u2192 frequency=5 (NOT 1) 2. Single weekday per week (e.g., \"Every Monday\") \u2192 frequency=1   3. Complex monthly patterns (e.g., \"first Monday\", \"last Friday\") \u2192 frequency=3 (supported)    4. Interval-based weekly (e.g., \"every 2 weeks on Monday\") \u2192 frequency=5",
+            "required": false
+          },
+          "repeatLevel": {
+            "type": "string",
+            "description": "Only support: \"hour\", \"day\", \"week\", \"month\", \"year\"",
+            "required": false
+          },
+          "repeatEvery": {
+            "type": "number",
+            "description": "Repeat interval (0 for no interval, >=1 for multi-unit intervals like \"every 2 days\")",
+            "required": false
+          },
+          "repeatOn": {
+            "type": "array",
+            "description": "Only fill when repeatEvery is not 0, Day mapping: 1=Sunday, 2=Monday, 3=Tuesday, 4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday. [] for non-weekly schedules.",
+            "required": false
+          },
+          "monthlyOn": {
+            "type": "number",
+            "description": "Day of month (1-31), use 0 for non-monthly schedules",
+            "required": false
+          },
+          "endType": {
+            "type": "number",
+            "description": "-1=Never, 1=Date, 2=Times (limited repetitions)",
+            "required": false
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Only fill when endType is 1 (DATE), otherwise empty string",
+            "required": false
+          },
+          "executedTimes": {
+            "type": "number",
+            "description": "Set to target count when endType is 2 (TIMES), otherwise 0",
+            "required": false
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone identifier for interpreting the cron time (e.g. 'Asia/Shanghai', 'America/Los_Angeles').",
+            "required": false
+          }
+        }
+      },
+      "output_schema": {},
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.system.scheduler.trigger.scheduler"
+      },
+      "input_summary": "startsOn (Optional): First execution time in format \"YYYY-MM-DD HH:mm:ss\", always should be next execution time, do not g...; frequency (Optional): Use numeric values: -1=Once (Single execution (repeatEvery=0)), 0=Daily (Every day (repeatEvery can ...; repeatLevel (Optional): Only support: \"hour\", \"day\", \"week\", \"month\", \"year\"; repeatEvery (Optional): Repeat interval (0 for no interval, >=1 for multi-unit intervals like \"every 2 days\"); repeatOn (Optional): Only fill when repeatEvery is not 0, Day mapping: 1=Sunday, 2=Monday, 3=Tuesday, 4=Wednesday, 5=Thur...; monthlyOn (Optional): Day of month (1-31), use 0 for non-monthly schedules; endType (Optional): -1=Never, 1=Date, 2=Times (limited repetitions); endDate (Optional): Only fill when endType is 1 (DATE), otherwise empty string; executedTimes (Optional): Set to target count when endType is 2 (TIMES), otherwise 0; timezone (Optional): IANA timezone identifier for interpreting the cron time (e.g. 'Asia/Shanghai', 'America/Los_Angeles'...",
+      "output_summary": "None",
+      "node_id": "zm.system.scheduler.trigger.scheduler",
+      "node_name": "Custom schedule",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom System Utilities",
+      "is_third_party": false,
+      "node_description": "Use when the workflow should be triggered at a specific absolute time or on a recurring schedule,  regardless of whether the workflow processes past, current, or future data. The defining factor is that the trigger is purely time-based \u2014 for example, \"at 3:00 PM tomorrow\",  \"every Monday at 9 AM\", or \"daily at noon\".\\n  If both a fixed time/schedule and past data are mentioned, still choose this event. Only use manual.trigger if there is no specific time or schedule at all.",
+      "config": {
+        "event_type": {
+          "type": "array",
+          "description": "Indicates this is a time-based trigger.",
+          "items": [
+            {
+              "event_name": "schedule.time_reached",
+              "event_type": "auto",
+              "event_desc": "Use when the workflow should be triggered at a specific absolute time or on a recurring schedule,\n  regardless of whether the workflow processes past, current, or future data.\n  The defining factor is that the trigger is purely time-based \u2014 for example, \"at 3:00 PM tomorrow\",\n  \"every Monday at 9 AM\", or \"daily at noon\".\n  If both a fixed time/schedule and past data are mentioned, still choose this event. Only use manual.trigger if there is no specific time or schedule at all."
+            }
+          ]
+        }
+      },
+      "raw_node": {
+        "nodeId": "zm.system.scheduler.trigger.scheduler",
+        "nodeName": "Custom schedule",
+        "nodeDescription": "Use when the workflow should be triggered at a specific absolute time or on a recurring schedule,  regardless of whether the workflow processes past, current, or future data. The defining factor is that the trigger is purely time-based \u2014 for example, \"at 3:00 PM tomorrow\",  \"every Monday at 9 AM\", or \"daily at noon\".\\n  If both a fixed time/schedule and past data are mentioned, still choose this event. Only use manual.trigger if there is no specific time or schedule at all.",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "startsOn": {
+              "type": "string",
+              "description": "First execution time in format \"YYYY-MM-DD HH:mm:ss\", always should be next execution time, do not generate a time belonging to the past.",
+              "required": false
+            },
+            "frequency": {
+              "type": "number",
+              "description": "Use numeric values: -1=Once (Single execution (repeatEvery=0)), 0=Daily (Every day (repeatEvery can be 1+ for intervals: 1=daily, 2=every 2 days, etc.)), 1=Weekly on (Single specific weekday per week (repeatEvery MUST=1, repeatOn=[day])), 2=Every weekday (Monday-Friday only (repeatEvery MUST=1)), 3=Monthly on (Same date each month OR complex monthly patterns like \"first Monday\" (use monthlyOn, repeatEvery can be 1+)), 4=Annually on (Same date each year (use monthlyOn field, repeatEvery can be 1+)), 5=Custom (Multiple days per week (e.g., \"Tuesday and Friday\") OR interval patterns (e.g., \"every 2 weeks on Monday\")).            Key decision rules: 1. Multiple days in one week (e.g., \"Tuesday and Friday\") \u2192 frequency=5 (NOT 1) 2. Single weekday per week (e.g., \"Every Monday\") \u2192 frequency=1   3. Complex monthly patterns (e.g., \"first Monday\", \"last Friday\") \u2192 frequency=3 (supported)    4. Interval-based weekly (e.g., \"every 2 weeks on Monday\") \u2192 frequency=5",
+              "required": false
+            },
+            "repeatLevel": {
+              "type": "string",
+              "description": "Only support: \"hour\", \"day\", \"week\", \"month\", \"year\"",
+              "required": false
+            },
+            "repeatEvery": {
+              "type": "number",
+              "description": "Repeat interval (0 for no interval, >=1 for multi-unit intervals like \"every 2 days\")",
+              "required": false
+            },
+            "repeatOn": {
+              "type": "array",
+              "description": "Only fill when repeatEvery is not 0, Day mapping: 1=Sunday, 2=Monday, 3=Tuesday, 4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday. [] for non-weekly schedules.",
+              "required": false
+            },
+            "monthlyOn": {
+              "type": "number",
+              "description": "Day of month (1-31), use 0 for non-monthly schedules",
+              "required": false
+            },
+            "endType": {
+              "type": "number",
+              "description": "-1=Never, 1=Date, 2=Times (limited repetitions)",
+              "required": false
+            },
+            "endDate": {
+              "type": "string",
+              "description": "Only fill when endType is 1 (DATE), otherwise empty string",
+              "required": false
+            },
+            "executedTimes": {
+              "type": "number",
+              "description": "Set to target count when endType is 2 (TIMES), otherwise 0",
+              "required": false
+            },
+            "timezone": {
+              "type": "string",
+              "description": "IANA timezone identifier for interpreting the cron time (e.g. 'Asia/Shanghai', 'America/Los_Angeles').",
+              "required": false
+            }
+          }
+        },
+        "outputSchema": "",
+        "config": {
+          "event_type": {
+            "type": "array",
+            "description": "Indicates this is a time-based trigger.",
+            "items": [
+              {
+                "event_name": "schedule.time_reached",
+                "event_type": "auto",
+                "event_desc": "Use when the workflow should be triggered at a specific absolute time or on a recurring schedule,\n  regardless of whether the workflow processes past, current, or future data.\n  The defining factor is that the trigger is purely time-based \u2014 for example, \"at 3:00 PM tomorrow\",\n  \"every Monday at 9 AM\", or \"daily at noon\".\n  If both a fixed time/schedule and past data are mentioned, still choose this event. Only use manual.trigger if there is no specific time or schedule at all."
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "action_id": "zm.task.task.trigger.set_as_collaborator",
+      "node_id": "zm.task.task.trigger.set_as_collaborator",
+      "name": "zm.task.task.trigger.set_as_collaborator",
+      "node_name": "When set as a task collaborator",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Trigger when you are added as a collaborator to a task.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "reminder": {
+            "type": "string"
+          }
+        }
+      },
+      "output_schema": {},
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.task.task.trigger.set_as_collaborator"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.task.task.event"
+    },
+    {
+      "action_id": "zm.task.task.trigger.status_updated",
+      "node_id": "zm.task.task.trigger.status_updated",
+      "name": "zm.task.task.trigger.status_updated",
+      "node_name": "When task status is updated",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Trigger when the status of a task is changed.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "isAll": {
+            "type": "boolean",
+            "title": "Trigger tasks",
+            "default": true,
+            "enum": [
+              true,
+              false
+            ]
+          },
+          "targetStatus": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          }
+        },
+        "required": [
+          "isAll",
+          "targetStatus"
+        ],
+        "dependencies": {
+          "isAll": {
+            "oneOf": [
+              {
+                "properties": {
+                  "isAll": {
+                    "const": false
+                  },
+                  "specificTasks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "Select  tasks",
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "specificTasks"
+                ]
+              },
+              {
+                "properties": {
+                  "isAll": {
+                    "const": true
+                  }
+                },
+                "required": []
+              }
+            ]
+          }
+        }
+      },
+      "output_schema": {},
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.task.task.trigger.status_updated"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.task.task.event"
+    },
+    {
+      "action_id": "zm.task.task.trigger.task_assigned",
+      "node_id": "zm.task.task.trigger.task_assigned",
+      "name": "zm.task.task.trigger.task_assigned",
+      "node_name": "When a task is assigned to me",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Trigger when someone assigns a task to you.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "reminder": {
+            "type": "string"
+          }
+        },
+        "skipMyCreatedTasks": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "output_schema": {},
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.task.task.trigger.task_assigned"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.task.task.event"
+    },
+    {
+      "action_id": "zm.task.task.trigger.task_created",
+      "node_id": "zm.task.task.trigger.task_created",
+      "name": "zm.task.task.trigger.task_created",
+      "node_name": "When a task is created",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Trigger when a new task is created by you.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "reminder": {
+            "type": "string"
+          }
+        }
+      },
+      "output_schema": {},
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.task.task.trigger.task_created"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.task.task.event"
+    },
+    {
+      "action_id": "zm.tc.channel.trigger.emoji_reaction",
+      "name": "zm.tc.channel.trigger.emoji_reaction",
+      "domain": "trigger",
+      "description": "Zoom Chat - Emoji reaction trigger node. This trigger node starts a workflow when a specified emoji reaction is added to a message in a channel, with options to monitor specific channels, users, or emoji types. Use cases include triggering approvals via emoji reactions, tracking team sentiment or feedback, and launching automated follow-ups when teammates react to important messages.",
+      "tags": [
+        "1p",
+        "built-in",
+        "channel",
+        "channel message",
+        "chat",
+        "emoji",
+        "emoji reaction",
+        "emoji_reaction",
+        "first-party",
+        "reaction",
+        "team",
+        "team collaboration",
+        "trigger",
+        "used",
+        "user interaction",
+        "when",
+        "workflow start",
+        "zoom",
+        "zoom chat"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "specifiedChannelsWithMe": {
+            "type": "boolean",
+            "required": true,
+            "description": "if true, means only take effect when 'me' react the emoji in specific channel, if false means take effect for all users."
+          },
+          "allChannels": {
+            "type": "boolean",
+            "required": true,
+            "description": "whether take effect for all channels, true means all channels, else false"
+          },
+          "channelInfos": {
+            "type": "array",
+            "description": "",
+            "required": true,
+            "items": {
+              "type": "channel",
+              "description": "the channel info",
+              "required": true,
+              "properties": {
+                "channelName": {
+                  "type": "string",
+                  "description": "",
+                  "required": true
+                },
+                "channelId": {
+                  "type": "string",
+                  "description": "",
+                  "required": false
+                }
+              }
+            }
+          },
+          "emojis": {
+            "type": "array",
+            "description": "List of emoji reactions to monitor. Each emoji must be base64 encoded UTF-8 bytes (e.g., '8J+YgA==' for \ud83d\ude00, '8J+RjQ==' for \ud83d\udc4d)",
+            "required": true,
+            "items": {
+              "type": "string",
+              "description": "Base64 encoded emoji string"
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "channel",
+            "description": "The channel where the reaction occurred",
+            "required": true
+          },
+          "operator": {
+            "type": "user",
+            "description": "The user who made the reaction",
+            "required": true
+          },
+          "thread": {
+            "type": "array",
+            "description": "The thread including mentioned message.",
+            "required": true
+          },
+          "message": {
+            "type": "message",
+            "description": "The message that was reacted to",
+            "required": true
+          }
+        }
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.tc.channel.trigger.emoji_reaction"
+      },
+      "input_summary": "specifiedChannelsWithMe (Optional): if true, means only take effect when 'me' react the emoji in specific channel, if false means take e...; allChannels (Optional): whether take effect for all channels, true means all channels, else false; channelInfos (Optional): ; emojis (Optional): List of emoji reactions to monitor. Each emoji must be base64 encoded UTF-8 bytes (e.g., '8J+YgA==' ...",
+      "output_summary": "channel: The channel where the reaction occurred; operator: The user who made the reaction; thread: The thread including mentioned message.; message: The message that was reacted to",
+      "node_id": "zm.tc.channel.trigger.emoji_reaction",
+      "node_name": "When emoji reaction is used",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom Chat",
+      "is_third_party": false,
+      "node_description": "Trigger when someone uses an emoji reaction in a channel.",
+      "config": {
+        "event_type": {
+          "type": "array",
+          "description": "",
+          "items": [
+            {
+              "event_name": "channel.emoji_reaction",
+              "event_type": "auto",
+              "event_desc": "Trigger when someone uses an emoji reaction in a channel."
+            }
+          ]
+        }
+      },
+      "raw_node": {
+        "nodeId": "zm.tc.channel.trigger.emoji_reaction",
+        "nodeName": "When emoji reaction is used",
+        "nodeDescription": "Trigger when someone uses an emoji reaction in a channel.",
+        "nodeSetId": "zm.tc.tc.team_chat_events",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "specifiedChannelsWithMe": {
+              "type": "boolean",
+              "required": true,
+              "description": "if true, means only take effect when 'me' react the emoji in specific channel, if false means take effect for all users."
+            },
+            "allChannels": {
+              "type": "boolean",
+              "required": true,
+              "description": "whether take effect for all channels, true means all channels, else false"
+            },
+            "channelInfos": {
+              "type": "array",
+              "description": "",
+              "required": true,
+              "items": {
+                "type": "channel",
+                "description": "the channel info",
+                "required": true,
+                "properties": {
+                  "channelName": {
+                    "type": "string",
+                    "description": "",
+                    "required": true
+                  },
+                  "channelId": {
+                    "type": "string",
+                    "description": "",
+                    "required": false
+                  }
+                }
+              }
+            },
+            "emojis": {
+              "type": "array",
+              "description": "List of emoji reactions to monitor. Each emoji must be base64 encoded UTF-8 bytes (e.g., '8J+YgA==' for \ud83d\ude00, '8J+RjQ==' for \ud83d\udc4d)",
+              "required": true,
+              "items": {
+                "type": "string",
+                "description": "Base64 encoded emoji string"
+              }
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "type": "channel",
+              "description": "The channel where the reaction occurred",
+              "required": true
+            },
+            "operator": {
+              "type": "user",
+              "description": "The user who made the reaction",
+              "required": true
+            },
+            "thread": {
+              "type": "array",
+              "description": "The thread including mentioned message.",
+              "required": true
+            },
+            "message": {
+              "type": "message",
+              "description": "The message that was reacted to",
+              "required": true
+            }
+          }
+        },
+        "config": {
+          "event_type": {
+            "type": "array",
+            "description": "",
+            "items": [
+              {
+                "event_name": "channel.emoji_reaction",
+                "event_type": "auto",
+                "event_desc": "Trigger when someone uses an emoji reaction in a channel."
+              }
+            ]
+          }
+        }
+      },
+      "nodeSetId": "zm.tc.tc.team_chat_events"
+    },
+    {
+      "action_id": "zm.tc.channel.trigger.mention_group",
+      "name": "zm.tc.channel.trigger.mention_group",
+      "domain": "trigger",
+      "description": "Zoom Chat - Mention group trigger. This trigger node starts a workflow when a mention group is @mentioned in a Zoom Chat message, optionally filtered by specific channels or groups, and provides the channel, message, thread, and sender. Use cases include alerting on-call teams when a group is mentioned, automatically creating tasks or incidents from group mentions, and routing messages to bots or workflows for follow-up.",
+      "tags": [
+        "1p",
+        "built-in",
+        "channel",
+        "chat",
+        "chat automation",
+        "first-party",
+        "group",
+        "group mention",
+        "mention",
+        "mention group",
+        "mention_group",
+        "mentioned",
+        "notifications",
+        "team",
+        "trigger",
+        "when",
+        "workflow entry",
+        "zoom",
+        "zoom chat"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "channelInfos": {
+            "type": "array",
+            "description": "The specific channels user wants to trigger",
+            "required": true,
+            "items": {
+              "type": "channel",
+              "description": "",
+              "properties": {
+                "channelName": {
+                  "type": "string",
+                  "description": "the channel name",
+                  "required": true
+                },
+                "channelId": {
+                  "type": "string",
+                  "description": "the channel id"
+                }
+              },
+              "required": true
+            }
+          },
+          "groupInfos": {
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "object",
+              "description": "The user group been mentioned",
+              "required": true,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "group name",
+                  "required": true
+                },
+                "groupId": {
+                  "type": "string",
+                  "description": "",
+                  "required": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "channel",
+            "description": "The channel where the mention occurred",
+            "required": true
+          },
+          "message": {
+            "type": "message",
+            "description": "The message containing the mention",
+            "required": true
+          },
+          "thread": {
+            "type": "array",
+            "description": "The thread including mentioned message.",
+            "required": true
+          },
+          "operator": {
+            "type": "user",
+            "description": "The user who send the message mentioned the group",
+            "required": true
+          }
+        }
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.tc.channel.trigger.mention_group"
+      },
+      "input_summary": "channelInfos (Optional): The specific channels user wants to trigger; groupInfos (Optional): ",
+      "output_summary": "channel: The channel where the mention occurred; message: The message containing the mention; thread: The thread including mentioned message.; operator: The user who send the message mentioned the group",
+      "node_id": "zm.tc.channel.trigger.mention_group",
+      "node_name": "When mention group is mentioned",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom Chat",
+      "is_third_party": false,
+      "node_description": "Trigger when someone @mentions a mention group.",
+      "config": {
+        "event_type": {
+          "type": "array",
+          "description": "",
+          "items": [
+            {
+              "event_name": "channel.mention_group",
+              "event_type": "auto",
+              "event_desc": "Triggered when a group (e.g., @team, @project) is mentioned in a channel message."
+            }
+          ]
+        }
+      },
+      "raw_node": {
+        "nodeId": "zm.tc.channel.trigger.mention_group",
+        "nodeName": "When mention group is mentioned",
+        "nodeDescription": "Trigger when someone @mentions a mention group.",
+        "nodeSetId": "zm.tc.tc.team_chat_events",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "channelInfos": {
+              "type": "array",
+              "description": "The specific channels user wants to trigger",
+              "required": true,
+              "items": {
+                "type": "channel",
+                "description": "",
+                "properties": {
+                  "channelName": {
+                    "type": "string",
+                    "description": "the channel name",
+                    "required": true
+                  },
+                  "channelId": {
+                    "type": "string",
+                    "description": "the channel id"
+                  }
+                },
+                "required": true
+              }
+            },
+            "groupInfos": {
+              "type": "array",
+              "required": true,
+              "items": {
+                "type": "object",
+                "description": "The user group been mentioned",
+                "required": true,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "group name",
+                    "required": true
+                  },
+                  "groupId": {
+                    "type": "string",
+                    "description": "",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "type": "channel",
+              "description": "The channel where the mention occurred",
+              "required": true
+            },
+            "message": {
+              "type": "message",
+              "description": "The message containing the mention",
+              "required": true
+            },
+            "thread": {
+              "type": "array",
+              "description": "The thread including mentioned message.",
+              "required": true
+            },
+            "operator": {
+              "type": "user",
+              "description": "The user who send the message mentioned the group",
+              "required": true
+            }
+          }
+        },
+        "config": {
+          "event_type": {
+            "type": "array",
+            "description": "",
+            "items": [
+              {
+                "event_name": "channel.mention_group",
+                "event_type": "auto",
+                "event_desc": "Triggered when a group (e.g., @team, @project) is mentioned in a channel message."
+              }
+            ]
+          }
+        }
+      },
+      "nodeSetId": "zm.tc.tc.team_chat_events"
+    },
+    {
+      "action_id": "zm.tc.channel.trigger.mention_me",
+      "name": "zm.tc.channel.trigger.mention_me",
+      "domain": "trigger",
+      "description": "Zoom Chat - When mentioned trigger node. This trigger node starts a workflow whenever someone @mentions you in a Zoom Chat channel, with options to monitor all channels or only specific ones and providing details about the channel, message, thread, and sender. Use cases include creating alerts for important mentions, logging mentions to a task or ticket system, and automatically responding or escalating messages where you are mentioned.",
+      "tags": [
+        "1p",
+        "built-in",
+        "channel",
+        "channel message",
+        "chat",
+        "first-party",
+        "mention",
+        "mention_me",
+        "mentioned",
+        "notification",
+        "team",
+        "team chat",
+        "trigger",
+        "when",
+        "workflow start",
+        "zoom",
+        "zoom chat"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "mentionAll": {
+            "type": "boolean",
+            "description": "Whether to monitor all channels. true means all channels, false means specified channels only.",
+            "required": true
+          },
+          "channelInfos": {
+            "type": "array",
+            "description": "The specific channels user wants to trigger",
+            "items": {
+              "type": "channel",
+              "required": true,
+              "properties": {
+                "channelName": {
+                  "type": "string",
+                  "description": "channel name",
+                  "required": true
+                },
+                "channelId": {
+                  "type": "string",
+                  "description": "channel id",
+                  "required": false
+                }
+              }
+            },
+            "required": true
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "channel",
+            "description": "The channel where the mention occurred",
+            "required": true
+          },
+          "message": {
+            "type": "message",
+            "description": "The message containing the mention",
+            "required": true
+          },
+          "thread": {
+            "type": "array",
+            "description": "The thread including mentioned message.",
+            "required": true
+          },
+          "operator": {
+            "type": "user",
+            "description": "The user who send message to mentioned you",
+            "required": true
+          }
+        }
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.tc.channel.trigger.mention_me"
+      },
+      "input_summary": "mentionAll (Optional): Whether to monitor all channels. true means all channels, false means specified channels only.; channelInfos (Optional): The specific channels user wants to trigger",
+      "output_summary": "channel: The channel where the mention occurred; message: The message containing the mention; thread: The thread including mentioned message.; operator: The user who send message to mentioned you",
+      "node_id": "zm.tc.channel.trigger.mention_me",
+      "node_name": "When mentioned",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom Chat",
+      "is_third_party": false,
+      "node_description": "Trigger when someone @mentions me in a channel.",
+      "config": {
+        "event_type": {
+          "type": "array",
+          "description": "Trigger when someone @mentions me in a channel.",
+          "items": [
+            {
+              "event_name": "channel.mention_me",
+              "event_type": "auto",
+              "event_desc": "Triggered when someone directly mentions(@) you in a channel message."
+            }
+          ]
+        }
+      },
+      "raw_node": {
+        "nodeId": "zm.tc.channel.trigger.mention_me",
+        "nodeName": "When mentioned",
+        "nodeDescription": "Trigger when someone @mentions me in a channel.",
+        "nodeSetId": "zm.tc.tc.team_chat_events",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mentionAll": {
+              "type": "boolean",
+              "description": "Whether to monitor all channels. true means all channels, false means specified channels only.",
+              "required": true
+            },
+            "channelInfos": {
+              "type": "array",
+              "description": "The specific channels user wants to trigger",
+              "items": {
+                "type": "channel",
+                "required": true,
+                "properties": {
+                  "channelName": {
+                    "type": "string",
+                    "description": "channel name",
+                    "required": true
+                  },
+                  "channelId": {
+                    "type": "string",
+                    "description": "channel id",
+                    "required": false
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "type": "channel",
+              "description": "The channel where the mention occurred",
+              "required": true
+            },
+            "message": {
+              "type": "message",
+              "description": "The message containing the mention",
+              "required": true
+            },
+            "thread": {
+              "type": "array",
+              "description": "The thread including mentioned message.",
+              "required": true
+            },
+            "operator": {
+              "type": "user",
+              "description": "The user who send message to mentioned you",
+              "required": true
+            }
+          }
+        },
+        "config": {
+          "event_type": {
+            "type": "array",
+            "description": "Trigger when someone @mentions me in a channel.",
+            "items": [
+              {
+                "event_name": "channel.mention_me",
+                "event_type": "auto",
+                "event_desc": "Triggered when someone directly mentions(@) you in a channel message."
+              }
+            ]
+          }
+        }
+      },
+      "nodeSetId": "zm.tc.tc.team_chat_events"
+    },
+    {
+      "action_id": "zm.tc.channel.trigger.user_join",
+      "name": "zm.tc.channel.trigger.user_join",
+      "domain": "trigger",
+      "description": "Zoom Chat - Channel join trigger. This trigger node starts a workflow when a new user joins a specified Zoom Chat channel or any channel if none are specified. Use cases include welcoming new members with automated messages, notifying admins of channel membership changes, and syncing channel joins to onboarding or access management workflows.",
+      "tags": [
+        "1p",
+        "built-in",
+        "channel",
+        "channel joined",
+        "chat",
+        "chat channel",
+        "first-party",
+        "joined",
+        "membership change",
+        "team",
+        "trigger",
+        "user join",
+        "user_join",
+        "when",
+        "workflow start",
+        "zoom",
+        "zoom chat"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "channelInfos": {
+            "type": "array",
+            "description": "The specific channels user request",
+            "items": {
+              "type": "channel",
+              "required": true,
+              "properties": {
+                "channel_name": {
+                  "type": "string",
+                  "description": "the channel name",
+                  "required": true
+                },
+                "channel_id": {
+                  "type": "string",
+                  "description": "the channel id",
+                  "required": false
+                }
+              }
+            },
+            "required": true
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "channel",
+            "description": "The channel that the user joined",
+            "required": true
+          },
+          "member": {
+            "type": "user",
+            "description": "The user who joined the channel",
+            "required": true
+          }
+        }
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.tc.channel.trigger.user_join"
+      },
+      "input_summary": "channelInfos (Optional): The specific channels user request",
+      "output_summary": "channel: The channel that the user joined; member: The user who joined the channel",
+      "node_id": "zm.tc.channel.trigger.user_join",
+      "node_name": "When channel is joined",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom Chat",
+      "is_third_party": false,
+      "node_description": "Trigger when a new member joins a channel",
+      "config": {
+        "event_type": {
+          "type": "array",
+          "description": "Trigger when a new member joins a channel",
+          "items": [
+            {
+              "event_name": "channel.user_join",
+              "event_type": "auto",
+              "event_desc": "Trigger when a new member joins a channel"
+            }
+          ]
+        }
+      },
+      "raw_node": {
+        "nodeId": "zm.tc.channel.trigger.user_join",
+        "nodeName": "When channel is joined",
+        "nodeDescription": "Trigger when a new member joins a channel",
+        "nodeSetId": "zm.tc.tc.team_chat_events",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "channelInfos": {
+              "type": "array",
+              "description": "The specific channels user request",
+              "items": {
+                "type": "channel",
+                "required": true,
+                "properties": {
+                  "channel_name": {
+                    "type": "string",
+                    "description": "the channel name",
+                    "required": true
+                  },
+                  "channel_id": {
+                    "type": "string",
+                    "description": "the channel id",
+                    "required": false
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "type": "channel",
+              "description": "The channel that the user joined",
+              "required": true
+            },
+            "member": {
+              "type": "user",
+              "description": "The user who joined the channel",
+              "required": true
+            }
+          }
+        },
+        "config": {
+          "event_type": {
+            "type": "array",
+            "description": "Trigger when a new member joins a channel",
+            "items": [
+              {
+                "event_name": "channel.user_join",
+                "event_type": "auto",
+                "event_desc": "Trigger when a new member joins a channel"
+              }
+            ]
+          }
+        }
+      },
+      "nodeSetId": "zm.tc.tc.team_chat_events"
+    },
+    {
+      "action_id": "zm.tc.channel.trigger.link",
+      "node_id": "zm.tc.channel.trigger.link",
+      "name": "zm.tc.channel.trigger.link",
+      "node_name": "When link is clicked",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "Trigger when someone clicks on a link.",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {},
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "channel",
+            "properties": {
+              "account_id": {
+                "description": "Account ID",
+                "type": "string"
+              },
+              "archived": {
+                "description": "Archived status",
+                "type": "boolean"
+              },
+              "bind_huddle": {
+                "description": "Huddle bound",
+                "type": "boolean"
+              },
+              "call_queue_channel": {
+                "description": "Call queue channel",
+                "type": "boolean"
+              },
+              "channel_id": {
+                "description": "Channel ID",
+                "type": "string"
+              },
+              "channel_name": {
+                "description": "Channel name",
+                "type": "string"
+              },
+              "cmcchannel": {
+                "description": "CMC channel",
+                "type": "boolean"
+              },
+              "cq_channel": {
+                "description": "Call queue channel",
+                "type": "boolean"
+              },
+              "default_channel": {
+                "description": "Default channel",
+                "type": "boolean"
+              },
+              "e2echannel": {
+                "description": "E2E encrypted",
+                "type": "boolean"
+              },
+              "exists_real_message": {
+                "description": "Has real messages",
+                "type": "boolean"
+              },
+              "external_user_flag": {
+                "description": "Has external users",
+                "type": "boolean"
+              },
+              "huddle_disable": {
+                "description": "Huddle disabled",
+                "type": "boolean"
+              },
+              "locked": {
+                "description": "Locked status",
+                "type": "boolean"
+              },
+              "mucchannel": {
+                "description": "MUC channel",
+                "type": "boolean"
+              },
+              "only_allow_admin_use_workflow": {
+                "description": "Admin-only workflow",
+                "type": "boolean"
+              },
+              "option": {
+                "description": "Options",
+                "type": "integer"
+              },
+              "owner_id": {
+                "description": "Owner ID",
+                "type": "string"
+              },
+              "pre_meeting_channel": {
+                "description": "Pre-meeting channel",
+                "type": "boolean"
+              },
+              "spot_channel": {
+                "description": "Spot channel",
+                "type": "boolean"
+              },
+              "workflow_block": {
+                "description": "Workflow blocked",
+                "type": "boolean"
+              },
+              "workflow_disabled": {
+                "description": "Workflow disabled",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "channel_id"
+            ],
+            "description": "Channel"
+          },
+          "creator": {
+            "type": "user",
+            "properties": {
+              "account_id": {
+                "description": "Account ID",
+                "type": "string"
+              },
+              "admin": {
+                "description": "Admin status",
+                "type": "boolean"
+              },
+              "dept": {
+                "description": "Department",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Display name",
+                "type": "string"
+              },
+              "email": {
+                "description": "Email",
+                "type": "string"
+              },
+              "lower_user_id": {
+                "description": "Lowercase user ID",
+                "type": "string"
+              },
+              "option01": {
+                "description": "Option field",
+                "type": "integer"
+              },
+              "owner": {
+                "description": "Owner status",
+                "type": "boolean"
+              },
+              "role": {
+                "description": "Role ID",
+                "type": "integer"
+              },
+              "sns_email": {
+                "description": "SNS email",
+                "type": "string"
+              },
+              "user_id": {
+                "description": "User ID",
+                "type": "string"
+              },
+              "user_type": {
+                "description": "User type",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "account_id",
+              "user_id"
+            ],
+            "description": "Flow creator"
+          },
+          "operator": {
+            "type": "user",
+            "properties": {
+              "account_id": {
+                "description": "Account ID",
+                "type": "string"
+              },
+              "admin": {
+                "description": "Admin status",
+                "type": "boolean"
+              },
+              "dept": {
+                "description": "Department",
+                "type": "string"
+              },
+              "display_name": {
+                "description": "Display name",
+                "type": "string"
+              },
+              "email": {
+                "description": "Email",
+                "type": "string"
+              },
+              "lower_user_id": {
+                "description": "Lowercase user ID",
+                "type": "string"
+              },
+              "option01": {
+                "description": "Option field",
+                "type": "integer"
+              },
+              "owner": {
+                "description": "Owner status",
+                "type": "boolean"
+              },
+              "role": {
+                "description": "Role ID",
+                "type": "integer"
+              },
+              "sns_email": {
+                "description": "SNS email",
+                "type": "string"
+              },
+              "user_id": {
+                "description": "User ID",
+                "type": "string"
+              },
+              "user_type": {
+                "description": "User type",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "account_id",
+              "user_id"
+            ],
+            "description": "Run user"
+          }
+        }
+      },
+      "input_summary": null,
+      "output_summary": "channel: Channel; creator: Flow creator; operator: Run user",
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.tc.channel.trigger.link"
+      },
+      "config": {},
+      "node_description": ""
+    },
+    {
+      "action_id": "zm.tc.message.chat_channel_message_received",
+      "name": "zm.tc.message.chat_channel_message_received",
+      "domain": "trigger",
+      "description": "Zoom Chat - New message posted to your owned channel trigger node. This trigger starts a workflow when a new message is posted in a Zoom Chat channel you own, optionally filtered to specific channels, and provides details about the channel, sender, thread, and message content. Use cases include auto-moderating channel messages, routing important posts to other tools, and triggering notifications or workflows when team updates are shared.",
+      "tags": [
+        "1p",
+        "built-in",
+        "channel",
+        "channel message",
+        "chat",
+        "chat_channel_message_received",
+        "first-party",
+        "message",
+        "new",
+        "new message",
+        "owned",
+        "owned channel",
+        "posted",
+        "real time monitoring",
+        "team",
+        "team chat",
+        "trigger",
+        "your",
+        "zoom",
+        "zoom chat"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "filterParam": {
+            "type": "array",
+            "description": "The channels you owned to monitor for messages",
+            "required": true,
+            "items": {
+              "type": "channel",
+              "required": true,
+              "properties": {
+                "channelName": {
+                  "type": "string",
+                  "description": "The channel display name",
+                  "required": true
+                },
+                "channelId": {
+                  "type": "string",
+                  "description": "The channel unique identifier",
+                  "required": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "channel",
+            "description": "The channel that received message",
+            "required": true
+          },
+          "operator": {
+            "type": "user",
+            "description": "The user who send the message",
+            "required": true
+          },
+          "thread": {
+            "type": "thread",
+            "description": "The message thread containing the mention",
+            "required": true
+          },
+          "message": {
+            "type": "message",
+            "description": "The message send in channel",
+            "required": true
+          }
+        }
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.tc.message.chat_channel_message_received"
+      },
+      "input_summary": "filterParam (Optional): The channels you owned to monitor for messages",
+      "output_summary": "channel: The channel that received message; operator: The user who send the message; thread: The message thread containing the mention; message: The message send in channel",
+      "node_id": "zm.tc.message.chat_channel_message_received",
+      "node_name": "New message posted to your owned channel",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom Chat",
+      "is_third_party": false,
+      "node_description": "trigger When a new message posted to your owned channel",
+      "config": null,
+      "raw_node": {
+        "nodeId": "zm.tc.message.chat_channel_message_received",
+        "nodeName": "New message posted to your owned channel",
+        "nodeDescription": "trigger When a new message posted to your owned channel",
+        "nodeSetId": "zm.tc.tc.team_chat_events",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filterParam": {
+              "type": "array",
+              "description": "The channels you owned to monitor for messages",
+              "required": true,
+              "items": {
+                "type": "channel",
+                "required": true,
+                "properties": {
+                  "channelName": {
+                    "type": "string",
+                    "description": "The channel display name",
+                    "required": true
+                  },
+                  "channelId": {
+                    "type": "string",
+                    "description": "The channel unique identifier",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "type": "channel",
+              "description": "The channel that received message",
+              "required": true
+            },
+            "operator": {
+              "type": "user",
+              "description": "The user who send the message",
+              "required": true
+            },
+            "thread": {
+              "type": "thread",
+              "description": "The message thread containing the mention",
+              "required": true
+            },
+            "message": {
+              "type": "message",
+              "description": "The message send in channel",
+              "required": true
+            }
+          }
+        }
+      },
+      "nodeSetId": "zm.tc.tc.team_chat_events"
+    },
+    {
+      "action_id": "zm.tc.message.dm_message_received",
+      "name": "zm.tc.message.dm_message_received",
+      "domain": "trigger",
+      "description": "Zoom Chat - New direct message trigger node. This trigger node starts a workflow when a new message is sent or received in your Zoom Chat direct messages, with optional filters for message direction and specific contacts. Use cases include auto-logging DM conversations, triggering alerts for messages from key users, and launching follow-up workflows when you receive important direct messages.",
+      "tags": [
+        "1p",
+        "built-in",
+        "chat",
+        "chat message",
+        "direct message",
+        "dm trigger",
+        "dm_message_received",
+        "first-party",
+        "message",
+        "message received",
+        "new",
+        "posted",
+        "team",
+        "team communication",
+        "trigger",
+        "your",
+        "zoom",
+        "zoom chat"
+      ],
+      "arg_schema": {
+        "type": "object",
+        "properties": {
+          "dm_direction": {
+            "type": "string",
+            "description": "The direction of direct messages to monitor. 'receive' means messages you receive, 'send' means messages you send.",
+            "required": true,
+            "enum": [
+              "receive",
+              "send"
+            ]
+          },
+          "target_user": {
+            "type": "array",
+            "description": "The specific contacts to monitor. Leave empty to monitor all contacts.",
+            "required": false,
+            "items": {
+              "type": "user",
+              "required": true,
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "description": "The user's display name",
+                  "required": true
+                },
+                "userId": {
+                  "type": "string",
+                  "description": "The user's unique identifier",
+                  "required": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "message_receiver": {
+            "type": "user",
+            "description": "The user who receive the message",
+            "required": true
+          },
+          "message_sender": {
+            "type": "user",
+            "description": "The user who send the message",
+            "required": true
+          },
+          "thread": {
+            "type": "thread",
+            "description": "The message thread containing the mention",
+            "required": true
+          },
+          "message": {
+            "type": "message",
+            "description": "The message send in channel",
+            "required": true
+          }
+        }
+      },
+      "enabled": true,
+      "execution": {
+        "worker_node_id": "zm.tc.message.dm_message_received"
+      },
+      "input_summary": "dm_direction (Optional): The direction of direct messages to monitor. 'receive' means messages you receive, 'send' means mess...; target_user (Optional): The specific contacts to monitor. Leave empty to monitor all contacts.",
+      "output_summary": "message_receiver: The user who receive the message; message_sender: The user who send the message; thread: The message thread containing the mention; message: The message send in channel",
+      "node_id": "zm.tc.message.dm_message_received",
+      "node_name": "New message posted to your DM chat",
+      "node_type": "trigger",
+      "source": "1p",
+      "product_name": "Zoom Chat",
+      "is_third_party": false,
+      "node_description": "When a new message posted to your DM chat",
+      "config": null,
+      "raw_node": {
+        "nodeId": "zm.tc.message.dm_message_received",
+        "nodeName": "New message posted to your DM chat",
+        "nodeDescription": "When a new message posted to your DM chat",
+        "nodeSetId": "zm.tc.tc.team_chat_events",
+        "nodeType": "trigger",
+        "source": "1P",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "dm_direction": {
+              "type": "string",
+              "description": "The direction of direct messages to monitor. 'receive' means messages you receive, 'send' means messages you send.",
+              "required": true,
+              "enum": [
+                "receive",
+                "send"
+              ]
+            },
+            "target_user": {
+              "type": "array",
+              "description": "The specific contacts to monitor. Leave empty to monitor all contacts.",
+              "required": false,
+              "items": {
+                "type": "user",
+                "required": true,
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "The user's display name",
+                    "required": true
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "The user's unique identifier",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "message_receiver": {
+              "type": "user",
+              "description": "The user who receive the message",
+              "required": true
+            },
+            "message_sender": {
+              "type": "user",
+              "description": "The user who send the message",
+              "required": true
+            },
+            "thread": {
+              "type": "thread",
+              "description": "The message thread containing the mention",
+              "required": true
+            },
+            "message": {
+              "type": "message",
+              "description": "The message send in channel",
+              "required": true
+            }
+          }
+        }
+      },
+      "nodeSetId": "zm.tc.tc.team_chat_events"
+    },
+    {
+      "action_id": "zm.zcc.script_event_engagement_agent_accepted",
+      "node_id": "zm.zcc.script_event_engagement_agent_accepted",
+      "name": "zm.zcc.script_event_engagement_agent_accepted",
+      "node_name": "Engagement agent accepted script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the engagement is accepted",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_engagement_agent_accepted"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_engagement_disposition_added",
+      "node_id": "zm.zcc.script_event_engagement_disposition_added",
+      "name": "zm.zcc.script_event_engagement_disposition_added",
+      "node_name": "Engagement disposition added script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the engagement disposition is added",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_engagement_disposition_added"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_engagement_ended",
+      "node_id": "zm.zcc.script_event_engagement_ended",
+      "name": "zm.zcc.script_event_engagement_ended",
+      "node_name": "Engagement ended script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the engagement is ended",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_engagement_ended"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_engagement_ring_started",
+      "node_id": "zm.zcc.script_event_engagement_ring_started",
+      "name": "zm.zcc.script_event_engagement_ring_started",
+      "node_name": "Engagement ring started script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the engagement ring is started",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_engagement_ring_started"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_engagement_started",
+      "node_id": "zm.zcc.script_event_engagement_started",
+      "name": "zm.zcc.script_event_engagement_started",
+      "node_name": "Engagement started script event ",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the engagement is started",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_engagement_started"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_engagement_survey_completed",
+      "node_id": "zm.zcc.script_event_engagement_survey_completed",
+      "name": "zm.zcc.script_event_engagement_survey_completed",
+      "node_name": "Engagement survey completed script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the engagement survey is completed",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_engagement_survey_completed"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_engagement_transfer_completed",
+      "node_id": "zm.zcc.script_event_engagement_transfer_completed",
+      "name": "zm.zcc.script_event_engagement_transfer_completed",
+      "node_name": "Engagement transfer completed script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the engagement is transferred",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_engagement_transfer_completed"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_recording_completed",
+      "node_id": "zm.zcc.script_event_recording_completed",
+      "name": "zm.zcc.script_event_recording_completed",
+      "node_name": "Recording completed script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the recording is completed",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_recording_completed"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_recording_started",
+      "node_id": "zm.zcc.script_event_recording_started",
+      "name": "zm.zcc.script_event_recording_started",
+      "node_name": "Recording started script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the recording is started",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_recording_started"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_recording_transcript_completed",
+      "node_id": "zm.zcc.script_event_recording_transcript_completed",
+      "name": "zm.zcc.script_event_recording_transcript_completed",
+      "node_name": "Recording transcript completed script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the recording transcript is completed",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_recording_transcript_completed"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_recording_transcript_started",
+      "node_id": "zm.zcc.script_event_recording_transcript_started",
+      "name": "zm.zcc.script_event_recording_transcript_started",
+      "node_name": "Recording transcript started script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the recording transcript is started",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_recording_transcript_started"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_voicemail_completed",
+      "node_id": "zm.zcc.script_event_voicemail_completed",
+      "name": "zm.zcc.script_event_voicemail_completed",
+      "node_name": "Voicemail completed script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the voicemail is completed",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_voicemail_completed"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.zcc.script_event_voicemail_transcript_completed",
+      "node_id": "zm.zcc.script_event_voicemail_transcript_completed",
+      "name": "zm.zcc.script_event_voicemail_transcript_completed",
+      "node_name": "Voicemail transcript completed script event",
+      "node_type": "trigger",
+      "domain": "trigger",
+      "description": "A new script event is triggered after the voicemail transcript is completed ",
+      "source": "1P",
+      "tags": [],
+      "arg_schema": {
+        "properties": {},
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "input_summary": null,
+      "output_summary": null,
+      "is_third_party": false,
+      "product_name": null,
+      "execution": {
+        "worker_node_id": "zm.zcc.script_event_voicemail_transcript_completed"
+      },
+      "config": {},
+      "node_description": "",
+      "nodeSetId": "zm.zcc.zcc_event"
+    },
+    {
+      "action_id": "zm.asyncnotify.mobile.sms_node",
+      "node_id": "zm.asyncnotify.mobile.sms_node",
+      "node_name": "Send SMS message",
+      "node_type": "tool",
+      "nodeSetId": null,
+      "source": "1p",
+      "description": "Zoom Asyncnotify - This tool node sends an SMS message to a specified recipient using a predefined SMS template ID. It is designed for automated notifications such as appointment reminders, one-time password (OTP) verification codes, and transactional alerts like order confirmations or service updates. Use this node to programmatically trigger mobile text notifications as part of a workflow.",
+      "tags": [
+        "1p",
+        "asyncnotify",
+        "built-in",
+        "first-party",
+        "message",
+        "mobile",
+        "mobile messaging",
+        "otp verification",
+        "send",
+        "send sms",
+        "sms",
+        "sms notification",
+        "sms_node",
+        "tool",
+        "tool node",
+        "transactional alerts",
+        "zoom",
+        "zoom asyncnotify"
+      ],
+      "arg_schema": {
+        "description": "Schema for SMS notify request containing call template and recipient information",
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "recipient": {
+            "description": "Information about the sms recipient",
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "regionCode": {
+                "type": "string",
+                "description": "The region code with + sign (e.g., +1 for USA)"
+              },
+              "phoneNumber": {
+                "pattern": "^[+]?[0-9]{1,}$",
+                "description": "The phone number of the recipient",
+                "type": "string"
+              }
+            },
+            "required": [
+              "phoneNumber",
+              "regionCode"
+            ]
+          },
+          "templateId": {
+            "description": "The template id of the SMS notify",
+            "default": "tpl_d7c2a5e9f4b1a863",
+            "type": "string"
+          }
+        },
+        "required": [
+          "templateId",
+          "recipient"
+        ]
+      },
+      "output_schema": {},
+      "input_summary": "templateId (Required): The template id of the SMS notify; recipient (Required): Information about the sms recipient",
+      "output_summary": null,
+      "domain": "tool",
+      "product_name": "Zoom Asyncnotify",
+      "is_third_party": false,
+      "app": null,
+      "execution": {
+        "worker_node_id": "zm.asyncnotify.mobile.sms_node"
+      },
+      "config": {},
+      "ext": "{\"aicw_node_type\":\"notify\",\"optimizedVersion\":\"v1\"}",
+      "relation_ids": {},
+      "node_description": "",
+      "prompt": null,
+      "created_at": 1782418611,
+      "updated_at": 1782925427,
+      "version": "3.3"
+    },
+    {
+      "action_id": "zm.asyncnotify.mobile.voice_node",
+      "node_id": "zm.asyncnotify.mobile.voice_node",
+      "node_name": "Send voice message",
+      "node_type": "tool",
+      "nodeSetId": null,
+      "source": "1p",
+      "description": "Zoom Asyncnotify - This tool node sends an automated voice message to a specified recipient using a predefined phone call template. It enables workflows to trigger outbound voice notifications for use cases such as emergency alerts, appointment reminders, service outage announcements, or incident escalations. Provide a template ID and recipient information to deliver timely, consistent voice communications at scale.",
+      "tags": [
+        "1p",
+        "appointment reminders",
+        "asyncnotify",
+        "automated phone call",
+        "built-in",
+        "dr_node",
+        "emergency alerts",
+        "first-party",
+        "incident escalation",
+        "message",
+        "mobile",
+        "send",
+        "tool",
+        "tool node",
+        "voice",
+        "voice message",
+        "voice notification",
+        "voice_node",
+        "zoom",
+        "zoom asyncnotify"
+      ],
+      "arg_schema": {
+        "description": "Schema for a phone call request containing call template and recipient information",
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Phone Call Request",
+        "properties": {
+          "recipient": {
+            "description": "Information about the call recipient",
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "regionCode": {
+                "description": "The region code with + sign (e.g., +1 for USA)",
+                "type": "string"
+              },
+              "phoneNumber": {
+                "pattern": "^[+]?[0-9]{1,}$",
+                "description": "The phone number of the recipient",
+                "type": "string"
+              }
+            },
+            "required": [
+              "phoneNumber",
+              "regionCode"
+            ]
+          },
+          "templateId": {
+            "default": "tpl_d7c2a5e9f4b1a863",
+            "description": "The template id of the phone call",
+            "type": "string"
+          }
+        },
+        "required": [
+          "templateId",
+          "recipient"
+        ]
+      },
+      "output_schema": {},
+      "input_summary": "templateId (Required): The template id of the phone call; recipient (Required): Information about the call recipient",
+      "output_summary": null,
+      "domain": "tool",
+      "product_name": "Zoom Asyncnotify",
+      "is_third_party": false,
+      "app": null,
+      "execution": {
+        "worker_node_id": "zm.asyncnotify.mobile.voice_node"
+      },
+      "config": {},
+      "ext": "{\"aicw_node_type\":\"notify\",\"optimizedVersion\":\"v1\"}",
+      "relation_ids": {},
+      "node_description": "",
+      "prompt": null,
+      "created_at": 1782418612,
+      "updated_at": 1782886128,
+      "version": "3.3"
+    }
+  ]
+}

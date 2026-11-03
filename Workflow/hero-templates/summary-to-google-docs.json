@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Meeting Summary to Google Docs",
+      "description": "Automatically sends your Zoom meeting summary to a Google Docs document when the meeting ends. Triggered only when a summary is available, it creates a new document with the meeting content—preserving the original structure and language—without any AI processing.",
+      "source": "template",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Meeting Summary to Google Docs",
+          "description": "Automatically sends your Zoom meeting summary to a Google Docs document when the meeting ends. Triggered only when a summary is available, it creates a new document with the meeting content—preserving the original structure and language—without any AI processing."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "lcqwpn",
+            "node_type": "trigger",
+            "node_name": "Zoom Meetings event",
+            "node_alias": "Zoom Meetings event",
+            "node_desc": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+            "input_map": {
+              "filter_type": "all_meetings"
+            },
+            "config": {
+              "event_name": "meeting.summary_created",
+              "event_config": {
+                "time_offset": 0
+              }
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "meeting": {
+                  "description": "the meeting object includes meeting info like meeting topic, meeting host etc",
+                  "type": "meeting",
+                  "required": true
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.system.operators.condition",
+            "reference_id": "hkitoh",
+            "node_type": "condition",
+            "node_name": "Condition",
+            "node_alias": "Condition",
+            "node_desc": "Specify a condition on it's output to decide which path the flow will to follow",
+            "input_map": {
+              "determined_by_ai": false,
+              "expression": {
+                "switchConditionMap": {
+                  "Route 1": [
+                    {
+                      "key": "{{lcqwpn.meeting.summary.summaryContent}}",
+                      "value": "",
+                      "condition": "isNotEmpty"
+                    }
+                  ]
+                }
+              }
+            },
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.connector_mcp.zm_googledocs.googledocs_create_document_markdown",
+            "reference_id": "dwelzt",
+            "node_type": "mcp_tool",
+            "node_name": "Create Document Markdown",
+            "node_alias": "",
+            "node_desc": "Creates a new Google Docs document, optionally initializing it with a title and content provided as Markdown text.",
+            "input_map": {
+              "title": "{{lcqwpn.meeting.meeting_topic}} - Meeting Summary",
+              "markdown_text": "{{lcqwpn.meeting.summary.summaryContent}}"
+            },
+            "config": {
+              "approval_strategy": "always_allow"
+            },
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "lcqwpn",
+            "target_node": "hkitoh"
+          },
+          {
+            "source_node": "hkitoh",
+            "target_node": "dwelzt",
+            "condition": {
+              "hkitoh.branch": "Route 1"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

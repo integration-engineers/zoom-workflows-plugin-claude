@@ -1,0 +1,422 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Meeting chat to Slack",
+      "description": "After each meeting ends, forward the meeting's in-meeting chat messages to you as a Slack direct message.",
+      "source": "",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Meeting chat to Slack",
+          "description": "After each meeting ends, forward the meeting's in-meeting chat messages to you as a Slack direct message."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "trg1",
+            "node_type": "trigger",
+            "node_name": "Meeting event",
+            "node_alias": "",
+            "node_desc": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+            "input_map": {
+              "filter_type": "all_meetings"
+            },
+            "config": {
+              "event_config": {
+                "time_offset": 3
+              },
+              "event_name": "meeting.end"
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "meeting": {
+                  "required": true,
+                  "properties": {
+                    "summary.docId": {
+                      "type": "string",
+                      "content_type": "doc_id",
+                      "description": "Canonical meeting summary Zoom Doc ID"
+                    },
+                    "score": {
+                      "description": "Relevance or quality score",
+                      "type": "number"
+                    },
+                    "summary.summaryContent": {
+                      "type": "string",
+                      "content_type": "markdown_text",
+                      "description": "Meeting AI summary content"
+                    },
+                    "master_event_id": {
+                      "description": "Master event ID for recurring meetings",
+                      "type": "string"
+                    },
+                    "meeting_topic": {
+                      "description": "Topic",
+                      "type": "string"
+                    },
+                    "htmlLink": {
+                      "description": "Link to meeting details",
+                      "type": "string"
+                    },
+                    "meeting_id": {
+                      "description": "Meeting  id",
+                      "type": "string"
+                    },
+                    "schedule_end_time": {
+                      "description": "Scheduled end timestamp",
+                      "type": "integer"
+                    },
+                    "business_id": {
+                      "description": "Business identifier",
+                      "type": "string"
+                    },
+                    "meeting_end_time": {
+                      "description": "Actual meeting end timestamp",
+                      "type": "integer"
+                    },
+                    "meeting_start_time": {
+                      "description": "Actual meeting start timestamp",
+                      "type": "integer"
+                    },
+                    "meeting_type": {
+                      "description": "Type of meeting (instant, scheduled, etc.)",
+                      "type": "integer"
+                    },
+                    "unified_id": {
+                      "description": "Unified identifier across systems",
+                      "type": "string"
+                    },
+                    "attendee_list": {
+                      "type": "array",
+                      "description": "Meeting attendees",
+                      "items": {
+                        "type": "User"
+                      }
+                    },
+                    "business_group_id": {
+                      "description": "Business group identifier",
+                      "type": "string"
+                    },
+                    "has_transcript_permission": {
+                      "description": "Whether user can access transcript",
+                      "type": "boolean"
+                    },
+                    "business_type": {
+                      "description": "Type of business meeting",
+                      "type": "string"
+                    },
+                    "location": {
+                      "description": "Meeting location",
+                      "type": "string"
+                    },
+                    "has_summary_permission": {
+                      "description": "Whether user can access summary",
+                      "type": "boolean"
+                    },
+                    "meeting_category": {
+                      "description": "Meeting category classification",
+                      "type": "MeetingCategory"
+                    },
+                    "has_metadata_permission": {
+                      "description": "Whether user can access metadata",
+                      "type": "boolean"
+                    },
+                    "has_summary": {
+                      "description": "Whether meeting has AI summary",
+                      "type": "boolean"
+                    },
+                    "summary_content": {
+                      "type": "string",
+                      "content_type": "markdown_text",
+                      "description": "Meeting summary text content"
+                    },
+                    "meeting_number": {
+                      "description": "Meeting number",
+                      "type": "integer"
+                    },
+                    "join_time": {
+                      "type": "array",
+                      "description": "Participant join time records",
+                      "items": {
+                        "type": "JoinTimeItem"
+                      }
+                    },
+                    "status": {
+                      "description": "Current meeting status",
+                      "type": "string"
+                    },
+                    "doc_id": {
+                      "type": "string",
+                      "content_type": "doc_id",
+                      "description": "Associated document ID"
+                    },
+                    "updated": {
+                      "description": "Last update timestamp string",
+                      "type": "string"
+                    },
+                    "transcript_file_sub_type": {
+                      "description": "Type of transcript file",
+                      "type": "string"
+                    },
+                    "transcript_content": {
+                      "description": "Meeting transcript text content",
+                      "type": "string"
+                    },
+                    "transcript_chunk": {
+                      "type": "array",
+                      "description": "Segmented transcript content chunks",
+                      "items": {
+                        "type": "Chunk"
+                      }
+                    },
+                    "summary_file_sub_type": {
+                      "description": "Type of summary file",
+                      "type": "string"
+                    },
+                    "meeting_source": {
+                      "description": "Source platform of the meeting",
+                      "type": "string"
+                    },
+                    "summary_chunk": {
+                      "type": "array",
+                      "description": "Segmented summary content chunks",
+                      "items": {
+                        "type": "Chunk"
+                      }
+                    },
+                    "original_meeting_type": {
+                      "description": "Original meeting type before changes",
+                      "type": "integer"
+                    },
+                    "schedule_start_time": {
+                      "description": "Scheduled start time",
+                      "type": "integer"
+                    },
+                    "created": {
+                      "description": "Creation timestamp string",
+                      "type": "string"
+                    },
+                    "next_steps_file_sub_type": {
+                      "description": "Type of next steps file",
+                      "type": "string"
+                    },
+                    "has_transcript": {
+                      "description": "Whether meeting has transcript",
+                      "type": "boolean"
+                    },
+                    "account_id": {
+                      "description": "Account identifier",
+                      "type": "string"
+                    },
+                    "participant_size": {
+                      "description": "Number of participants",
+                      "type": "integer"
+                    },
+                    "host_email": {
+                      "description": "Host email address",
+                      "type": "string"
+                    },
+                    "query_privilege": {
+                      "description": "User query permission level",
+                      "type": "integer"
+                    },
+                    "kind": {
+                      "description": "Meeting kind or type",
+                      "type": "string"
+                    },
+                    "recall_source_names": {
+                      "type": "array",
+                      "description": "Source names for recall functionality",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "host_id": {
+                      "description": "Host ID",
+                      "type": "string"
+                    },
+                    "recurring_event_id": {
+                      "description": "ID for recurring meeting series",
+                      "type": "string"
+                    },
+                    "main_file_id": {
+                      "description": "Primary associated file ID",
+                      "type": "string"
+                    }
+                  },
+                  "type": "meeting",
+                  "description": "the meeting object includes meeting info like meeting topic, meeting host etc"
+                },
+                "meetingParticipants": {
+                  "description": "Meeting Participants",
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "account_id",
+                      "user_id"
+                    ],
+                    "type": "user",
+                    "properties": {
+                      "display_name": {
+                        "description": "Display name",
+                        "type": "string"
+                      },
+                      "user_type": {
+                        "description": "User type",
+                        "type": "integer"
+                      },
+                      "owner": {
+                        "description": "Owner status",
+                        "type": "boolean"
+                      },
+                      "admin": {
+                        "description": "Admin status",
+                        "type": "boolean"
+                      },
+                      "lower_user_id": {
+                        "description": "Lowercase user ID",
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "description": "User ID",
+                        "type": "string"
+                      },
+                      "option01": {
+                        "description": "Option field",
+                        "type": "integer"
+                      },
+                      "email": {
+                        "description": "Email",
+                        "type": "string"
+                      },
+                      "role": {
+                        "description": "Role ID",
+                        "type": "integer"
+                      },
+                      "account_id": {
+                        "description": "Account ID",
+                        "type": "string"
+                      },
+                      "sns_email": {
+                        "description": "SNS email",
+                        "type": "string"
+                      },
+                      "dept": {
+                        "description": "Department",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "recording": {
+                  "type": "object",
+                  "description": "Recording"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.aic.agent.deep_reasoning",
+            "reference_id": "dp1",
+            "node_type": "deep_reasoning",
+            "node_name": "AI reasoning",
+            "node_alias": "",
+            "node_desc": "",
+            "input_map": {
+              "system_prompt": "",
+              "max_steps": 20,
+              "knowledge": {
+                "web_urls": ""
+              },
+              "outputs": [
+                {
+                  "required": false,
+                  "name": "response",
+                  "type": "string",
+                  "description": "Execution receipt with the Slack recipient, message count, and Slack-confirmed delivery status"
+                }
+              ],
+              "outputSchema": [
+                {
+                  "required": false,
+                  "name": "response",
+                  "type": "string",
+                  "description": "Execution receipt with the Slack recipient, message count, and Slack-confirmed delivery status"
+                }
+              ],
+              "tools": [
+                {
+                  "app_key": "mcp_server_chat",
+                  "app_name": "Zoom Chat",
+                  "source": "workplace",
+                  "description": "This node provides the ability to query team chat related information and send various types of messages.",
+                  "logo": null,
+                  "authorized": true,
+                  "auth_url": "",
+                  "tool_details": []
+                },
+                {
+                  "authorized": true,
+                  "tool_details": [],
+                  "app_name": "Zoom Meetings",
+                  "source": "workplace",
+                  "description": "Zoom Meetings",
+                  "app_key": "zm.meeting.meeting.meeting_nodes"
+                },
+                {
+                  "authorized": true,
+                  "tool_details": [],
+                  "app_name": "Slack",
+                  "source": "connector",
+                  "description": "Slack",
+                  "app_key": "zm_slack"
+                }
+              ],
+              "task_prompt": "Fetch the chat messages from the Zoom Chat channel named {{trg1.meeting.meeting_topic}}, keeping only messages sent during this meeting: from {{trg1.meeting.meeting_start_time}} to {{trg1.meeting.meeting_end_time}} (epoch milliseconds). A recurring meeting reuses one channel, so never include messages from before or after this meeting. Forward them to myself in Slack: find my Slack user by my email first, then send the messages to that user as a Slack direct message. If no message falls in that window, send nothing and say so.\n\n## Execution receipt\n- Begin the `response` value with a compact execution receipt of at most 1000 characters, before any report, message body, analysis, or other long-form content.\n- Start the receipt with `Outcome: SUCCESS`, `Outcome: PARTIAL`, `Outcome: NO_ACTION`, or `Outcome: FAILED`, matching the observed run result.\n- Add `Reads:` with the provider/source plus the concrete record identifiers, titles, queries, or result counts actually observed and used; write `Reads: NONE` when no read ran.\n- Add `Writes:` with one compact entry per attempted side effect: provider, operation, resolved target or recipient, provider-confirmed status, and returned identifier or URL when the tool supplies one. If no write ran, state `Writes: NONE` and the reason.\n- Add `Checks:` with every core requested section, field, constraint, and required sink marked `OK` or `MISSING` from observed evidence. Keep it terse, but never omit a failed core check to fit the receipt; for a long artifact, this checklist is the bounded proof of its contents.\n- Never claim success from intent or generated content alone, never invent receipt evidence, and never defer the only business-outcome evidence until after long-form content."
+            },
+            "config": {
+              "available_tools": [],
+              "selected_apps": [
+                "zm.meeting.meeting.meeting_nodes",
+                "zm_slack"
+              ],
+              "only_use_selected_apps": true,
+              "execution_mode": "workflow",
+              "allow_auto_tool_discovery": true,
+              "allow_auto_skill_discovery": true
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "response": {
+                  "type": "string",
+                  "description": "Execution receipt with the Slack recipient, message count, and Slack-confirmed delivery status"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "trg1",
+            "target_node": "dp1"
+          }
+        ]
+      }
+    ]
+  }
+}

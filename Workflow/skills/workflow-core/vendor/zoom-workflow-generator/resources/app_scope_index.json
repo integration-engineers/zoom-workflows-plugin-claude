@@ -1,0 +1,113 @@
+{
+  "format_version": 1,
+  "resolver": {
+    "connector_prefix": "zm.connector_mcp.<app_key>.",
+    "one_p_families": {
+      "zm.meeting.* | *get_meeting_summary | *search_meeting": "zm.meeting.meeting.meeting_nodes",
+      "zm.doc.* | *zoom_doc*": "zm.doc.doc.doc_nodes",
+      "zm.tc.*": "zm.tc.tc.team_chat_nodes"
+    }
+  },
+  "source_conversion": {
+    "3p": "connector",
+    "1p": "workplace",
+    "aic": "workplace"
+  },
+  "apps": {
+    "web_search": {
+      "app_key": "web_search",
+      "app_name": "Web Search",
+      "source": "workplace"
+    },
+    "zm.doc.doc.doc_nodes": {
+      "app_key": "zm.doc.doc.doc_nodes",
+      "app_name": "Zoom Canvas Doc",
+      "source": "workplace"
+    },
+    "zm.meeting.meeting.meeting_nodes": {
+      "app_key": "zm.meeting.meeting.meeting_nodes",
+      "app_name": "Zoom Meetings",
+      "source": "workplace"
+    },
+    "zm.tc.tc.team_chat_nodes": {
+      "app_key": "zm.tc.tc.team_chat_nodes",
+      "app_name": "Zoom Chat",
+      "source": "workplace"
+    },
+    "zm_confluence": {
+      "app_key": "zm_confluence",
+      "app_name": "Confluence",
+      "source": "connector"
+    },
+    "zm_gmail": {
+      "app_key": "zm_gmail",
+      "app_name": "Gmail",
+      "source": "connector"
+    },
+    "zm_google_drive_new": {
+      "app_key": "zm_google_drive_new",
+      "app_name": "Google Drive New",
+      "source": "connector"
+    },
+    "zm_googlecalendar": {
+      "app_key": "zm_googlecalendar",
+      "app_name": "Google Calendar",
+      "source": "connector"
+    },
+    "zm_googledocs": {
+      "app_key": "zm_googledocs",
+      "app_name": "Google Docs",
+      "source": "connector"
+    },
+    "zm_googlesheets": {
+      "app_key": "zm_googlesheets",
+      "app_name": "Google Sheets",
+      "source": "connector"
+    },
+    "zm_jira": {
+      "app_key": "zm_jira",
+      "app_name": "Jira",
+      "source": "connector"
+    },
+    "zm_one_drive_data": {
+      "app_key": "zm_one_drive_data",
+      "app_name": "One Drive Data",
+      "source": "connector"
+    },
+    "zm_onedrive": {
+      "app_key": "zm_onedrive",
+      "app_name": "OneDrive",
+      "source": "connector"
+    },
+    "zm_outlook": {
+      "app_key": "zm_outlook",
+      "app_name": "Outlook",
+      "source": "connector"
+    },
+    "zm_salesforce": {
+      "app_key": "zm_salesforce",
+      "app_name": "Salesforce",
+      "source": "connector"
+    },
+    "zm_servicenow_tool": {
+      "app_key": "zm_servicenow_tool",
+      "app_name": "ServiceNow Tool",
+      "source": "connector"
+    },
+    "zm_slack": {
+      "app_key": "zm_slack",
+      "app_name": "Slack",
+      "source": "connector"
+    },
+    "zm_snowflake": {
+      "app_key": "zm_snowflake",
+      "app_name": "Snowflake",
+      "source": "connector"
+    },
+    "zm_workday": {
+      "app_key": "zm_workday",
+      "app_name": "Workday",
+      "source": "connector"
+    }
+  }
+}

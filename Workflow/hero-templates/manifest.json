@@ -1,0 +1,351 @@
+{
+ "format_version": 1,
+ "shortcut_prefix": {
+  "codex": "$zoom-workflows ",
+  "claude": "/zoom-workflows:zoom-workflows "
+ },
+ "templates": [
+  {
+   "id": "summary-to-gmail",
+   "file": "summary-to-gmail.json",
+   "title": "Meeting Summary -> Personal Email (Gmail)",
+   "prompt": "After every meeting, email me the summary and action items.",
+   "surface": "demo",
+   "license": "workplace",
+   "requires_3p": [
+    "gmail"
+   ],
+   "uses_ai": false,
+   "credit_cost": "free",
+   "free_trial": false,
+   "required_inputs": [],
+   "on_menu": true
+  },
+  {
+   "id": "summary-to-outlook",
+   "file": "summary-to-outlook.json",
+   "title": "Meeting Summary -> Personal Email (Outlook)",
+   "prompt": "After every meeting, email me the summary and action items.",
+   "surface": "demo",
+   "license": "workplace",
+   "requires_3p": [
+    "outlook"
+   ],
+   "uses_ai": false,
+   "credit_cost": "free",
+   "free_trial": false,
+   "required_inputs": [],
+   "on_menu": true
+  },
+  {
+   "id": "summary-to-slack",
+   "file": "summary-to-slack.json",
+   "title": "Meeting Summary -> Slack channel",
+   "prompt": "After every meeting, post the summary and action items to a Slack channel.",
+   "license": "zoommate",
+   "requires_3p": [
+    "slack"
+   ],
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "required_inputs": [
+    {
+     "placeholder": "__SLACK_CHANNEL__",
+     "asks": "Which Slack channel should the summary go to?",
+     "note": "Fills `channel` on zm.connector_mcp.zm_slack.slack_send_message (send_to=channel). The Workflow editor's channel picker stores a channel ID; use the ID when the user gives one, otherwise the channel name they named. Ask before deploying; never guess."
+    }
+   ],
+   "surface": "demo",
+   "free_trial": false,
+   "on_menu": true
+  },
+  {
+   "id": "summary-to-confluence",
+   "file": "summary-to-confluence.json",
+   "title": "Meeting Summary -> Confluence page",
+   "prompt": "After every meeting, save the summary as a Confluence page.",
+   "license": "zoommate",
+   "requires_3p": [
+    "confluence"
+   ],
+   "uses_ai": false,
+   "credit_cost": "credit",
+   "required_inputs": [
+    {
+     "placeholder": "__CONFLUENCE_SPACE_ID__",
+     "asks": "Which Confluence space should the pages go in?",
+     "note": "Fills the required `spaceId` on zm.connector_mcp.zm_confluence.confluence_create_page (a space ID, as the Builder space selector stores). Ask before deploying; never guess."
+    }
+   ],
+   "surface": "demo",
+   "free_trial": false,
+   "on_menu": true,
+   "credits_per_run": 10
+  },
+  {
+   "id": "summary-to-google-docs",
+   "file": "summary-to-google-docs.json",
+   "title": "Meeting Summary -> Google Docs",
+   "prompt": "After every meeting, save the summary to a new Google Doc.",
+   "license": "zoommate",
+   "requires_3p": [
+    "googledocs"
+   ],
+   "uses_ai": false,
+   "credit_cost": "credit",
+   "required_inputs": [],
+   "surface": "demo",
+   "free_trial": false,
+   "on_menu": true,
+   "credits_per_run": 10
+  },
+  {
+   "id": "summary-to-onedrive",
+   "file": "summary-to-onedrive.json",
+   "title": "Meeting Summary -> OneDrive",
+   "prompt": "After every meeting, save the summary as a file in my OneDrive.",
+   "license": "zoommate",
+   "requires_3p": [
+    "onedrive"
+   ],
+   "uses_ai": false,
+   "credit_cost": "credit",
+   "required_inputs": [],
+   "surface": "demo",
+   "free_trial": false,
+   "on_menu": true,
+   "credits_per_run": 10
+  },
+  {
+   "id": "call-before-meetings",
+   "file": "call-before-meetings.json",
+   "title": "Phone call reminder before each meeting",
+   "prompt": "About fifteen minutes before each of my meetings, call my phone to remind me.",
+   "surface": "demo",
+   "license": "zoommate",
+   "requires_3p": [],
+   "uses_ai": false,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "required_inputs": [
+    {
+     "placeholder": "__PHONE_NUMBER__",
+     "asks": "Which of your phone numbers verified in Zoom should Zoom call?",
+     "note": "The user's own number, verified in their Zoom account (Zoom Profile → Phone), digits only. Ask before deploying; never guess or reuse a number from elsewhere. Calls reach only the user's own verified phone."
+    },
+    {
+     "placeholder": "__REGION_CODE__",
+     "asks": "Which country calling code is that number under?",
+     "note": "Calling code such as +1 (the node script prefixes '+' when missing). An ISO code like US is wrong."
+    }
+   ],
+   "on_menu": true
+  },
+  {
+   "id": "salesforce-opportunity-update",
+   "file": "salesforce-opportunity-update.json",
+   "title": "Customer meetings -> Salesforce opportunity update",
+   "prompt": "After every customer meeting, update the related Salesforce opportunity.",
+   "surface": "demo",
+   "license": "zoommate",
+   "requires_3p": [
+    "salesforce"
+   ],
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "required_inputs": [],
+   "on_menu": true
+  },
+  {
+   "id": "zoom-zodiac",
+   "file": "zoom-zodiac.json",
+   "title": "Work-Style Horoscope from recent Zoom activity",
+   "prompt": "Use my recent meetings to give me a short work-style horoscope.",
+   "surface": "demo",
+   "license": "zoommate",
+   "requires_3p": [],
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "required_inputs": [],
+   "trigger": "manual",
+   "on_menu": true
+  },
+  {
+   "id": "meeting-chat-to-slack",
+   "file": "meeting-chat-to-slack.json",
+   "title": "Meeting chat -> Slack",
+   "prompt": "After each meeting, forward the meeting's chat messages to me in Slack.",
+   "surface": "demo",
+   "license": "zoommate",
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "on_menu": true,
+   "requires_3p": [
+    "slack"
+   ],
+   "required_inputs": []
+  },
+  {
+   "id": "reminder-to-gmail",
+   "file": "reminder-to-gmail.json",
+   "title": "Meeting reminder -> Gmail",
+   "prompt": "15 minutes before each meeting, email me the meeting essentials via Gmail.",
+   "surface": "demo",
+   "license": "zoommate",
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "on_menu": true,
+   "requires_3p": [
+    "gmail"
+   ],
+   "required_inputs": []
+  },
+  {
+   "id": "reminder-to-outlook",
+   "file": "reminder-to-outlook.json",
+   "title": "Meeting reminder -> Outlook",
+   "prompt": "15 minutes before each meeting, email me the meeting essentials via Outlook.",
+   "surface": "demo",
+   "license": "zoommate",
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "on_menu": true,
+   "requires_3p": [
+    "outlook"
+   ],
+   "required_inputs": []
+  },
+  {
+   "id": "reminder-to-zoom-chat",
+   "file": "reminder-to-zoom-chat.json",
+   "title": "Meeting reminder -> the meeting's Zoom Chat channel",
+   "prompt": "15 minutes before each meeting, post the meeting essentials to the Zoom Chat channel named after the meeting.",
+   "surface": "demo",
+   "license": "zoommate",
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "on_menu": true,
+   "requires_3p": [],
+   "required_inputs": []
+  },
+  {
+   "id": "reminder-to-slack",
+   "file": "reminder-to-slack.json",
+   "title": "Meeting reminder -> Slack DM",
+   "prompt": "15 minutes before each meeting, send me the meeting essentials as a Slack direct message.",
+   "surface": "demo",
+   "license": "zoommate",
+   "uses_ai": true,
+   "credit_cost": "credit",
+   "credits_per_run": 10,
+   "free_trial": false,
+   "on_menu": true,
+   "requires_3p": [
+    "slack"
+   ],
+   "required_inputs": []
+  }
+ ],
+ "shortcuts": [
+  {
+   "id": "send-meeting-summary",
+   "suffix": "send meeting summary",
+   "title": "Meeting summary & action items",
+   "description": "Email your meeting summaries and action items after every meeting. Choose from popular destinations like Gmail, Outlook, Slack, Confluence, Google Docs, and OneDrive.",
+   "cost": "Free on Gmail & Outlook · Others: 10 credits with ZoomMate license",
+   "destinations": [
+    {
+     "name": "Gmail",
+     "template": "summary-to-gmail"
+    },
+    {
+     "name": "Outlook",
+     "template": "summary-to-outlook"
+    },
+    {
+     "name": "Slack",
+     "template": "summary-to-slack"
+    },
+    {
+     "name": "Confluence",
+     "template": "summary-to-confluence"
+    },
+    {
+     "name": "Google Docs",
+     "template": "summary-to-google-docs"
+    },
+    {
+     "name": "OneDrive",
+     "template": "summary-to-onedrive"
+    }
+   ]
+  },
+  {
+   "id": "meeting-chat-to-slack",
+   "suffix": "meeting chat to Slack",
+   "title": "Meeting chat -> Slack",
+   "description": "Send the meeting chat messages to Slack.",
+   "cost": "10 credits with ZoomMate license",
+   "template": "meeting-chat-to-slack"
+  },
+  {
+   "id": "meeting-reminders",
+   "suffix": "meeting reminders",
+   "title": "Meeting reminders",
+   "description": "Get reminders for your upcoming meetings. Choose from popular notification channels like Phone Call, Gmail, Outlook, Zoom Chat, and Slack.",
+   "cost": "10 credits with ZoomMate license",
+   "destinations": [
+    {
+     "name": "Phone Call",
+     "template": "call-before-meetings"
+    },
+    {
+     "name": "Gmail",
+     "template": "reminder-to-gmail"
+    },
+    {
+     "name": "Outlook",
+     "template": "reminder-to-outlook"
+    },
+    {
+     "name": "Zoom Chat",
+     "template": "reminder-to-zoom-chat"
+    },
+    {
+     "name": "Slack",
+     "template": "reminder-to-slack"
+    }
+   ]
+  },
+  {
+   "id": "customer-opportunities-to-salesforce",
+   "suffix": "customer opportunities to Salesforce",
+   "title": "Customer meetings → Salesforce",
+   "description": "After every customer meeting, update the related Salesforce opportunity.",
+   "cost": "10 credits with ZoomMate license",
+   "template": "salesforce-opportunity-update"
+  },
+  {
+   "id": "my-zoom-zodiac",
+   "suffix": "my zoom zodiac",
+   "title": "Zoom Zodiac",
+   "description": "Zoom Zodiac — a fun, short horoscope based on your recent meetings and work activity. NOTE: This is for entertainment purposes only.",
+   "cost": "10 credits with ZoomMate license",
+   "template": "zoom-zodiac"
+  }
+ ]
+}

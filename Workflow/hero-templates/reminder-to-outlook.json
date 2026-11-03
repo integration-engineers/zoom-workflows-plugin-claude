@@ -1,0 +1,412 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Meeting Reminder to Outlook",
+      "description": "15 minutes before each meeting, email me the meeting essentials (overview, invitees, agenda, preparation checklist, join link) via Outlook.",
+      "source": "",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Meeting Reminder to Outlook",
+          "description": "15 minutes before each meeting, email me the meeting essentials (overview, invitees, agenda, preparation checklist, join link) via Outlook."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "trg1",
+            "node_type": "trigger",
+            "node_name": "Meeting event",
+            "node_alias": "",
+            "node_desc": "",
+            "input_map": {
+              "filter_type": "all_meetings"
+            },
+            "config": {
+              "event_name": "meeting.start",
+              "event_config": {
+                "time_offset": -15
+              }
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "meeting": {
+                  "type": "meeting",
+                  "description": "the meeting object includes meeting info like meeting topic, meeting host etc",
+                  "required": true,
+                  "properties": {
+                    "account_id": {
+                      "description": "Account identifier",
+                      "type": "string"
+                    },
+                    "attendee_list": {
+                      "description": "Meeting attendees",
+                      "items": {
+                        "type": "User"
+                      },
+                      "type": "array"
+                    },
+                    "business_group_id": {
+                      "description": "Business group identifier",
+                      "type": "string"
+                    },
+                    "business_id": {
+                      "description": "Business identifier",
+                      "type": "string"
+                    },
+                    "business_type": {
+                      "description": "Type of business meeting",
+                      "type": "string"
+                    },
+                    "created": {
+                      "description": "Creation timestamp string",
+                      "type": "string"
+                    },
+                    "doc_id": {
+                      "content_type": "doc_id",
+                      "description": "Associated document ID",
+                      "type": "string"
+                    },
+                    "has_metadata_permission": {
+                      "description": "Whether user can access metadata",
+                      "type": "boolean"
+                    },
+                    "has_summary": {
+                      "description": "Whether meeting has AI summary",
+                      "type": "boolean"
+                    },
+                    "has_summary_permission": {
+                      "description": "Whether user can access summary",
+                      "type": "boolean"
+                    },
+                    "has_transcript": {
+                      "description": "Whether meeting has transcript",
+                      "type": "boolean"
+                    },
+                    "has_transcript_permission": {
+                      "description": "Whether user can access transcript",
+                      "type": "boolean"
+                    },
+                    "host_email": {
+                      "description": "Host email address",
+                      "type": "string"
+                    },
+                    "host_id": {
+                      "description": "Host ID",
+                      "type": "string"
+                    },
+                    "htmlLink": {
+                      "description": "Link to meeting details",
+                      "type": "string"
+                    },
+                    "join_time": {
+                      "description": "Participant join time records",
+                      "items": {
+                        "type": "JoinTimeItem"
+                      },
+                      "type": "array"
+                    },
+                    "kind": {
+                      "description": "Meeting kind or type",
+                      "type": "string"
+                    },
+                    "location": {
+                      "description": "Meeting location",
+                      "type": "string"
+                    },
+                    "main_file_id": {
+                      "description": "Primary associated file ID",
+                      "type": "string"
+                    },
+                    "master_event_id": {
+                      "description": "Master event ID for recurring meetings",
+                      "type": "string"
+                    },
+                    "meeting_category": {
+                      "description": "Meeting category classification",
+                      "type": "MeetingCategory"
+                    },
+                    "meeting_end_time": {
+                      "description": "Actual meeting end timestamp",
+                      "type": "integer"
+                    },
+                    "meeting_id": {
+                      "description": "Meeting  id",
+                      "type": "string"
+                    },
+                    "meeting_number": {
+                      "description": "Meeting number",
+                      "type": "integer"
+                    },
+                    "meeting_source": {
+                      "description": "Source platform of the meeting",
+                      "type": "string"
+                    },
+                    "meeting_start_time": {
+                      "description": "Actual meeting start timestamp",
+                      "type": "integer"
+                    },
+                    "meeting_topic": {
+                      "description": "Topic",
+                      "type": "string"
+                    },
+                    "meeting_type": {
+                      "description": "Type of meeting (instant, scheduled, etc.)",
+                      "type": "integer"
+                    },
+                    "next_steps_file_sub_type": {
+                      "description": "Type of next steps file",
+                      "type": "string"
+                    },
+                    "original_meeting_type": {
+                      "description": "Original meeting type before changes",
+                      "type": "integer"
+                    },
+                    "participant_size": {
+                      "description": "Number of participants",
+                      "type": "integer"
+                    },
+                    "query_privilege": {
+                      "description": "User query permission level",
+                      "type": "integer"
+                    },
+                    "recall_source_names": {
+                      "description": "Source names for recall functionality",
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "recurring_event_id": {
+                      "description": "ID for recurring meeting series",
+                      "type": "string"
+                    },
+                    "schedule_end_time": {
+                      "description": "Scheduled end timestamp",
+                      "type": "integer"
+                    },
+                    "schedule_start_time": {
+                      "description": "Scheduled start time",
+                      "type": "integer"
+                    },
+                    "score": {
+                      "description": "Relevance or quality score",
+                      "type": "number"
+                    },
+                    "status": {
+                      "description": "Current meeting status",
+                      "type": "string"
+                    },
+                    "summary.docId": {
+                      "content_type": "doc_id",
+                      "description": "Canonical meeting summary document ID in Zoom Canvas Doc",
+                      "type": "string"
+                    },
+                    "summary.summaryContent": {
+                      "content_type": "markdown_text",
+                      "description": "Meeting AI summary content",
+                      "type": "string"
+                    },
+                    "summary_chunk": {
+                      "description": "Segmented summary content chunks",
+                      "items": {
+                        "type": "Chunk"
+                      },
+                      "type": "array"
+                    },
+                    "summary_content": {
+                      "content_type": "markdown_text",
+                      "description": "Meeting summary text content",
+                      "type": "string"
+                    },
+                    "summary_file_sub_type": {
+                      "description": "Type of summary file",
+                      "type": "string"
+                    },
+                    "transcript_chunk": {
+                      "description": "Segmented transcript content chunks",
+                      "items": {
+                        "type": "Chunk"
+                      },
+                      "type": "array"
+                    },
+                    "transcript_content": {
+                      "description": "Meeting transcript text content",
+                      "type": "string"
+                    },
+                    "transcript_file_sub_type": {
+                      "description": "Type of transcript file",
+                      "type": "string"
+                    },
+                    "unified_id": {
+                      "description": "Unified identifier across systems",
+                      "type": "string"
+                    },
+                    "updated": {
+                      "description": "Last update timestamp string",
+                      "type": "string"
+                    }
+                  }
+                },
+                "meetingParticipants": {
+                  "type": "array",
+                  "items": {
+                    "type": "user",
+                    "properties": {
+                      "account_id": {
+                        "description": "Account ID",
+                        "type": "string"
+                      },
+                      "admin": {
+                        "description": "Admin status",
+                        "type": "boolean"
+                      },
+                      "dept": {
+                        "description": "Department",
+                        "type": "string"
+                      },
+                      "display_name": {
+                        "description": "Display name",
+                        "type": "string"
+                      },
+                      "email": {
+                        "description": "Email",
+                        "type": "string"
+                      },
+                      "lower_user_id": {
+                        "description": "Lowercase user ID",
+                        "type": "string"
+                      },
+                      "option01": {
+                        "description": "Option field",
+                        "type": "integer"
+                      },
+                      "owner": {
+                        "description": "Owner status",
+                        "type": "boolean"
+                      },
+                      "role": {
+                        "description": "Role ID",
+                        "type": "integer"
+                      },
+                      "sns_email": {
+                        "description": "SNS email",
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "description": "User ID",
+                        "type": "string"
+                      },
+                      "user_type": {
+                        "description": "User type",
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "account_id",
+                      "user_id"
+                    ]
+                  },
+                  "description": "Meeting Participants"
+                },
+                "recording": {
+                  "type": "object",
+                  "description": "Recording"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.aic.agent.deep_reasoning",
+            "reference_id": "dp1",
+            "node_type": "deep_reasoning",
+            "node_name": "AI reasoning",
+            "node_alias": "",
+            "node_desc": "",
+            "input_map": {
+              "task_prompt": "# Execution contract\n\n## Role\nMeeting reminder assistant\n\n## Objective\nEmail the workflow owner the essentials of their meeting that starts in 15 minutes.\n\n## Requested delivery action\nsend\n\n## Inputs\n- **meeting** from `{{trg1.meeting}}` — The upcoming meeting from the trigger: its topic, meeting number, and invitees, and the key for the Zoom Meetings lookup\n\n## Procedure\n1. Look up the meeting with Zoom Meetings by its meeting number or ID and read its scheduled start time and time zone, duration, passcode, host, invitees, agenda or description, and join link; use the trigger's meeting fields when the lookup does not return a value.\n2. Compose the meeting essentials from the meeting in this structure: MEETING OVERVIEW (topic; start time as 'Day, Month DD at H:MM AM/PM' with its time zone; duration; meeting ID; passcode if available; host), INVITEES (every invitee by name), AGENDA (numbered agenda topics, with time allocation when stated), PREPARATION CHECKLIST (documents to review, materials to prepare, pre-meeting tasks, technical setup), JOIN INFORMATION (the meeting link).\n3. Send exactly one email-safe HTML email to the workflow owner, with a subject naming the meeting topic and that it starts in 15 minutes.\n\n## Output requirements\n- Return the delivered reminder text and the provider-confirmed delivery status.\n\n## Typed outputs\n- `response` (string): Plain-language execution result, including observed side-effect status when applicable\n\n## Missing-data policy\nWrite 'Not stated' for any field the meeting does not provide, and leave the preparation checklist to what the meeting's agenda or description supports; never invent items.\n\n## Evidence policy\nUse only the trigger's meeting and what the Zoom Meetings lookup returns for that meeting.\n\n## Tool policy\nUse Zoom Meetings only to read this meeting's details, and only Outlook to deliver.\n\n## Side-effect policy\nSend exactly one email to the workflow owner and report success only after provider confirmation.\n\n## Success criteria\n- Every stated fact comes from the meeting.\n- The delivery output reflects the observed provider result.\n\n## Execution receipt\n- Begin the `response` value with a compact execution receipt of at most 1000 characters, before any report, message body, analysis, or other long-form content.\n- Start the receipt with `Outcome: SUCCESS`, `Outcome: PARTIAL`, `Outcome: NO_ACTION`, or `Outcome: FAILED`, matching the observed run result.\n- Add `Reads:` with the provider/source plus the concrete record identifiers, titles, queries, or result counts actually observed and used; write `Reads: NONE` when no read ran.\n- Add `Writes:` with one compact entry per attempted side effect: provider, operation, resolved target or recipient, provider-confirmed status, and returned identifier or URL when the tool supplies one. If no write ran, state `Writes: NONE` and the reason.\n- Add `Checks:` with every core requested section, field, constraint, and required sink marked `OK` or `MISSING` from observed evidence. Keep it terse, but never omit a failed core check to fit the receipt; for a long artifact, this checklist is the bounded proof of its contents.\n- Never claim success from intent or generated content alone, never invent receipt evidence, and never defer the only business-outcome evidence until after long-form content.",
+              "system_prompt": "",
+              "max_steps": 20,
+              "knowledge": {
+                "web_urls": ""
+              },
+              "tools": [
+                {
+                  "app_key": "zm.meeting.meeting.meeting_nodes",
+                  "app_name": "Zoom Meetings",
+                  "source": "workplace",
+                  "description": "Zoom Meetings",
+                  "authorized": true,
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm_outlook",
+                  "app_name": "Outlook",
+                  "source": "connector",
+                  "description": "Outlook",
+                  "authorized": true,
+                  "tool_details": []
+                }
+              ],
+              "outputs": [
+                {
+                  "name": "response",
+                  "type": "string",
+                  "description": "Plain-language execution result, including observed side-effect status when applicable",
+                  "required": false
+                }
+              ],
+              "outputSchema": [
+                {
+                  "name": "response",
+                  "type": "string",
+                  "description": "Plain-language execution result, including observed side-effect status when applicable",
+                  "required": false
+                }
+              ]
+            },
+            "config": {
+              "execution_mode": "workflow",
+              "allow_auto_tool_discovery": true,
+              "allow_auto_skill_discovery": true,
+              "available_tools": [],
+              "selected_apps": [
+                "zm.meeting.meeting.meeting_nodes",
+                "zm_outlook"
+              ],
+              "only_use_selected_apps": true
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "response": {
+                  "type": "string",
+                  "description": "Plain-language execution result, including observed side-effect status when applicable"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "trg1",
+            "target_node": "dp1"
+          }
+        ]
+      }
+    ]
+  }
+}

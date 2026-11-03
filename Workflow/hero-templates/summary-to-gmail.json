@@ -1,0 +1,228 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Meeting Summary to Gmail",
+      "description": "Sends a polished email to the current user with the meeting summary and participant details after substantial Zoom meetings - without any AI processing. *This workflow template does not consume credits unless modified to include credit-consuming features.",
+      "source": "template",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Meeting Summary to Gmail",
+          "description": "Sends a polished email to the current user with the meeting summary and participant details after substantial Zoom meetings - without any AI processing. *This workflow template does not consume credits unless modified to include credit-consuming features."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "pmkccs",
+            "node_type": "trigger",
+            "node_name": "Zoom Meetings event",
+            "node_alias": "Zoom Meetings event",
+            "node_desc": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+            "input_map": {
+              "filter_type": "all_meetings"
+            },
+            "config": {
+              "event_name": "meeting.summary_created",
+              "event_config": {
+                "time_offset": 0
+              }
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "meeting": {
+                  "description": "the meeting object includes meeting info like meeting topic, meeting host etc",
+                  "type": "meeting",
+                  "required": true
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.system.operators.condition",
+            "reference_id": "yfqzyp",
+            "node_type": "condition",
+            "node_name": "Condition",
+            "node_alias": "",
+            "node_desc": "Specify a condition on it's output to decide which path the flow will to follow",
+            "input_map": {
+              "determined_by_ai": false,
+              "expression": {
+                "switchConditionMap": {
+                  "Route 1": [
+                    {
+                      "key": "{{pmkccs.meeting.summary.summaryContent}}",
+                      "value": "",
+                      "condition": "isNotEmpty"
+                    }
+                  ]
+                }
+              }
+            },
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.system.operators.code",
+            "reference_id": "mdcode",
+            "node_type": "logic",
+            "node_name": "Custom script",
+            "node_alias": "",
+            "node_desc": "Insert and run custom Python in your workflow. Code runs in a secure sandbox; the value it returns is mapped to the Outputs below.",
+            "input_map": {
+              "input": {
+                "summaryContent": "{{pmkccs.meeting.summary.summaryContent}}",
+                "meeting_name": "{{pmkccs.meeting.meeting_topic}}"
+              },
+              "code": "# -*- coding: utf-8 -*-\n\"\"\"\nRender a meeting summary (markdown) into a branded, email-safe HTML report.\nNo LLM. Splits the markdown by level-2 (##) headings into sections and renders\neach section as its own card (table-based, inline styles, Outlook/Gmail safe).\nReads : summaryContent (markdown string), meeting_name (str), email_to (str, optional)\nOutputs: email_subject, mail_body (HTML), email_to\n\"\"\"\n\nimport json\nimport re\nfrom pathlib import Path\n\nBLUE = \"#0E72ED\"\nINK = \"#022B30\"\nMUTED = \"#5B6B73\"\nBORDER = \"#E1E7EC\"\nBG = \"#F7F9FA\"\nCARD_BG = \"#FFFFFF\"\nTIERS = [\"#0E72ED\", \"#268543\", \"#7A8CF0\", \"#B3610E\", \"#C23B52\", \"#0F8A8A\"]\n\n\ndef _text(data, name, default=\"\"):\n    v = data.get(name, default)\n    return default if v is None else str(v)\n\n\ndef _escape(value):\n    t = str(value if value is not None else \"\")\n    return t.replace(\"&\", \"&amp;\").replace(\"<\", \"&lt;\").replace(\">\", \"&gt;\").replace('\"', \"&quot;\")\n\n\ndef _inline(text):\n    s = _escape(text)\n    s = re.sub(r\"\\*\\*([^*]+)\\*\\*\", lambda m: \"<strong>\" + m.group(1) + \"</strong>\", s)\n    s = re.sub(r\"__([^_]+)__\", lambda m: \"<strong>\" + m.group(1) + \"</strong>\", s)\n    s = re.sub(r\"\\*([^*]+)\\*\", lambda m: \"<em>\" + m.group(1) + \"</em>\", s)\n    s = re.sub(r\"`([^`]+)`\", lambda m: '<code style=\"background:#EEF1F4;border:1px solid ' + BORDER + ';border-radius:4px;padding:1px 5px;font-family:Consolas,Menlo,monospace;font-size:13px;\">' + m.group(1) + \"</code>\", s)\n    s = re.sub(r\"\\[([^\\]]+)\\]\\(([^)]+)\\)\", lambda m: '<a href=\"' + m.group(2) + '\" style=\"color:' + BLUE + ';text-decoration:underline;\">' + m.group(1) + \"</a>\", s)\n    return s\n\n\ndef _render_blocks(lines):\n    out = []\n    list_open = [None]\n\n    def close_list():\n        if list_open[0]:\n            out.append(\"</\" + list_open[0] + \">\")\n            list_open[0] = None\n\n    for raw in lines:\n        t = raw.strip()\n        if t == \"\":\n            close_list(); continue\n        m = re.match(r\"^(#{3,6})\\s+(.*)$\", t)\n        if m:\n            close_list()\n            size = {3: \"16px\", 4: \"15px\", 5: \"14px\", 6: \"13px\"}[len(m.group(1))]\n            out.append('<div style=\"font-weight:700;font-size:' + size + ';color:' + INK + ';margin:16px 0 6px 0;\">' + _inline(m.group(2)) + \"</div>\")\n            continue\n        if re.match(r\"^(-{3,}|\\*{3,}|_{3,})$\", t):\n            close_list()\n            out.append('<div style=\"border-top:1px solid ' + BORDER + ';margin:16px 0;font-size:0;line-height:0;\">&nbsp;</div>')\n            continue\n        m = re.match(r\"^>\\s?(.*)$\", t)\n        if m:\n            close_list()\n            out.append('<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:10px 0;\"><tr><td style=\"padding:10px 16px;border-left:3px solid ' + BLUE + ';background:' + BG + ';color:' + MUTED + ';font-size:15px;line-height:1.6;\">' + _inline(m.group(1)) + \"</td></tr></table>\")\n            continue\n        m = re.match(r\"^[-*+]\\s+(.*)$\", t)\n        if m:\n            if list_open[0] != \"ul\":\n                close_list(); out.append('<ul style=\"margin:8px 0;padding-left:22px;\">'); list_open[0] = \"ul\"\n            out.append('<li style=\"margin:6px 0;font-size:15px;line-height:1.65;color:' + INK + ';\">' + _inline(m.group(1)) + \"</li>\")\n            continue\n        m = re.match(r\"^\\d+\\.\\s+(.*)$\", t)\n        if m:\n            if list_open[0] != \"ol\":\n                close_list(); out.append('<ol style=\"margin:8px 0;padding-left:22px;\">'); list_open[0] = \"ol\"\n            out.append('<li style=\"margin:6px 0;font-size:15px;line-height:1.65;color:' + INK + ';\">' + _inline(m.group(1)) + \"</li>\")\n            continue\n        close_list()\n        out.append('<p style=\"margin:8px 0;font-size:15px;line-height:1.65;color:' + INK + ';\">' + _inline(t) + \"</p>\")\n    close_list()\n    return \"\".join(out)\n\n\ndef _split_sections(md):\n    lines = md.replace(\"\\r\\n\", \"\\n\").split(\"\\n\")\n    preamble, sections, cur = [], [], None\n    for raw in lines:\n        m = re.match(r\"^##\\s+(.*)$\", raw.strip())  # level-2 only; ### will not match\n        if m:\n            cur = {\"title\": m.group(1).strip(), \"lines\": []}\n            sections.append(cur)\n        elif cur is None:\n            preamble.append(raw)\n        else:\n            cur[\"lines\"].append(raw)\n    return preamble, sections\n\n\ndef _section_card(title, body_html, color):\n    return (\n        '<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:0 0 20px 0;border:1px solid ' + BORDER + ';border-radius:12px;overflow:hidden;background:' + CARD_BG + ';\">'\n        + '<tr><td style=\"padding:14px 22px;border-left:5px solid ' + color + ';background:#FAFBFC;\">'\n        + '<div style=\"font-size:18px;line-height:1.3;font-weight:700;color:' + INK + ';\">' + _inline(title) + '</div>'\n        + '</td></tr>'\n        + '<tr><td style=\"padding:8px 22px 18px 22px;\">' + body_html + '</td></tr>'\n        + '</table>'\n    )\n\n\ndef _build_html(md, meeting_name):\n    preamble, sections = _split_sections(md)\n    subject = (meeting_name or \"Meeting\") + \" - Meeting Summary\"\n    preheader = \"Formatted meeting summary for \" + (meeting_name or \"your meeting\")\n\n    cards = \"\"\n    if \"\".join(preamble).strip():\n        cards += _section_card(\"Overview\", _render_blocks(preamble), MUTED)\n    for i, sec in enumerate(sections):\n        cards += _section_card(sec[\"title\"], _render_blocks(sec[\"lines\"]), TIERS[i % len(TIERS)])\n    if not cards:\n        cards = ('<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border:1px solid ' + BORDER + ';border-radius:12px;\"><tr><td style=\"padding:24px;color:' + MUTED + ';font-style:italic;font-size:15px;\">No summary content was provided.</td></tr></table>')\n\n    return (\n        '<!DOCTYPE html><html lang=\"en\" dir=\"ltr\"><head>'\n        '<meta charset=\"UTF-8\">'\n        '<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">'\n        '<meta name=\"x-apple-disable-message-reformatting\">'\n        '<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">'\n        '<meta name=\"color-scheme\" content=\"light\"><meta name=\"supported-color-schemes\" content=\"light\">'\n        + '<title>' + _escape(subject) + '</title>'\n        + '<!--[if mso]><style>body,table,td{font-family:Segoe UI,Arial,sans-serif!important;}table,tr,td{border-collapse:collapse;}</style><![endif]-->'\n        + '<style>body{margin:0;padding:0;background:' + BG + ';}table{border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;}'\n        + '@media only screen and (max-width:600px){.email-card{width:100%!important;border-radius:0!important;}.email-pad{padding:28px 24px!important;}h1.email-h1{font-size:28px!important;}}'\n        + '</style></head>'\n        + '<body style=\"margin:0;padding:0;background:' + BG + ';font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;color:' + INK + ';-webkit-text-size-adjust:100%;\">'\n        + '<div style=\"display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;visibility:hidden;mso-hide:all;\">' + _escape(preheader) + '</div>'\n        + '<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"background:' + BG + ';\"><tr><td align=\"center\" style=\"padding:32px 16px;\">'\n        + '<table role=\"presentation\" class=\"email-card\" width=\"720\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;max-width:720px;min-width:320px;background:#FFFFFF;border-radius:12px;overflow:hidden;border:1px solid ' + BORDER + ';\">'\n        + '<tr><td style=\"height:5px;background:' + BLUE + ';font-size:0;line-height:0;\">&nbsp;</td></tr>'\n        + '<tr><td class=\"email-pad\" style=\"padding:44px 48px 36px 48px;background:' + BLUE + ';\">'\n        + '<div style=\"font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#DDE8FA;margin-bottom:12px;\">Meeting Summary</div>'\n        + '<h1 class=\"email-h1\" style=\"margin:0;font-size:34px;line-height:1.2;font-weight:700;color:#FFFFFF;\">' + _escape(meeting_name or \"Meeting\") + '</h1>'\n        + '</td></tr>'\n        + '<tr><td class=\"email-pad\" style=\"padding:36px 48px 8px 48px;\">' + cards + '</td></tr>'\n        + '<tr><td style=\"padding:20px 48px 34px 48px;border-top:1px solid ' + BORDER + ';\">'\n        + '<p style=\"margin:0;font-size:13px;line-height:1.6;color:' + MUTED + ';\">Formatted from the meeting summary. Section headings were parsed directly from the summary text — generated without AI.</p>'\n        + '</td></tr>'\n        + '</table></td></tr></table></body></html>'\n    )\n\n\ndef run_node(input_data, context):\n    try:\n        if not isinstance(input_data, dict):\n            input_data = {}\n        md = _text(input_data, \"summaryContent\", \"\")\n        meeting_name = _text(input_data, \"meeting_name\", \"Meeting\") or \"Meeting\"\n        email_to = _text(input_data, \"email_to\", \"\")\n        if md.strip():\n            mail_body = _build_html(md, meeting_name)\n        else:\n            mail_body = ('<!DOCTYPE html><html><body style=\"font-family:Arial,sans-serif;color:#022B30;\">'\n                         '<p>No meeting summary content was available to format.</p></body></html>')\n        return {\"success\": True, \"output\": {\n            \"email_subject\": meeting_name + \" - Meeting Summary\",\n            \"mail_body\": mail_body,\n            \"email_to\": email_to,\n        }}\n    except Exception as exc:  # noqa: BLE001\n        return {\"success\": False, \"output\": {\"error\": str(exc)}}\n\n\nif __name__ == \"__main__\":\n    try:\n        request = json.loads(Path(__file__).with_name(\"request.json\").read_text(encoding=\"utf-8\"))\n        result = run_node(request.get(\"input_data\", {}), request.get(\"context\", {}))\n    except Exception as exc:\n        result = {\"success\": False, \"output\": {\"error\": str(exc)}}\n    print(json.dumps(result, ensure_ascii=False))\n",
+              "inputSchema": [
+                {
+                  "name": "summaryContent",
+                  "type": "string",
+                  "description": "Meeting summary markdown from the trigger",
+                  "required": true
+                },
+                {
+                  "name": "meeting_name",
+                  "type": "string",
+                  "description": "Meeting topic used as the report title",
+                  "required": false
+                }
+              ],
+              "parameter": {
+                "summaryContent": "{{pmkccs.meeting.summary.summaryContent}}",
+                "meeting_name": "{{pmkccs.meeting.meeting_topic}}"
+              },
+              "requestJson": {
+                "input_data": {
+                  "summaryContent": "{{pmkccs.meeting.summary.summaryContent}}",
+                  "meeting_name": "{{pmkccs.meeting.meeting_topic}}"
+                },
+                "context": {}
+              },
+              "outputs": [
+                {
+                  "id": "email_subject",
+                  "name": "email_subject",
+                  "type": "string",
+                  "description": "Subject line for the email node",
+                  "is_array": false
+                },
+                {
+                  "id": "mail_body",
+                  "name": "mail_body",
+                  "type": "string",
+                  "description": "Rendered HTML email body (sectioned by ## headings)",
+                  "is_array": false
+                },
+                {
+                  "id": "email_to",
+                  "name": "email_to",
+                  "type": "string",
+                  "description": "Optional recipient passthrough",
+                  "is_array": false
+                }
+              ],
+              "outputSchema": [
+                {
+                  "name": "email_subject",
+                  "type": "string",
+                  "required": false
+                },
+                {
+                  "name": "mail_body",
+                  "type": "string",
+                  "required": false
+                },
+                {
+                  "name": "email_to",
+                  "type": "string",
+                  "required": false
+                }
+              ]
+            },
+            "config": {},
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "email_subject": {
+                  "type": "string",
+                  "description": "email_subject"
+                },
+                "mail_body": {
+                  "type": "string",
+                  "description": "mail_body"
+                },
+                "email_to": {
+                  "type": "string",
+                  "description": "email_to"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.connector_mcp.zm_gmail.gmail_send_email",
+            "reference_id": "mailsn",
+            "node_type": "mcp_tool",
+            "node_name": "Send Email",
+            "node_alias": "",
+            "node_desc": "Sends an email via Gmail API using the authenticated user's Google profile display name.",
+            "input_map": {
+              "is_html": true,
+              "cc": [],
+              "bcc": [],
+              "extra_recipients": [],
+              "body": "{{mdcode.mail_body}}\n",
+              "subject": "{{mdcode.email_subject}}",
+              "recipient_email": "{{ROOT.sysWorkflowCreator.email}}"
+            },
+            "config": {
+              "approval_strategy": "always_allow"
+            },
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "pmkccs",
+            "target_node": "yfqzyp"
+          },
+          {
+            "source_node": "yfqzyp",
+            "target_node": "mdcode",
+            "condition": {
+              "yfqzyp.branch": "Route 1"
+            }
+          },
+          {
+            "source_node": "mdcode",
+            "target_node": "mailsn"
+          }
+        ]
+      }
+    ]
+  }
+}

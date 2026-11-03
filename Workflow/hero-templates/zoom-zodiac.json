@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Zoom Zodiac",
+      "description": "On demand, a short work-style horoscope from your three most recent meetings. For entertainment purposes only.",
+      "source": "gui",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Zoom Zodiac",
+          "description": "On demand, a short work-style horoscope from your three most recent meetings. For entertainment purposes only."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.system.manual.trigger_manually",
+            "reference_id": "iynzub",
+            "node_type": "trigger",
+            "node_name": "Manually start",
+            "node_alias": "",
+            "node_desc": "Trigger when press a button",
+            "input_map": {},
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.aic.agent.deep_reasoning",
+            "reference_id": "knqvnu",
+            "node_type": "deep_reasoning",
+            "node_name": "AI reasoning",
+            "node_alias": "",
+            "node_desc": "",
+            "input_map": {
+              "knowledge": {
+                "web_urls": ""
+              },
+              "max_steps": 20,
+              "system_prompt": "",
+              "task_prompt": "[Goal]\nProduce a short, upbeat \"Zoom Zodiac\" for the workflow creator (the current user) — a fun,\nevidence-based recognition message built entirely from their own work activity in the last 3 meetings,\nframed through a zodiac-inspired work-style archetype.\n[Inputs]\nNo upstream variables are required. Gather everything live, scoped to the workflow creator's own\nactivity only (not teammates'):\n- Resolve the workflow creator's own Zoom identity first, so the search below is filtered to them.\n- Zoom Meetings tool: meetings, meeting summaries, recordings, and transcripts they organized or attended.\n  This is the only source for this task — do not use a chat tool, a document/Canvas tool, or any other\n  connected tool.\n[Steps]\n1. Using the Zoom Meetings tool, retrieve the workflow creator's meetings sorted by start time, most\n   recent first, and take the 3 most recent ones (fewer than 3 if that's all that exist) as the evidence\n   base, along with each one's summary, recording, and transcript.\n2. Check for any data at all: if the workflow creator has zero meetings, state plainly that no meeting\n   activity was found and stop there — this is a normal, complete result, not an error. Do not invent a\n   sign, an achievement, the header, or any of the four output sentences in this case.\n3. Otherwise, read across the summaries, recordings, and transcripts of those (up to) 3 meetings and note\n   concrete, work-related behavior patterns only — skip anything personal, romantic/relationship, family,\n   or health-related, and abstract away confidential specifics, per the privacy & confidentiality screen\n   in Step 5 of the rulebook below.\n[Decisions & Defaults — Zoom Zodiac Rulebook]\nThis is an internal, lighthearted personality-style framework for work recognition — not real astrology,\nfortune-telling, or anything tied to birth date. It is derived entirely from what you observe across\nthese meetings. Do not hedge or add disclaimers about astrology's validity — this is clearly a fun\ninternal framework, so just apply the rules below and write confidently. Apply them in order so results\nstay consistent:\nStep 1 — Score the four elements from observed behavior. Count concrete instances, drawn from the\nmeetings' summaries, recordings, or transcripts, showing each pattern:\n- Fire (initiative/momentum): proposes new ideas, kicks off work quickly, drives urgency, pushes for\n  decisions or action.\n- Earth (structure/reliability): follows through on commitments, tracks details, plans methodically,\n  keeps things on schedule.\n- Air (connection/communication): coordinates across people or topics, facilitates discussion, shares\n  information, moves fluidly between conversations.\n- Water (empathy/depth): supports teammates, listens carefully, digs deeply into a hard problem, shows\n  resilience through a setback.\nThe element with the most instances is dominant. Break ties by whichever has evidence spread across more\nof the (up to) 3 meetings; if still tied, prefer whichever has evidence from the most recent meeting.\nStep 2 — Within the dominant element, pick the one sign whose sub-pattern best matches the strongest\nevidence (if none stands out clearly, use the first-listed sign for that element):\n- Fire → Aries (fast, decisive first mover) / Leo (visible leadership, confident ownership, presents\n  outcomes) / Sagittarius (big-picture strategy, explores new approaches, cross-team scope)\n- Earth → Taurus (steady, calm persistence, dependable under pressure) / Virgo (detail-oriented,\n  quality-focused, catches issues) / Capricorn (goal-driven, disciplined planning, owns deadlines)\n- Air → Gemini (quick context-switcher, fast communicator across many threads) / Libra (facilitates,\n  balances competing views, builds consensus) / Aquarius (novel ideas, unconventional problem-solving)\n- Water → Cancer (protective of team wellbeing, nurtures relationships) / Scorpio (intense focus on hard\n  problems, resilient through setbacks) / Pisces (imaginative framing, senses unstated needs, adapts fluidly)\nStep 3 — Each sign's fixed \"superpower\" label (use this exact phrasing as the English source meaning —\ntranslate per Step 8 when the output language isn't English):\nAries → The Trailblazer: turning ideas into action fast and unblocking others through decisive momentum.\nTaurus → The Steady Anchor: dependable follow-through that keeps projects on track no matter what.\nGemini → The Connector: fluidly bridging conversations and people, keeping information flowing.\nCancer → The Team Caretaker: sensing what teammates need and building trust through support.\nLeo → The Confident Leader: rallying people around a vision with visible ownership.\nVirgo → The Precision Expert: catching the details others miss and elevating quality through rigor.\nLibra → The Diplomat: finding balanced solutions that bring people into alignment.\nScorpio → The Deep Diver: relentless focus that cracks the hardest problems.\nSagittarius → The Visionary Explorer: zooming out to spot new opportunities and bold moves.\nCapricorn → The Disciplined Builder: turning long-term goals into structured, reliable progress.\nAquarius → The Innovator: reframing problems with fresh, unconventional ideas.\nPisces → The Intuitive Creative: sensing unspoken needs and adapting with imaginative solutions.\nStep 4 — Sparse-evidence priority rule. If, after Step 1's scoring and tie-breaks, two or more elements\nremain tied, or every element has only one supporting instance, do not fall back to any single fixed\nsign. Instead break the tie using this fixed element priority order, highest to lowest: Earth > Air >\nWater > Fire. Reasoning, applied consistently: a reliability/follow-through instance (Earth) is the\neasiest pattern to confirm from a single example, such as a deadline hit or a document finished; a\ncoordination instance (Air) is next easiest to confirm; a support/empathy instance (Water) needs a bit\nmore context to distinguish from ordinary politeness; an initiative instance (Fire) is riskiest to\ngeneralize from one example, since a single bold action could be a one-off rather than a pattern. Select\nthe highest-priority element that has at least one supporting instance, then use Step 2 to pick the\nspecific sign within it (using the first-listed sign for that element if its sub-patterns are also tied).\nStep 5 — Privacy & confidentiality screen:\n(a) Personal-life exclusion: use only clearly work/professional accomplishments. Never reference romantic\n    relationships, dating, family/personal-life details, health, or any other non-work-sensitive topic\n    even if it appeared in the source data — quietly pick different evidence instead.\n(b) Confidentiality abstraction: describe every pattern and achievement only at the level of its general\n    category or type of contribution — never its confidential specifics. State the kind of work, not the\n    identifying detail: which broad area or platform it touched, what type of contribution it was (a\n    design decision, a launch, a piece of cross-team coordination, a fix), not the specific feature name,\n    internal project or code name, exact release/version/date, security or permission-model specifics,\n    customer name, metric, or other detail that would reveal confidential product plans. For example, say\n    \"drove key design decisions for the agentic platform\" — never \"created clarity in the permission\n    model for the January release.\" If the only evidence you have is too specific to abstract safely,\n    generalize it further (e.g., to \"a key platform decision\") rather than omitting the achievement entirely.\nStep 6 — Plain-language rule: in every one of the four output sentences, spell out every abbreviation,\nacronym, and piece of internal shorthand into its full term — never write the short form. For example,\nwrite \"Product Requirements Document\" instead of \"PRD,\" \"Application Programming Interface\" instead of\n\"API,\" \"Quarterly Business Review\" instead of \"QBR,\" and so on for any other acronym or internal\nshorthand you encounter in the source data. If you are not certain what a given abbreviation stands for,\ndescribe the underlying activity in plain words instead of guessing at or repeating the abbreviation.\nStep 7 — Length rule: each of the four sentences must be under 10 words on its own, and the header plus\nall four sentences combined must total 45 words or fewer. Keep sentences 1 and 2 (the Zoom Zodiac sentence\nand the Achievement sentence) as close to fully intact as possible within their own 10-word limit; trim\nsentences 3 and 4 first if the combined total still runs over. Tighten wording to fit — do not pad with\nfiller, and do not cut required content (the sign name, the superpower label, the achievement, the growth\nsuggestion, or the closing) to hit the limit. Before finishing, check each sentence's own word count and\nthe combined total, and revise down anything that exceeds its limit.\nStep 8 — Output language rule: identify the dominant language of the retrieved meeting content (summaries,\nrecordings, transcripts) across the (up to) 3 meetings. If more than one language appears, pick whichever\nlanguage makes up the larger share of the combined content across the 3 meetings; if that is still tied,\nprefer the language of the most recent meeting. Write the header and all four sentences in that language.\nTranslate the sign name and the superpower label (Step 3) into that language, preserving their meaning —\ndo not leave them in English unless English is the dominant language. Exception: the literal header text\n\"Zoom Zodiac\" is a fixed brand name and stays as written in every language.\n[What to surface]\nIf the workflow creator has no meetings at all (Step 2 above), state that single fact clearly and stop —\ndo not write the header or any of the four sentences below in that case, and do not invent content to\nfill them.\nOtherwise, your final response must start with a header line containing only the text \"Zoom Zodiac\" and\nnothing else on that line (plain text or bold, e.g. **Zoom Zodiac**, is fine — just no extra words, no\nsign name, and no sentence content on the header line itself). After the header, write four lines, in the\nlanguage determined by Step 8, with every abbreviation spelled out per Step 6, each under 10 words, and the\nheader plus all four together totaling 45 words or fewer per Step 7:\n1. Zoom Zodiac line — state only the sign name followed by its superpower label, with no introductory\n   phrase (never \"Your Zoom Zodiac is...\", \"for this quarter is...\", or similar lead-ins). Format as\n   \"<Sign> — <Superpower Label>,\" e.g. \"Capricorn — The Disciplined Builder.\" You may reduce this to just\n   the sign name and superpower label as keywords rather than a full sentence.\n2. Achievement line — state the accomplishment directly, with no introductory phrase (never \"One\n   achievement worth celebrating...,\" \"You should be proud of...,\" or similar lead-ins). Start directly\n   with the accomplishment itself, described only at the category/type level (per Step 5(b)) — never the\n   specific confidential detail behind it, e.g. \"Drove key design decisions for the agentic platform.\"\n3. Growth line — one concrete, actionable suggestion for how they can build on this pattern or close a\n   gap going into their next meeting, phrased generally enough to avoid confidential specifics.\n4. Closing line — warm, energetic, encouraging, emotionally uplifting; genuine celebration, no caveats or\n   disclaimers. You may reduce this to a short burst of keywords or an exclamation rather than a full\n   sentence.",
+              "tools": [
+                {
+                  "app_key": "mcp_server_meeting",
+                  "app_name": "Zoom Meetings",
+                  "auth_url": "",
+                  "authorized": true,
+                  "description": "You can manage a meeting in this node.",
+                  "source": "workplace",
+                  "tool_details": []
+                }
+              ]
+            },
+            "config": {
+              "execution_mode": "workflow"
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "response": {
+                  "type": "string",
+                  "description": "Response from AI"
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "iynzub",
+            "target_node": "knqvnu"
+          }
+        ]
+      }
+    ]
+  }
+}

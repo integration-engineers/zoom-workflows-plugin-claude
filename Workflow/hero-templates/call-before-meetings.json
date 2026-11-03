@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Voice message for meeting reminder",
+      "description": "About fifteen minutes before each of your meetings, Zoom calls your phone with a voice reminder of the meeting title.",
+      "source": "gui",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Voice message for meeting reminder",
+          "description": "About fifteen minutes before each of your meetings, Zoom calls your phone with a voice reminder of the meeting title."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "ttywtj",
+            "node_type": "trigger",
+            "node_name": "Zoom Meetings event",
+            "node_alias": "",
+            "node_desc": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+            "input_map": {
+              "filter_type": "all_meetings",
+              "event_config": {
+                "time_offset": 3
+              }
+            },
+            "config": {
+              "event_name": "meeting.start",
+              "event_config": {
+                "time_offset": -15
+              }
+            },
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.asyncnotify.mobile.voice_node",
+            "reference_id": "nvldml",
+            "node_type": "notify",
+            "node_name": "Send voice message",
+            "node_alias": "",
+            "node_desc": "",
+            "input_map": {
+              "templateId": "tpl_8f3a9c2d1b7e4a6f",
+              "variables": {
+                "user.displayName": "{{ROOT.sysWorkflowCreator.display_name}}",
+                "meeting.title": "{{ttywtj.meeting.meeting_topic}}",
+                "meeting.start_time": "in fifteen minutes",
+                "meeting.url": "by going to your Zoom Workplace app or refer to your meeting information details"
+              },
+              "recipient": {
+                "regionCode": "__REGION_CODE__",
+                "phoneNumber": "__PHONE_NUMBER__"
+              }
+            },
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "ttywtj",
+            "target_node": "nvldml"
+          }
+        ]
+      }
+    ]
+  }
+}

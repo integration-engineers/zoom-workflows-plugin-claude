@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "data": {
+    "metadata": {
+      "name": "Meeting Summary to Slack",
+      "description": "Generates AI meeting summaries with key discussion points, decisions, and action items, then formats and shares them to Slack after meetings.",
+      "source": "template",
+      "icon": ""
+    },
+    "flows": [
+      {
+        "workflow_metadata": {
+          "name": "Meeting Summary to Slack",
+          "description": "Generates AI meeting summaries with key discussion points, decisions, and action items, then formats and shares them to Slack after meetings."
+        },
+        "nodes": [
+          {
+            "node_id": "zm.meeting.meeting.meeting_event",
+            "reference_id": "fyhzxp",
+            "node_type": "trigger",
+            "node_name": "Meeting event",
+            "node_alias": "",
+            "node_desc": "Start when a meeting event occurs, such as meeting start, end, or other activities.",
+            "input_map": {
+              "filter_type": "all_meetings"
+            },
+            "config": {
+              "event_name": "meeting.summary_created",
+              "event_config": {
+                "time_offset": 0
+              }
+            },
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.aic.agent.deep_reasoning",
+            "reference_id": "obsuet",
+            "node_type": "deep_reasoning",
+            "node_name": "Reasoning",
+            "node_alias": "",
+            "node_desc": "",
+            "input_map": {
+              "task_prompt": "You are an AI meeting summarization agent. Your task is to analyze meeting content from the {{fyhzxp.meeting}} and generate comprehensive, actionable summaries for team communication.\n**Your Role:**\n- Process meeting transcripts, recordings, or notes received from the MeetingEvent trigger\n- Extract key information and insights\n- Create structured summaries optimized for Slack sharing\n- Compose the formatted summary as `message_body` , If no valid meeting content is available, return “No meeting summary available for this session.” \n**Summary Structure:**\n1. **Meeting Overview**\n   - Date, duration, and participants\n   - Main meeting purpose/agenda\n2. **Key Discussion Points**\n   - Primary topics covered\n   - Important decisions made\n   - Action items with assigned owners and deadlines\n3. **Next Steps**\n   - Follow-up meetings scheduled\n   - Pending decisions or discussions\n   - Deliverables and timelines\n**Output Requirements:**\n- Keep summaries concise but comprehensive (200–400 words)\n- Use bullet points and clear formatting for Slack readability\n- Highlight urgent action items with emphasis\n- Include @mentions for assigned team members when applicable\n- Maintain professional tone while being accessible\n**Quality Standards:**\n- Ensure accuracy of all factual information\n- Capture the meeting's tone and context\n- Prioritize actionable items over general discussion\n- Format for optimal mobile and desktop Slack viewing\n**STRICT TITLE RULE:**\n- The summary MUST start with this exact title format:\n  **Meeting Summary – [Meeting Name] ([Date Time GMT+X])**\nFor the markdown output rules:\n*Allowed syntax (Slack – mrkdwn)*\n✨ *Text styles*\n・*Bold*: *text*\n・*Italic*: *text*\n・~Strikethrough~: ~text~\n・`Inline code`: `code`\n🔗 *Links*\n・Standard link: [https://example.com](https://example.com)\n・Labeled link: [https://example.com|label](https://example.com|label)\n💬 *Mentions*\n・Mention user: <@USERID>\n・Mention channel: <#CHANNELID>\n・Mention user group:\n・Mention everyone:\n🖼️ *Images & files*\n・Paste image/file directly or use uploaded file references\n・No inline image markdown syntax required\n🧱 *Blocks*\n・Block quote: > text\n・Multiline code: `code` (only for code)\n🚫 *Disallowed*\n・HTML / CSS\n・Tables\n・Custom color text\n・Non-mrkdwn styling attributes\n🛡️ *Escaping & safety*\n・Escape when showing literals: * _ ~ ` < > \\\n・Sanitize any user-provided text before insertion\n・Do not invent special syntaxes beyond Slack mrkdwn\n📖 *Readability*\n・Short lines, clear spacing\n・Use emojis for structure and scanning\n・Avoid excessive emphasis or visual noise\n📤 *Output rule*\n・Return only the final Slack-ready mrkdwn text\n・No explanations, no JSON\n**Error handling:**\n- If failed , just return empty value for `message_body` .",
+              "knowledge": {
+                "web_urls": ""
+              },
+              "system_prompt": "",
+              "tools": [
+                {
+                  "app_key": "web_search",
+                  "app_name": "Web Search",
+                  "source": "workplace",
+                  "description": "",
+                  "authorized": true,
+                  "auth_url": "",
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm.clip.clip_nodes",
+                  "app_name": "Zoom Clips",
+                  "source": "workplace",
+                  "description": "",
+                  "authorized": true,
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm.doc.doc.doc_nodes",
+                  "app_name": "Zoom Docs",
+                  "source": "workplace",
+                  "description": "You can manage a zoom doc in this node.",
+                  "authorized": true,
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm.mail.mail.mail_nodes",
+                  "app_name": "Mail node",
+                  "source": "workplace",
+                  "description": "This node handle email operation including search. mails.",
+                  "authorized": true,
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm.meeting.meeting.meeting_nodes",
+                  "app_name": "Zoom Meetings",
+                  "source": "workplace",
+                  "description": "You can manage a meeting in this node.",
+                  "authorized": true,
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm.task.task.task_nodes",
+                  "app_name": "Zoom Tasks",
+                  "source": "workplace",
+                  "description": "You can create or update a task in this node.",
+                  "authorized": true,
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm.tc.tc.team_chat_nodes",
+                  "app_name": "Zoom Team Chat",
+                  "source": "workplace",
+                  "description": "This node provides the ability to query team chat related information and send various types of messages.",
+                  "authorized": true,
+                  "tool_details": []
+                },
+                {
+                  "app_key": "zm.whiteboard.whiteboard_nodes",
+                  "app_name": "Zoom Whiteboards",
+                  "source": "workplace",
+                  "description": "",
+                  "authorized": true,
+                  "tool_details": []
+                }
+              ],
+              "outputs": [
+                {
+                  "id": "ucqhwb",
+                  "name": "message_body",
+                  "type": "string",
+                  "description": "",
+                  "is_array": false
+                }
+              ],
+              "max_steps": 20
+            },
+            "config": {
+              "execution_mode": "workflow"
+            },
+            "output_schema": {
+              "type": "object",
+              "properties": {
+                "message_body": {
+                  "type": "string",
+                  "description": ""
+                }
+              }
+            },
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.system.operators.condition",
+            "reference_id": "eetlcq",
+            "node_type": "condition",
+            "node_name": "Condition",
+            "node_alias": "",
+            "node_desc": "Specify a condition on it's output to decide which path the flow will to follow",
+            "input_map": {
+              "determined_by_ai": false,
+              "expression": {
+                "switchConditionMap": {
+                  "not empty": [
+                    {
+                      "key": "{{obsuet.message_body}}",
+                      "value": "",
+                      "condition": "isNotEmpty"
+                    }
+                  ]
+                }
+              }
+            },
+            "config": {},
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          },
+          {
+            "node_id": "zm.connector_mcp.zm_slack.slack_send_message",
+            "reference_id": "fxbodb",
+            "node_type": "mcp_tool",
+            "node_name": "Send Message",
+            "node_alias": "",
+            "node_desc": "Posts a message to a Slack channel, direct message, or private group; requires content via `text`, `blocks`, or `attachments`.",
+            "input_map": {
+              "text": "{{obsuet.message_body}}",
+              "send_to": "channel",
+              "channel": "__SLACK_CHANNEL__"
+            },
+            "config": {
+              "approval_strategy": "always_allow"
+            },
+            "output_schema": {},
+            "expanded": false,
+            "children": {
+              "nodes": [],
+              "edges": []
+            }
+          }
+        ],
+        "edges": [
+          {
+            "source_node": "fyhzxp",
+            "target_node": "obsuet"
+          },
+          {
+            "source_node": "obsuet",
+            "target_node": "eetlcq"
+          },
+          {
+            "source_node": "eetlcq",
+            "target_node": "fxbodb",
+            "condition": {
+              "eetlcq.branch": "not empty"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
