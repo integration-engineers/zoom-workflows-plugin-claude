@@ -1,9 +1,21 @@
 {
   "name": "zoom-workflows",
-  "version": "0.3.18",
   "description": "Build, deploy, run, and inspect Zoom Workflows through the Zoom MCP server, the same server as the Zoom for Claude connector.",
+  "version": "0.3.18",
+  "homepage": "https://developers.zoom.us/",
+  "repository": "https://github.com/zoom/zoom-workflows-plugin-claude",
+  "license": "MIT",
+  "keywords": [
+    "zoom",
+    "zoom-workflows",
+    "claude-plugin",
+    "workflow",
+    "automation",
+    "meetings",
+    "mcp"
+  ],
   "author": {
-    "name": "Zoom"
-  },
-  "license": "MIT"
+    "name": "Zoom",
+    "url": "https://github.com/zoom/zoom-workflows-plugin-claude"
+  }
 }

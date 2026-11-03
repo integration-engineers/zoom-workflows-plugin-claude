@@ -49,6 +49,49 @@ Each user's first 10 workflow runs are free, with no license required. After tha
 summaries to Gmail or Outlook stay free, and the other shortcuts use 10 ZoomMate credits per run,
 which needs a ZoomMate license.
 
+## Connectors
+
+See [CONNECTORS.md](CONNECTORS.md). The plugin declares one MCP server, `zoom`, in
+[`.mcp.json`](.mcp.json). Authorization is managed by Claude through the Zoom for Claude connector,
+so there is no token to set. Without the connection, Claude can still plan a workflow and compile
+its definition locally; testing and deploying need the connection.
+
+## Structure
+
+```text
+Zoom Workflows Plugin for Claude/
+├── .claude-plugin/plugin.json
+├── .mcp.json
+├── AGENTS.md
+├── CHANGELOG.md
+├── CONNECTORS.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── README.md
+├── skills/
+│   └── zoom-workflows/
+└── Workflow/
+    ├── hero-templates/
+    └── skills/
+        ├── workflow-onboard/
+        ├── workflow-demo/
+        │   └── zoom-zodiac-card/
+        ├── workflow-create/
+        ├── workflow-core/
+        │   ├── adapters/
+        │   ├── references/
+        │   ├── scripts/
+        │   └── vendor/zoom-workflow-generator/
+        └── workflow-inspect/
+```
+
+[AGENTS.md](AGENTS.md) is a discovery file for agent tools that read it, and
+[CHANGELOG.md](CHANGELOG.md) lists release notes.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Support
 
 Zoom: https://support.zoom.com
