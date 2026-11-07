@@ -28,14 +28,16 @@ publishes. When deploy succeeds, the reply that presents the build also says it 
 a sentence on what triggers it, what it does, and where the result goes. Then ask once, as a choice card, using whichever question tool this host provides, run it once now? Wait for the user's answer.
 
 A yes authorizes one run of the same definition. Poll it to a terminal state, finishing any
-human-input step. When it completes, show what it produced, taken from the final get-execution's
+human-input step; *Reading a run* covers a run that outlasts the turn. When it completes, show what it produced, taken from the final get-execution's
 `step_records`:
 - the delivered content as sent, such as the email's recipient, subject, and body, or the chat
   message, read from the delivering step's `input` or the agent step's output;
 - for a record write (a Jira issue, a Salesforce update), the fields written and the returned id or
   link from that step's `output`;
 - with nothing delivered, the last step's output:
-  - a Deep Reasoning step: `output.output.final_result.answer`;
+  - a Deep Reasoning step: the fields its `output_schema` declares, under `output.output` (for
+    example `output.output.response`); `output.output.final_result.answer` only when the node
+    declares no `output_schema` properties;
   - a code or LLM step: its declared output fields.
 
 When an agent answer opens with an execution receipt (`Outcome: …`), use the receipt to judge the
@@ -112,6 +114,25 @@ time.
 
 Poll get-execution with the returned instance until it is terminal or waiting on someone, then
 report what the server says.
+
+Runs vary in length. Any run can take several minutes: AI steps such as Deep Reasoning, connector
+calls, and larger data reads can each run for minutes with no output until they finish. A run that
+is still `RUNNING` with no error is working, not stuck, however long it has been. Poll about every
+60 to 90 seconds for about five minutes. After each poll that is still running, add one short line:
+the step that is `IN_PROGRESS` in `step_records`, how long the run has been going, and that there
+is no error, without interpreting `diagnosis`. If it is still running after about five minutes,
+stop and say so plainly: name the step that is still working (for example "AI reasoning is still
+working") and give when the run started and how long it has been running. Then ask as a choice
+card, using whichever question tool this host provides, how to follow it: watch it in the
+background, or keep waiting here for another five minutes. Where the host cannot run a background
+agent, offer to keep waiting here or to check again when they ask. The background agent only reads
+get-execution for this instance, about every 60 to 90 seconds, until `status` is terminal or
+`PAUSED` or `business_status` says the run is waiting on someone, and stops after two to three
+hours in any case; then it hands the final get-execution back to you. You report the result here
+as described in this file, including any result display a demo skill defines. A run waiting on
+someone is yours to handle here, as *Human input* below describes; the background agent never
+resumes or decides. Undeploying, resubmitting, or starting another run does nothing for a run that
+is still going.
 
 - `status` is running or terminal: `RUNNING`, `PAUSED`, `COMPLETED`, `FAILED`, `TIMED_OUT`,
   `TERMINATED`.

@@ -47,7 +47,7 @@ working directory and not a folder inside `skills/`.
 
 ## Repo Shape
 
-- `.claude-plugin/plugin.json` - Claude plugin manifest
+- `.claude-plugin/plugin.json` - Claude plugin manifest; `.claude-plugin/icon.png` - listing icon
 - `.mcp.json` - the bundled Zoom MCP server definition
 - `skills/zoom-workflows/` - the entry skill
 - `Workflow/skills/` - internal skills, the host adapters, and the vendored generator

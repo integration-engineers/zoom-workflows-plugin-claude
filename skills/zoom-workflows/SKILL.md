@@ -35,10 +35,13 @@ Everything live goes through the connected **Zoom MCP server** (the Zoom connect
 The plugin declares one MCP server, `zoom`, at `https://mcp.zoom.us/mcp/zoom/streamable`: the same
 server as the **Zoom for Claude** directory connector, so a user who has both sees one set of
 tools. If no Zoom MCP tools are available, or the server is not connected or rejects a call, say so
-before anything else and how to fix it: connect Zoom for Claude with your Zoom account (Claude's
-Settings → Connectors, or the plugin's Connectors tab), then start a new conversation (in Claude
-Code, check `/mcp`); on a Team or Enterprise plan where it is not listed, the Claude admin has to
-add it. Do not call Zoom APIs directly outside the connected MCP tools. The host owns OAuth; never read, print, or
+before anything else and how to fix it, for the host you are running in. In Claude: connect Zoom
+for Claude with your Zoom account (Claude's Settings → Connectors, or the plugin's Connectors tab),
+then start a new conversation (in Claude Code, check `/mcp`); on a Team or Enterprise plan where it
+is not listed, the Claude admin has to add it. In Codex or ChatGPT: connect this plugin's Zoom
+connection with your Zoom account from the plugin's settings or when the host asks, then start a
+new conversation; in a workspace where the plugin is not available, the workspace admin has to
+enable it. Do not call Zoom APIs directly outside the connected MCP tools. The host owns OAuth; never read, print, or
 cache tokens, or ask the user to paste them or a callback URL into chat.
 
 ## Scope

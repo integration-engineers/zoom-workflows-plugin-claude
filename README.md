@@ -60,7 +60,9 @@ its definition locally; testing and deploying need the connection.
 
 ```text
 Zoom Workflows Plugin for Claude/
-├── .claude-plugin/plugin.json
+├── .claude-plugin/
+│   ├── plugin.json
+│   └── icon.png
 ├── .mcp.json
 ├── AGENTS.md
 ├── CHANGELOG.md

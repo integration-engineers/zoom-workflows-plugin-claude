@@ -75,6 +75,11 @@ and the one most often gotten wrong:
 The same distinction applies to a Zoom Chat DM target; a DP node can resolve the workflow owner on
 its own, so "DM me" does not need a hardcoded user id.
 
+**Calls and texts reach only the user.** A workflow's phone call or text goes to one phone: the
+user's own, verified in their Zoom account. When the request names someone else ("call Alex",
+"text the attendees"), say so before asking for anything and offer a Zoom Chat message to that
+person instead; asking for their number leads to a workflow that cannot be built.
+
 **Resolving the source identifier.** The read side needs the same treatment as the recipient. When
 the request points at a container without naming it — "my Zoom Chat channel", "our board", "the
 epic", "the repo" — that identifier is run-blocking: ask before building, exactly as for an unstated
